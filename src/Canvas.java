@@ -1,5 +1,6 @@
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.Point;
 
 import javax.swing.JPanel;
 
@@ -11,4 +12,7 @@ public class Canvas extends JPanel {
 		super.setBackground(Color.WHITE);
 		super.setPreferredSize(new Dimension(WIDTH, HEIGHT));
 	}
+	
+	
+
 }
