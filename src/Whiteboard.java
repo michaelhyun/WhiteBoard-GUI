@@ -71,11 +71,21 @@ public class Whiteboard extends JFrame {
 		bottom.add(backButton);
 		bottom.add(removeButton);
 		
+		Box saveBox = Box.createHorizontalBox();
+		saveBox.setAlignmentX(LEFT_ALIGNMENT);
+		JButton saveButton = new JButton("Save");
+		JButton openButton = new JButton("Open");
+		JButton saveImageButton = new JButton("Save Image");
+		saveBox.add(saveButton);
+		saveBox.add(openButton);
+		saveBox.add(saveImageButton);
+		
 		Box leftPanel = Box.createVerticalBox();
 		leftPanel.add(top);
 		leftPanel.add(middle);
 		leftPanel.add(middleBot);
 		leftPanel.add(bottom);
+		leftPanel.add(saveBox);
 		
 		
 		controlPanel.add(leftPanel, BorderLayout.WEST);
