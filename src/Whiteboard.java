@@ -4,10 +4,12 @@ import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Frame;
 
+import javax.swing.Box;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JTextArea;
 
 public class Whiteboard extends JFrame {
 	private final String PROJECT_FRAME_NAME = "Whiteboard";
@@ -32,18 +34,51 @@ public class Whiteboard extends JFrame {
 		//create control panel for buttons
 		JPanel controlPanel = new JPanel();
 		controlPanel.setLayout(new FlowLayout());
-		
+
+		Box top = Box.createHorizontalBox();
+		top.setAlignmentX(Box.LEFT_ALIGNMENT);
 		JLabel addLabel = new JLabel("Add");
 		JButton rectButton = new JButton("Rect");
 		JButton ovalButton = new JButton("Oval");
 		JButton lineButton = new JButton("Line");
 		JButton textButton = new JButton("Text");
-		controlPanel.add(addLabel);
-		controlPanel.add(rectButton);
-		controlPanel.add(ovalButton);
-		controlPanel.add(lineButton);
-		controlPanel.add(textButton);
+		top.add(addLabel);
+		top.add(rectButton);
+		top.add(ovalButton);
+		top.add(lineButton);
+		top.add(textButton);
+		
+		
+		Box middle = Box.createHorizontalBox();
+		middle.setAlignmentX(Box.LEFT_ALIGNMENT);
+		JButton setColorButton = new JButton("Set Color");	
+		middle.add(setColorButton);
+		
 
+		Box middleBot = Box.createHorizontalBox();
+		middleBot.setAlignmentX(Box.LEFT_ALIGNMENT);
+		JTextArea textArea = new JTextArea();
+		JButton edwardianButton = new JButton("Edwardian Script");
+		middleBot.add(textArea);
+		middleBot.add(edwardianButton);
+		
+		Box bottom = Box.createHorizontalBox();
+		bottom.setAlignmentX(Box.LEFT_ALIGNMENT);
+		JButton frontButton = new JButton("Move to Front");
+		JButton backButton = new JButton("Move to Back");
+		JButton removeButton = new JButton("Remove Shape");
+		bottom.add(frontButton);
+		bottom.add(backButton);
+		bottom.add(removeButton);
+		
+		Box leftPanel = Box.createVerticalBox();
+		leftPanel.add(top);
+		leftPanel.add(middle);
+		leftPanel.add(middleBot);
+		leftPanel.add(bottom);
+		
+		
+		controlPanel.add(leftPanel, BorderLayout.WEST);
 		frame.add(controlPanel,BorderLayout.WEST);
 		frame.add(canvas,BorderLayout.CENTER);
 		frame.pack();
