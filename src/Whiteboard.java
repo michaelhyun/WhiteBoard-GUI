@@ -87,8 +87,9 @@ public class Whiteboard extends JFrame {
 		leftPanel.add(bottom);
 		leftPanel.add(saveBox);
 		
-		
 		controlPanel.add(leftPanel, BorderLayout.WEST);
+		
+		
 		frame.add(controlPanel,BorderLayout.WEST);
 		frame.add(canvas,BorderLayout.CENTER);
 		frame.pack();
