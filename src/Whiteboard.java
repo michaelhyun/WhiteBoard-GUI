@@ -56,32 +56,33 @@ public class Whiteboard extends JFrame {
 		//action listeners for adding rectangle
 		rectButton.addActionListener(new ActionListener(){
 		      public void actionPerformed(ActionEvent evt){
-		    	  DShape rect = new DRect();
-		    	  rect.draw(canvas.getGraphics());
+		    	  DShapeModel rect = new DRectModel();
+		    	  canvas.addShape(rect);
 		      }
 
 		});
 		//action listeners for adding Oval
 		ovalButton.addActionListener(new ActionListener(){
 		      public void actionPerformed(ActionEvent evt){
-		    	  DShape oval = new DOval();
-		    	  oval.draw(canvas.getGraphics());
-		      }
+		    	  DShapeModel oval = new DOvalModel();
+		    	  
+		    	  canvas.addShape(oval);
+		    	  }
 
 		});
 		//action listeners for adding Line
 		lineButton.addActionListener(new ActionListener(){
 		      public void actionPerformed(ActionEvent evt){
-		    	  DShape line = new DLine();
-		    	  line.draw(canvas.getGraphics());
+		    	  DShapeModel line = new DLineModel();
+		    	  canvas.addShape(line);
 		      }
 
 		});
 		//action listeners for adding Text
 		textButton.addActionListener(new ActionListener(){
 		      public void actionPerformed(ActionEvent evt){
-		    	  DShape text = new DText();
-		    	  text.draw(canvas.getGraphics());
+		    	  DShapeModel text = new DTextModel();
+		    	  canvas.addShape(text);
 		      }
 
 		});
@@ -99,7 +100,7 @@ public class Whiteboard extends JFrame {
 		//action listeners for setting color
 		setColorButton.addActionListener(new ActionListener(){
 		      public void actionPerformed(ActionEvent evt){
-		    	  //how do you get the shape
+		    	  //update model for the selected shape
 		      }
 
 		});
@@ -117,7 +118,10 @@ public class Whiteboard extends JFrame {
 		edwardianButton.addActionListener(new ActionListener(){
 		      public void actionPerformed(ActionEvent evt){
 		    	  String text = textArea.getText();
-		    	  //Create a new Object
+		    	  DText object = new DText();
+//		    	  object.add(text); 
+//		    	  object.setFont();
+		    	  object.draw(canvas.getGraphics());
 		      }
 
 		});
@@ -137,6 +141,7 @@ public class Whiteboard extends JFrame {
 		frontButton.addActionListener(new ActionListener(){
 		      public void actionPerformed(ActionEvent evt){
 		    	  //move object in list
+		    	  
 		      }
 
 		});
@@ -151,6 +156,7 @@ public class Whiteboard extends JFrame {
 		removeButton.addActionListener(new ActionListener(){
 		      public void actionPerformed(ActionEvent evt){
 		    	  //remove shape
+		    	  //canvas.removeShape(shape);
 		      }
 
 		});
@@ -165,21 +171,21 @@ public class Whiteboard extends JFrame {
 		saveBox.add(openButton);
 		saveBox.add(saveImageButton);
 		
-		//action listeners for removing shape
+		//action listeners for save
 		saveButton.addActionListener(new ActionListener(){
 		      public void actionPerformed(ActionEvent evt){
 		    	  //save file
 		      }
 
 		});		
-		//action listeners for removing shape
+		//action listeners for opening file
 		openButton.addActionListener(new ActionListener(){
 		      public void actionPerformed(ActionEvent evt){
 		    	  //open file
 		      }
 
 		});		
-		//action listeners for removing shape
+		//action listeners for saving image
 		saveImageButton.addActionListener(new ActionListener(){
 		      public void actionPerformed(ActionEvent evt){
 		    	  //save image
