@@ -3,6 +3,8 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Frame;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 import javax.swing.Box;
 import javax.swing.JButton;
@@ -30,6 +32,7 @@ public class Whiteboard extends JFrame {
 		
 		//create canvas
 		Canvas canvas = new Canvas();
+		canvas.setPreferredSize(new Dimension(400, 400));
 		
 		//create control panel for buttons
 		JPanel controlPanel = new JPanel();
@@ -49,10 +52,57 @@ public class Whiteboard extends JFrame {
 		top.add(textButton);
 		
 		
+		
+		//action listeners for adding rectangle
+		rectButton.addActionListener(new ActionListener(){
+		      public void actionPerformed(ActionEvent evt){
+		    	  DShape rect = new DRect();
+		    	  rect.draw(canvas.getGraphics());
+		      }
+
+		});
+		//action listeners for adding Oval
+		ovalButton.addActionListener(new ActionListener(){
+		      public void actionPerformed(ActionEvent evt){
+		    	  DShape oval = new DOval();
+		    	  oval.draw(canvas.getGraphics());
+		      }
+
+		});
+		//action listeners for adding Line
+		lineButton.addActionListener(new ActionListener(){
+		      public void actionPerformed(ActionEvent evt){
+		    	  DShape line = new DLine();
+		    	  line.draw(canvas.getGraphics());
+		      }
+
+		});
+		//action listeners for adding Text
+		textButton.addActionListener(new ActionListener(){
+		      public void actionPerformed(ActionEvent evt){
+		    	  DShape text = new DText();
+		    	  text.draw(canvas.getGraphics());
+		      }
+
+		});
+		
+		
+		
+		
+		
+		
 		Box middle = Box.createHorizontalBox();
 		middle.setAlignmentX(Box.LEFT_ALIGNMENT);
 		JButton setColorButton = new JButton("Set Color");	
 		middle.add(setColorButton);
+		
+		//action listeners for setting color
+		setColorButton.addActionListener(new ActionListener(){
+		      public void actionPerformed(ActionEvent evt){
+		    	  //how do you get the shape
+		      }
+
+		});
 		
 
 		Box middleBot = Box.createHorizontalBox();
@@ -61,6 +111,18 @@ public class Whiteboard extends JFrame {
 		JButton edwardianButton = new JButton("Edwardian Script");
 		middleBot.add(textArea);
 		middleBot.add(edwardianButton);
+		
+		
+		//action listeners for adding Text
+		edwardianButton.addActionListener(new ActionListener(){
+		      public void actionPerformed(ActionEvent evt){
+		    	  String text = textArea.getText();
+		    	  //Create a new Object
+		      }
+
+		});
+		
+		
 		
 		Box bottom = Box.createHorizontalBox();
 		bottom.setAlignmentX(Box.LEFT_ALIGNMENT);
@@ -71,6 +133,29 @@ public class Whiteboard extends JFrame {
 		bottom.add(backButton);
 		bottom.add(removeButton);
 		
+		//action listeners for moving to front
+		frontButton.addActionListener(new ActionListener(){
+		      public void actionPerformed(ActionEvent evt){
+		    	  //move object in list
+		      }
+
+		});
+		//action listeners for moving to back
+		backButton.addActionListener(new ActionListener(){
+		      public void actionPerformed(ActionEvent evt){
+		    	  //move object in list
+		      }
+
+		});
+		//action listeners for removing shape
+		removeButton.addActionListener(new ActionListener(){
+		      public void actionPerformed(ActionEvent evt){
+		    	  //remove shape
+		      }
+
+		});
+		
+		
 		Box saveBox = Box.createHorizontalBox();
 		saveBox.setAlignmentX(LEFT_ALIGNMENT);
 		JButton saveButton = new JButton("Save");
@@ -79,6 +164,28 @@ public class Whiteboard extends JFrame {
 		saveBox.add(saveButton);
 		saveBox.add(openButton);
 		saveBox.add(saveImageButton);
+		
+		//action listeners for removing shape
+		saveButton.addActionListener(new ActionListener(){
+		      public void actionPerformed(ActionEvent evt){
+		    	  //save file
+		      }
+
+		});		
+		//action listeners for removing shape
+		openButton.addActionListener(new ActionListener(){
+		      public void actionPerformed(ActionEvent evt){
+		    	  //open file
+		      }
+
+		});		
+		//action listeners for removing shape
+		saveImageButton.addActionListener(new ActionListener(){
+		      public void actionPerformed(ActionEvent evt){
+		    	  //save image
+		      }
+
+		});	
 		
 		Box leftPanel = Box.createVerticalBox();
 		leftPanel.add(top);
