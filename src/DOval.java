@@ -6,13 +6,8 @@ import java.awt.geom.Ellipse2D;
 public class DOval extends DShape {
 	DOvalModel model;
 
-	public DOval() {
-		this.model = new DOvalModel();
-		model.setX(0);
-		model.setY(0);
-		model.setWidth(100);
-		model.setHeight(50);
-		model.setColor(Color.gray);
+	public DOval(DOvalModel model) {
+		this.model = model;
 	}
 
 	@Override

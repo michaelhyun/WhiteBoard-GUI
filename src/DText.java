@@ -5,18 +5,9 @@ import java.awt.Graphics;
 public class DText extends DShape {
 	DTextModel model;
 	
-	public DText() {
+	public DText(DTextModel model) {
 		// TODO Auto-generated constructor stub
-		this.model = new DTextModel();
-		model.setX(0);
-		model.setY(0);
-		model.setWidth(0);
-		model.setHeight(100);
-		model.setColor(Color.gray);
-		model.setText("Hello, World");
-		model.setFontName("Dialog");
-		model.setFontStyle(Font.PLAIN);
-		model.setFontSize(30);
+		this.model = model;
 	}
 
 	@Override

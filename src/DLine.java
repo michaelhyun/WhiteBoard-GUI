@@ -4,14 +4,9 @@ import java.awt.Graphics;
 public class DLine extends DShape {
 	DLineModel model;
 
-	public DLine() {
+	public DLine(DLineModel model) {
 		// TODO Auto-generated constructor stub
-		model = new DLineModel();
-		model.setX(0);
-		model.setY(0);
-		model.setWidth(100);
-		model.setHeight(50);
-		model.setColor(Color.gray);
+		this.model = model;
 	}
 
 	@Override

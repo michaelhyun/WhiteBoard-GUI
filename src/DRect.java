@@ -6,15 +6,8 @@ import java.awt.geom.Rectangle2D;
 public class DRect extends DShape {
 	public DRectModel model;
 
-	public DRect() {
-		this.model = new DRectModel();
-
-		model.setX(0);
-		model.setY(0);
-		model.setWidth(100);
-		model.setHeight(50);
-		model.setColor(Color.gray);
-
+	public DRect(DRectModel model) {
+		this.model = model;
 	}
 
 	@Override
