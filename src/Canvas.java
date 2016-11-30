@@ -1,6 +1,8 @@
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Point;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 
 import javax.swing.JPanel;
@@ -8,12 +10,35 @@ import javax.swing.JPanel;
 public class Canvas extends JPanel {
 	private final int HEIGHT = 400, WIDTH = 400;
 	private ArrayList<DShape> shapesList;
+	private DShape selectedShape;
 
 	public Canvas() {
 		// TODO Auto-generated constructor stub
 		super.setBackground(Color.WHITE);
 		super.setPreferredSize(new Dimension(WIDTH, HEIGHT));
 		shapesList = new ArrayList<DShape>();
+
+		addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent me) {
+				super.mouseClicked(me);
+				for (DShape shape : shapesList) { //need to go backwards
+					if (shape.contains(me.getPoint())) {
+						if (shape instanceof DRect) {
+							shape = selectedShape;
+						} else if (shape instanceof DOval) {
+							shape = selectedShape;
+						} else if (shape instanceof DLine) {
+							shape = selectedShape;
+						} else if (shape instanceof DText) {
+							shape = selectedShape;
+						}
+					}
+				}
+				
+				//need to do something to selected shape here
+			}
+		});
 
 	}
 
@@ -32,8 +57,8 @@ public class Canvas extends JPanel {
 			DShape text = new DText((DTextModel) model);
 			shapesList.add(text);
 		}
-		
-		for(DShape shape: shapesList){
+
+		for (DShape shape : shapesList) {
 			shape.draw(this.getGraphics());
 		}
 	}
