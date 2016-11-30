@@ -30,5 +30,11 @@ public class DText extends DShape {
 		g.setFont(f);
 		g.drawString(model.getText(), model.getWidth(), model.getHeight());
 	}
+
+	@Override
+	public String description() {
+		// TODO Auto-generated method stub
+		return "Text Box";
+	}
 	
 }

@@ -6,4 +6,5 @@ public abstract class DShape {
 	
 	public abstract boolean contains(Point point);
 	
+	public abstract String description();
 }

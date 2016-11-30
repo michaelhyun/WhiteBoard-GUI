@@ -22,20 +22,14 @@ public class Canvas extends JPanel {
 			@Override
 			public void mouseClicked(MouseEvent me) {
 				super.mouseClicked(me);
-				for (DShape shape : shapesList) { //need to go backwards
+				for(int i=shapesList.size()-1;i>=0;i--){
+					DShape shape = shapesList.get(i);
 					if (shape.contains(me.getPoint())) {
-						if (shape instanceof DRect) {
-							selectedShape = shape;
-						} else if (shape instanceof DOval) {
-							selectedShape = shape;
-						} else if (shape instanceof DLine) {
-							selectedShape = shape;
-						} else if (shape instanceof DText) {
-							selectedShape = shape;
-						}
+						selectedShape = shape;
+						System.out.println(selectedShape.description());
+						break;
 					}
 				}
-				
 				//need to do something to selected shape here
 			}
 		});

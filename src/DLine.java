@@ -29,4 +29,10 @@ public class DLine extends DShape {
 		return false;
 	}
 
+	@Override
+	public String description() {
+		// TODO Auto-generated method stub
+		return "Line";
+	}
+
 }

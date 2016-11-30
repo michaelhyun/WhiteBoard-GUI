@@ -32,4 +32,10 @@ public class DRect extends DShape {
 		}
 		return false;
 	}
+
+	@Override
+	public String description() {
+		// TODO Auto-generated method stub
+		return "Rectangle";
+	}
 }
