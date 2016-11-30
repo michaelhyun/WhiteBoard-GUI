@@ -25,13 +25,13 @@ public class Canvas extends JPanel {
 				for (DShape shape : shapesList) { //need to go backwards
 					if (shape.contains(me.getPoint())) {
 						if (shape instanceof DRect) {
-							shape = selectedShape;
+							selectedShape = shape;
 						} else if (shape instanceof DOval) {
-							shape = selectedShape;
+							selectedShape = shape;
 						} else if (shape instanceof DLine) {
-							shape = selectedShape;
+							selectedShape = shape;
 						} else if (shape instanceof DText) {
-							shape = selectedShape;
+							selectedShape = shape;
 						}
 					}
 				}
