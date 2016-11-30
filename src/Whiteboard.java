@@ -132,11 +132,17 @@ public class Whiteboard extends JFrame {
 		// action listeners for adding Text
 		edwardianButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent evt) {
+				DTextModel model = new DTextModel();
 				String text = textArea.getText();
-				// DText object = new DText();
-				// object.add(text);
-				// object.setFont();
-				// object.draw(canvas.getGraphics());
+				model.setText(text);
+				model.setX(0);
+				model.setY(0);
+				model.setWidth(0);
+				model.setHeight(100);
+				model.setColor(Color.GRAY);
+				model.setFontSize(30);
+				model.setFontName("Edwardian Script");
+				canvas.addShape(model);
 			}
 
 		});

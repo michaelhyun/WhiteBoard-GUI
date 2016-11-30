@@ -7,13 +7,13 @@ import javax.swing.JPanel;
 
 public class Canvas extends JPanel {
 	private final int HEIGHT = 400, WIDTH = 400;
-	private ArrayList<DShape> list;
+	private ArrayList<DShape> shapesList;
 
 	public Canvas() {
 		// TODO Auto-generated constructor stub
 		super.setBackground(Color.WHITE);
 		super.setPreferredSize(new Dimension(WIDTH, HEIGHT));
-		list = new ArrayList<DShape>();
+		shapesList = new ArrayList<DShape>();
 
 	}
 
@@ -21,26 +21,26 @@ public class Canvas extends JPanel {
 
 		if (model instanceof DRectModel) {
 			DShape rect = new DRect((DRectModel) model);
-			rect.draw(this.getGraphics());
-			list.add(rect);
+			shapesList.add(rect);
 		} else if (model instanceof DOvalModel) {
 			DShape oval = new DOval((DOvalModel) model);
-			oval.draw(this.getGraphics());
-			list.add(oval);
+			shapesList.add(oval);
 		} else if (model instanceof DLineModel) {
 			DShape line = new DLine((DLineModel) model);
-			line.draw(this.getGraphics());
-			list.add(line);
+			shapesList.add(line);
 		} else if (model instanceof DTextModel) {
 			DShape text = new DText((DTextModel) model);
-			text.draw(this.getGraphics());
-			list.add(text);
+			shapesList.add(text);
+		}
+		
+		for(DShape shape: shapesList){
+			shape.draw(this.getGraphics());
 		}
 	}
 
 	public void removeShape(DShape shape) {
 		try {
-			list.remove(shape);
+			shapesList.remove(shape);
 		} catch (Exception e) {
 			System.out.println("Hello");
 		}
