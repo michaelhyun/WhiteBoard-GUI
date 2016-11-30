@@ -4,7 +4,7 @@ public class DTextModel extends DShapeModel {
 	private String fontName;
 	private int fontStyle;
 	private int fontSize;
-	
+
 	private int textSize;
 
 	public String getText() {
@@ -46,5 +46,5 @@ public class DTextModel extends DShapeModel {
 	public void setFontSize(int fontSize) {
 		this.fontSize = fontSize;
 	}
-	
+
 }

@@ -95,15 +95,15 @@ public class Whiteboard extends JFrame {
 		textButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent evt) {
 				DTextModel model = new DTextModel();
-				model.setX(0);
-				model.setY(0);
-				model.setWidth(0);
-				model.setHeight(100);
+
+				// font must be set in this order
 				model.setColor(Color.GRAY);
 				model.setText("Hello, World");
 				model.setFontName("Dialog");
 				model.setFontStyle(Font.PLAIN);
 				model.setFontSize(30);
+				model.setX(0);
+				model.setY(0);
 				canvas.addShape(model);
 			}
 
