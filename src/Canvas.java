@@ -1,6 +1,5 @@
 import java.awt.Color;
 import java.awt.Dimension;
-import java.awt.Point;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
@@ -8,6 +7,7 @@ import java.util.ArrayList;
 import javax.swing.JPanel;
 
 public class Canvas extends JPanel {
+	private static final long serialVersionUID = 1L;
 	private final int HEIGHT = 400, WIDTH = 400;
 	private ArrayList<DShape> shapesList;
 	private DShape selectedShape;
