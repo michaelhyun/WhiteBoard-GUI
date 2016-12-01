@@ -1,5 +1,6 @@
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.Point;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
@@ -22,7 +23,7 @@ public class Canvas extends JPanel {
 			@Override
 			public void mouseClicked(MouseEvent me) {
 				super.mouseClicked(me);
-				for(int i=shapesList.size()-1;i>=0;i--){
+				for (int i = shapesList.size() - 1; i >= 0; i--) {
 					DShape shape = shapesList.get(i);
 					if (shape.contains(me.getPoint())) {
 						selectedShape = shape;
@@ -30,7 +31,29 @@ public class Canvas extends JPanel {
 						break;
 					}
 				}
-				//need to do something to selected shape here
+
+				// need to do something to selected shape here
+			}
+
+			@Override
+			public void mousePressed(MouseEvent e) {
+				System.out.println("pressed");
+				System.out.println(e.getX() + ", " + e.getY());
+			}
+
+			@Override
+			public void mouseReleased(MouseEvent e) {
+				System.out.println("released");
+				System.out.println(e.getX() + ", " + e.getY());
+			}
+		});
+
+		addMouseMotionListener(new MouseAdapter() {
+			@Override
+			public void mouseDragged(MouseEvent e) {
+				System.out.println("dragged");
+				Point point = e.getPoint();
+				System.out.println(point.getX() + ", " + point.getY());
 			}
 		});
 
