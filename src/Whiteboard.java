@@ -118,6 +118,7 @@ public class Whiteboard extends JFrame {
 		setColorButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent evt) {
 				// update model for the selected shape
+				
 			}
 
 		});

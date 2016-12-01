@@ -3,7 +3,7 @@ import java.awt.FontMetrics;
 import java.awt.Graphics;
 import java.awt.Point;
 
-public class DText extends DShape {
+public class DText extends DShape implements ModelListener{
 	DTextModel model;
 
 	public DText(DTextModel model) {
@@ -48,6 +48,18 @@ public class DText extends DShape {
 	public String description() {
 		// TODO Auto-generated method stub
 		return "Text Box";
+	}
+
+	@Override
+	public void modelChanged(DShapeModel model) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void drawKnobs() {
+		// TODO Auto-generated method stub
+		
 	}
 
 }

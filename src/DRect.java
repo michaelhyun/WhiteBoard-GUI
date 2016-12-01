@@ -3,7 +3,7 @@ import java.awt.Graphics2D;
 import java.awt.Point;
 import java.awt.geom.Rectangle2D;
 
-public class DRect extends DShape {
+public class DRect extends DShape implements ModelListener{
 	public DRectModel model;
 
 	public DRect(DRectModel model) {
@@ -36,5 +36,17 @@ public class DRect extends DShape {
 	public String description() {
 		// TODO Auto-generated method stub
 		return "Rectangle";
+	}
+
+	@Override
+	public void modelChanged(DShapeModel model) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void drawKnobs() {
+		// TODO Auto-generated method stub
+		
 	}
 }

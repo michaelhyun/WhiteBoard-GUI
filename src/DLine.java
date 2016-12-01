@@ -1,7 +1,7 @@
 import java.awt.Graphics;
 import java.awt.Point;
 
-public class DLine extends DShape {
+public class DLine extends DShape implements ModelListener{
 	DLineModel model;
 
 	public DLine(DLineModel model) {
@@ -32,6 +32,18 @@ public class DLine extends DShape {
 	public String description() {
 		// TODO Auto-generated method stub
 		return "Line";
+	}
+
+	@Override
+	public void modelChanged(DShapeModel model) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void drawKnobs() {
+		// TODO Auto-generated method stub
+		
 	}
 
 }

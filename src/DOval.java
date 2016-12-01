@@ -3,7 +3,7 @@ import java.awt.Graphics2D;
 import java.awt.Point;
 import java.awt.geom.Ellipse2D;
 
-public class DOval extends DShape {
+public class DOval extends DShape implements ModelListener{
 	DOvalModel model;
 
 	public DOval(DOvalModel model) {
@@ -36,6 +36,18 @@ public class DOval extends DShape {
 	public String description() {
 		// TODO Auto-generated method stub
 		return "Oval";
+	}
+
+	@Override
+	public void modelChanged(DShapeModel model) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void drawKnobs() {
+		// TODO Auto-generated method stub
+		
 	}
 
 }
