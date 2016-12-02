@@ -1,5 +1,6 @@
 import java.awt.Graphics;
 import java.awt.Point;
+import java.util.ArrayList;
 
 public abstract class DShape {
 	public abstract void draw(Graphics g);
@@ -8,6 +9,8 @@ public abstract class DShape {
 	
 	public abstract String description();
 
-	public abstract void drawKnobs();
+	public abstract ArrayList<Point> getKnobs();
+	
+	
 
 }

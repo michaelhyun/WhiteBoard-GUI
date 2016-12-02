@@ -1,5 +1,6 @@
 import java.awt.Graphics;
 import java.awt.Point;
+import java.util.ArrayList;
 
 public class DLine extends DShape implements ModelListener{
 	DLineModel model;
@@ -41,9 +42,19 @@ public class DLine extends DShape implements ModelListener{
 	}
 
 	@Override
-	public void drawKnobs() {
+	public ArrayList<Point> getKnobs() {
 		// TODO Auto-generated method stub
+		ArrayList<Point> points = new ArrayList<Point>();
+		Point topLeft = new Point(model.getX(), model.getY());
+		Point bottomRight = new Point(model.getX() + model.getWidth(), model.getY() + model.getHeight());
+		Point bottomLeft = new Point(model.getX(), model.getY() + model.getHeight());
+		Point topRight = new Point(model.getX() + model.getWidth(), model.getY());
+		points.add(topLeft);
+		points.add(topRight);
+		points.add(bottomLeft);
+		points.add(bottomRight);
 		
+		return points;
 	}
 
 }

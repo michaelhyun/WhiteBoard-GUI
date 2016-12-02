@@ -1,8 +1,11 @@
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
 import java.awt.Point;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.awt.geom.Rectangle2D;
 import java.util.ArrayList;
 
 import javax.swing.JPanel;
@@ -31,7 +34,12 @@ public class Canvas extends JPanel {
 						break;
 					}
 				}
-
+				ArrayList<Point> points = selectedShape.getKnobs();
+				
+				for(Point p : points){
+					Rectangle2D rect= new Rectangle2D.Double(p.x, p.y, 9, 9);	
+					
+				}
 				// need to do something to selected shape here
 			}
 
