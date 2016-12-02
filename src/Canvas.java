@@ -3,6 +3,7 @@ import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Point;
+import java.awt.Rectangle;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.geom.Rectangle2D;
@@ -34,12 +35,15 @@ public class Canvas extends JPanel {
 						break;
 					}
 				}
-				ArrayList<Point> points = selectedShape.getKnobs();
-				
-				for(Point p : points){
-					Rectangle2D rect= new Rectangle2D.Double(p.x, p.y, 9, 9);	
-					
+				if (selectedShape != null) {
+					selectedShape.drawKnobs(getGraphics());
 				}
+				// ArrayList<Point> points = selectedShape.getKnobs();
+				//
+				// for(Point p : points){
+				// Rectangle rectangle = new Rectangle(p.x,p.y, 9, 9);
+				//
+				// }
 				// need to do something to selected shape here
 			}
 

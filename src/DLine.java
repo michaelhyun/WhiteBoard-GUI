@@ -57,4 +57,10 @@ public class DLine extends DShape implements ModelListener{
 		return points;
 	}
 
+	@Override
+	public void drawKnobs(Graphics g) {
+		// TODO Auto-generated method stub
+		
+	}
+
 }

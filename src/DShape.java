@@ -11,6 +11,6 @@ public abstract class DShape {
 
 	public abstract ArrayList<Point> getKnobs();
 	
-	
+	public abstract void drawKnobs(Graphics g);
 
 }

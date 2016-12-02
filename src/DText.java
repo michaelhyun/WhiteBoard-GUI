@@ -1,10 +1,11 @@
+import java.awt.Color;
 import java.awt.Font;
 import java.awt.FontMetrics;
 import java.awt.Graphics;
 import java.awt.Point;
 import java.util.ArrayList;
 
-public class DText extends DShape implements ModelListener{
+public class DText extends DShape implements ModelListener {
 	DTextModel model;
 
 	public DText(DTextModel model) {
@@ -34,13 +35,14 @@ public class DText extends DShape implements ModelListener{
 		FontMetrics metrics = g.getFontMetrics(f);
 		int x = model.getX();
 		int y = metrics.getHeight() + model.getY();
-		
-		//this is a bad solution, but I need to modify the model based on the graphics context
+
+		// this is a bad solution, but I need to modify the model based on the
+		// graphics context
 		model.setWidth(metrics.stringWidth(model.getText()));
 		model.setHeight(metrics.getHeight());
-		//end bad code ^
-		
-		//draw the string
+		// end bad code ^
+
+		// draw the string
 		g.drawString(model.getText(), x, y);
 
 	}
@@ -54,7 +56,7 @@ public class DText extends DShape implements ModelListener{
 	@Override
 	public void modelChanged(DShapeModel model) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
@@ -69,8 +71,24 @@ public class DText extends DShape implements ModelListener{
 		points.add(topRight);
 		points.add(bottomLeft);
 		points.add(bottomRight);
-		
+
 		return points;
+	}
+
+	@Override
+	public void drawKnobs(Graphics g) {
+		// TODO Auto-generated method stub
+		g.setColor(Color.RED);
+
+		ArrayList<Point> knobs = getKnobs();
+
+		Point topLeft = knobs.get(0);
+		Point bottomRight = knobs.get(3);
+		g.drawLine(topLeft.x, topLeft.y, bottomRight.x, bottomRight.y);
+
+		Point topRight = knobs.get(1);
+		Point bottomLeft = knobs.get(2);
+		g.drawLine(topRight.x, topRight.y, bottomLeft.x, bottomRight.y);
 	}
 
 }

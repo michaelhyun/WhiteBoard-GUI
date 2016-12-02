@@ -1,10 +1,11 @@
+import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Point;
 import java.awt.geom.Ellipse2D;
 import java.util.ArrayList;
 
-public class DOval extends DShape implements ModelListener{
+public class DOval extends DShape implements ModelListener {
 	DOvalModel model;
 
 	public DOval(DOvalModel model) {
@@ -20,13 +21,13 @@ public class DOval extends DShape implements ModelListener{
 		ellipse = new Ellipse2D.Double(model.getX(), model.getY(), model.getWidth(), model.getHeight());
 		g2d.fill(ellipse);
 	}
-	
-	public boolean contains(Point point){
+
+	public boolean contains(Point point) {
 		int x = point.x;
 		int y = point.y;
-		
-		if(model.getX() <= x && x <= (model.getX() + model.getWidth())){
-			if(model.getY() <= y && y <= (model.getY() + model.getHeight())){
+
+		if (model.getX() <= x && x <= (model.getX() + model.getWidth())) {
+			if (model.getY() <= y && y <= (model.getY() + model.getHeight())) {
 				return true;
 			}
 		}
@@ -42,7 +43,7 @@ public class DOval extends DShape implements ModelListener{
 	@Override
 	public void modelChanged(DShapeModel model) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
@@ -57,8 +58,24 @@ public class DOval extends DShape implements ModelListener{
 		points.add(topRight);
 		points.add(bottomLeft);
 		points.add(bottomRight);
-		
+
 		return points;
+	}
+
+	@Override
+	public void drawKnobs(Graphics g) {
+		// TODO Auto-generated method stub
+		g.setColor(Color.RED);
+
+		ArrayList<Point> knobs = getKnobs();
+
+		Point topLeft = knobs.get(0);
+		Point bottomRight = knobs.get(3);
+		g.drawLine(topLeft.x, topLeft.y, bottomRight.x, bottomRight.y);
+
+		Point topRight = knobs.get(1);
+		Point bottomLeft = knobs.get(2);
+		g.drawLine(topRight.x, topRight.y, bottomLeft.x, bottomRight.y);
 	}
 
 }
