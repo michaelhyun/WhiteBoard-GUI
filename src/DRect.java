@@ -68,17 +68,31 @@ public class DRect extends DShape implements ModelListener {
 	@Override
 	public void drawKnobs(Graphics g) {
 		// TODO Auto-generated method stub
-		
-		g.setColor(Color.RED);
-		
+		Graphics2D g2d = (Graphics2D) (g);
+		g2d.setColor(Color.RED);
+
 		ArrayList<Point> knobs = getKnobs();
-		
+
 		Point topLeft = knobs.get(0);
 		Point bottomRight = knobs.get(3);
-		g.drawLine(topLeft.x, topLeft.y, bottomRight.x, bottomRight.y);
-		
 		Point topRight = knobs.get(1);
 		Point bottomLeft = knobs.get(2);
-		g.drawLine(topRight.x,topRight.y, bottomLeft.x, bottomRight.y);		
+
+		Rectangle2D topLeftRect;
+		topLeftRect = new Rectangle2D.Double(topLeft.getX() - 5, topLeft.getY() - 5, 10, 10);
+
+		Rectangle2D topRightRect;
+		topRightRect = new Rectangle2D.Double(topRight.getX() - 5, topRight.getY() - 5, 10, 10);
+
+		Rectangle2D bottomLeftRect;
+		bottomLeftRect = new Rectangle2D.Double(bottomLeft.getX() - 5, bottomLeft.getY() - 5, 10, 10);
+
+		Rectangle2D bottomRightRect;
+		bottomRightRect = new Rectangle2D.Double(bottomRight.getX() - 5, bottomRight.getY() - 5, 10, 10);
+
+		g2d.fill(topLeftRect);
+		g2d.fill(topRightRect);
+		g2d.fill(bottomLeftRect);
+		g2d.fill(bottomRightRect);
 	}
 }
