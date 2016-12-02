@@ -2,11 +2,9 @@ import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Point;
-import java.awt.geom.Line2D;
 import java.awt.geom.Rectangle2D;
 import java.util.ArrayList;
 
-import javax.swing.text.TabStop;
 
 public class DRect extends DShape implements ModelListener {
 	public DRectModel model;
@@ -46,7 +44,7 @@ public class DRect extends DShape implements ModelListener {
 	@Override
 	public void modelChanged(DShapeModel model) {
 		// TODO Auto-generated method stub
-
+		this.model = (DRectModel) model;
 	}
 
 	@Override
