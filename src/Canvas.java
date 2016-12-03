@@ -118,12 +118,16 @@ public class Canvas extends JPanel {
 
 	public void redrawSelectedShape() {
 		removeAll();
-		revalidate();
-		repaint();
+
 		for (DShape shape : shapesList) {
 			shape.draw(getGraphics());
 		}
-		shapesList.get(selectedShapeIndex).drawKnobs(getGraphics());
+		
+		revalidate();
+		repaint();
+		
+//		shapesList.get(selectedShapeIndex).draw(getGraphics());
+//		shapesList.get(selectedShapeIndex).drawKnobs(getGraphics());
 	}
 
 }
