@@ -1,5 +1,6 @@
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.Graphics;
 import java.awt.Point;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
@@ -31,13 +32,15 @@ public class Canvas extends JPanel {
 					if (shape.contains(me.getPoint())) {
 						selectedShape = shape;
 						selectedShapeIndex = i;
+						selectedShape.drawKnobs(getGraphics());
 						System.out.println(selectedShape.description());
 						break;
+					} else {
+
 					}
+
 				}
-				if (selectedShape != null) {
-					selectedShape.drawKnobs(getGraphics());
-				}
+
 			}
 
 			@Override
@@ -64,20 +67,22 @@ public class Canvas extends JPanel {
 				Point point = e.getPoint();
 				System.out.println(point.getX() + ", " + point.getY());
 				if (selectedShape != null) {
-					DShapeModel model;
-					if (selectedShape instanceof DRect) {
-						model = ((DRect) selectedShape).model;
-						model.setX(model.getX() + (point.x - xBeforeDrag));
-						model.setY(model.getY() + (point.y - yBeforeDrag));
-						selectedShape.modelChanged(model);
-						shapesList.set(selectedShapeIndex, selectedShape);
-						redrawSelectedShape();
-					} else if (selectedShape instanceof DOval) {
+					if (selectedShape.contains(point)) {
+						DShapeModel model;
+						if (selectedShape instanceof DRect) {
+							model = ((DRect) selectedShape).model;
+							model.setX(model.getX() + (point.x - xBeforeDrag));
+							model.setY(model.getY() + (point.y - yBeforeDrag));
+							selectedShape.modelChanged(model);
+							shapesList.set(selectedShapeIndex, selectedShape);
+							repaint();
+						} else if (selectedShape instanceof DOval) {
 
-					} else if (selectedShape instanceof DText) {
+						} else if (selectedShape instanceof DText) {
 
-					} else if (selectedShape instanceof DLine) {
+						} else if (selectedShape instanceof DLine) {
 
+						}
 					}
 				}
 				xBeforeDrag = point.x;
@@ -116,18 +121,13 @@ public class Canvas extends JPanel {
 		}
 	}
 
-	public void redrawSelectedShape() {
-		removeAll();
 
+	@Override
+	public void paintComponent(Graphics g) {
+		super.paintComponent(g);
 		for (DShape shape : shapesList) {
-			shape.draw(getGraphics());
+			shape.draw(g);
 		}
-		
-		revalidate();
-		repaint();
-		
-//		shapesList.get(selectedShapeIndex).draw(getGraphics());
-//		shapesList.get(selectedShapeIndex).drawKnobs(getGraphics());
 	}
 
 }
