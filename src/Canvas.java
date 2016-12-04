@@ -95,51 +95,30 @@ public class Canvas extends JPanel {
 				// System.out.println(point.getX() + ", " + point.getY());
 				if (selectedShape != null) {
 					if (movingKnob != null) { // resizing object
-						ArrayList<Point> knobPoints = selectedShape.getKnobs();
-						DShapeModel model;
 						if (selectedShape instanceof DRect) {
+							DShapeModel model;
+							model = ((DRect) selectedShape).model;
 							double dx = point.x - movingKnob.getX();
 							double dy = point.y - movingKnob.getY();
-							
-							if (anchorKnob.equals(knobPoints.get(0))) {
-								model = ((DRect) selectedShape).model;
-								model.setWidth((int) model.getWidth() + (int) (dx));
-								model.setHeight((int) model.getHeight() + (int) (dy));
-								selectedShape.modelChanged(model);
-								shapesList.set(selectedShapeIndex, selectedShape);
-								repaint();
-							}
-							else if (anchorKnob.equals(knobPoints.get(1))) {
-								model = ((DRect) selectedShape).model;
-								model.setX((int)(model.getX()+ dx));
-								model.setWidth((int)(model.getWidth() - dx));
-								model.setHeight((int)(model.getHeight() + dy));
-								selectedShape.modelChanged(model);
-								shapesList.set(selectedShapeIndex, selectedShape);
-								repaint();
-							}
-							else if (anchorKnob.equals(knobPoints.get(2))) {
-								model = ((DRect) selectedShape).model;
-								model.setY((int)(model.getY() + dy));
-								model.setWidth((int) model.getWidth() + (int) (dx));
-								model.setHeight((int) model.getHeight() - (int) (dy));
-								selectedShape.modelChanged(model);
-								shapesList.set(selectedShapeIndex, selectedShape);
-								repaint();
-							}
-							else if (anchorKnob.equals(knobPoints.get(3))) {
-								model = ((DRect) selectedShape).model;
-								model.setX((int) (model.getX() + dx));
-								model.setY((int) (model.getY() + dy));
-								model.setWidth((int) model.getWidth() - (int) (dx));
-								model.setHeight((int) model.getHeight() - (int) (dy));
-								selectedShape.modelChanged(model);
-								shapesList.set(selectedShapeIndex, selectedShape);
-								repaint();
-							}
+							resize(model, dx, dy);
+						}
+						if (selectedShape instanceof DOval) {
+							DShapeModel model;
+							model = ((DOval) selectedShape).model;
+							double dx = point.x - movingKnob.getX();
+							double dy = point.y - movingKnob.getY();
+							resize(model, dx, dy);
+						}
+						if (selectedShape instanceof DLine) {
+
+						}
+						if (selectedShape instanceof DText) {
+
 						}
 						System.out.println("moving");
 						movingKnob = point;
+						
+						
 					} else if (selectedShape.contains(point)) { // moving object
 						DShapeModel model;
 						if (selectedShape instanceof DRect) {
@@ -178,6 +157,44 @@ public class Canvas extends JPanel {
 			}
 		});
 
+	}
+	
+	public void resize(DShapeModel model, double dx, double dy){
+		
+		ArrayList<Point> knobPoints = selectedShape.getKnobs();
+		
+		if (anchorKnob.equals(knobPoints.get(0))) {
+			model.setWidth((int) model.getWidth() + (int) (dx));
+			model.setHeight((int) model.getHeight() + (int) (dy));
+			selectedShape.modelChanged(model);
+			shapesList.set(selectedShapeIndex, selectedShape);
+			repaint();
+		}
+		else if (anchorKnob.equals(knobPoints.get(1))) {
+			model.setX((int)(model.getX()+ dx));
+			model.setWidth((int)(model.getWidth() - dx));
+			model.setHeight((int)(model.getHeight() + dy));
+			selectedShape.modelChanged(model);
+			shapesList.set(selectedShapeIndex, selectedShape);
+			repaint();
+		}
+		else if (anchorKnob.equals(knobPoints.get(2))) {
+			model.setY((int)(model.getY() + dy));
+			model.setWidth((int) model.getWidth() + (int) (dx));
+			model.setHeight((int) model.getHeight() - (int) (dy));
+			selectedShape.modelChanged(model);
+			shapesList.set(selectedShapeIndex, selectedShape);
+			repaint();
+		}
+		else if (anchorKnob.equals(knobPoints.get(3))) {
+			model.setX((int) (model.getX() + dx));
+			model.setY((int) (model.getY() + dy));
+			model.setWidth((int) model.getWidth() - (int) (dx));
+			model.setHeight((int) model.getHeight() - (int) (dy));
+			selectedShape.modelChanged(model);
+			shapesList.set(selectedShapeIndex, selectedShape);
+			repaint();
+		}
 	}
 
 	public void addShape(DShapeModel model) {
