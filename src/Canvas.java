@@ -110,15 +110,14 @@ public class Canvas extends JPanel {
 							resize(model, dx, dy);
 						}
 						if (selectedShape instanceof DLine) {
-
+							//resize
 						}
 						if (selectedShape instanceof DText) {
-
+							//resize
 						}
 						System.out.println("moving");
 						movingKnob = point;
-						
-						
+
 					} else if (selectedShape.contains(point)) { // moving object
 						DShapeModel model;
 						if (selectedShape instanceof DRect) {
@@ -158,35 +157,32 @@ public class Canvas extends JPanel {
 		});
 
 	}
-	
-	public void resize(DShapeModel model, double dx, double dy){
-		
+
+	public void resize(DShapeModel model, double dx, double dy) {
+
 		ArrayList<Point> knobPoints = selectedShape.getKnobs();
-		
+
 		if (anchorKnob.equals(knobPoints.get(0))) {
 			model.setWidth((int) model.getWidth() + (int) (dx));
 			model.setHeight((int) model.getHeight() + (int) (dy));
 			selectedShape.modelChanged(model);
 			shapesList.set(selectedShapeIndex, selectedShape);
 			repaint();
-		}
-		else if (anchorKnob.equals(knobPoints.get(1))) {
-			model.setX((int)(model.getX()+ dx));
-			model.setWidth((int)(model.getWidth() - dx));
-			model.setHeight((int)(model.getHeight() + dy));
+		} else if (anchorKnob.equals(knobPoints.get(1))) {
+			model.setX((int) (model.getX() + dx));
+			model.setWidth((int) (model.getWidth() - dx));
+			model.setHeight((int) (model.getHeight() + dy));
 			selectedShape.modelChanged(model);
 			shapesList.set(selectedShapeIndex, selectedShape);
 			repaint();
-		}
-		else if (anchorKnob.equals(knobPoints.get(2))) {
-			model.setY((int)(model.getY() + dy));
+		} else if (anchorKnob.equals(knobPoints.get(2))) {
+			model.setY((int) (model.getY() + dy));
 			model.setWidth((int) model.getWidth() + (int) (dx));
 			model.setHeight((int) model.getHeight() - (int) (dy));
 			selectedShape.modelChanged(model);
 			shapesList.set(selectedShapeIndex, selectedShape);
 			repaint();
-		}
-		else if (anchorKnob.equals(knobPoints.get(3))) {
+		} else if (anchorKnob.equals(knobPoints.get(3))) {
 			model.setX((int) (model.getX() + dx));
 			model.setY((int) (model.getY() + dy));
 			model.setWidth((int) model.getWidth() - (int) (dx));
@@ -250,12 +246,17 @@ public class Canvas extends JPanel {
 
 	}
 
-	public void removeShape(DShape shape) {
-		try {
-			shapesList.remove(shape);
-		} catch (Exception e) {
-			System.out.println("Hello");
+	public void removeShape() {
+
+		if (selectedShape != null) {
+			shapesList.remove(selectedShape);
+			selectedShape = null;
+
+			repaint();
+		} else {
+			System.out.print("No shape selected");
 		}
+
 	}
 
 	@Override

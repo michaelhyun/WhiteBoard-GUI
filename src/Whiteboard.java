@@ -177,7 +177,7 @@ public class Whiteboard extends JFrame {
 		removeButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent evt) {
 				// remove shape
-				// canvas.removeShape(shape);
+				canvas.removeShape();
 			}
 
 		});
