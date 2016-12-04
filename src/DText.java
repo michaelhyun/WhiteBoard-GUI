@@ -30,8 +30,9 @@ public class DText extends DShape implements ModelListener {
 	@Override
 	public void draw(Graphics g) {
 		// TODO Auto-generated method stub
-
-		Font f = new Font(model.getText(), model.getFontStyle(), model.getFontSize());
+		
+		
+		Font f = new Font(model.getFontName(), model.getFontStyle(), model.getFontSize());
 		g.setFont(f);
 
 		FontMetrics metrics = g.getFontMetrics(f);
@@ -43,7 +44,6 @@ public class DText extends DShape implements ModelListener {
 		model.setWidth(metrics.stringWidth(model.getText()));
 		model.setHeight(metrics.getHeight());
 		// end bad code ^
-		
 		g.setColor(model.getColor());
 		
 		// draw the string

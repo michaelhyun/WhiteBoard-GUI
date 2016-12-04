@@ -3,6 +3,7 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Font;
+import java.awt.GraphicsEnvironment;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
@@ -136,14 +137,13 @@ public class Whiteboard extends JFrame {
 			public void actionPerformed(ActionEvent evt) {
 				DTextModel model = new DTextModel();
 				String text = textArea.getText();
+				model.setColor(Color.GRAY);
 				model.setText(text);
+				model.setFontName("EdwardianScriptITC");
+				model.setFontStyle(Font.PLAIN);
+				model.setFontSize(30);
 				model.setX(0);
 				model.setY(0);
-				model.setWidth(0);
-				model.setHeight(100);
-				model.setColor(Color.GRAY);
-				model.setFontSize(30);
-				model.setFontName("Edwardian Script");
 				canvas.addShape(model);
 			}
 

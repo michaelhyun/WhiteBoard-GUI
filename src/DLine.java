@@ -1,5 +1,8 @@
+import java.awt.Color;
 import java.awt.Graphics;
+import java.awt.Graphics2D;
 import java.awt.Point;
+import java.awt.geom.Rectangle2D;
 import java.util.ArrayList;
 
 public class DLine extends DShape implements ModelListener{
@@ -45,14 +48,11 @@ public class DLine extends DShape implements ModelListener{
 	public ArrayList<Point> getKnobs() {
 		// TODO Auto-generated method stub
 		ArrayList<Point> points = new ArrayList<Point>();
-		Point topLeft = new Point(model.getX(), model.getY());
-		Point bottomRight = new Point(model.getX() + model.getWidth(), model.getY() + model.getHeight());
-		Point bottomLeft = new Point(model.getX(), model.getY() + model.getHeight());
-		Point topRight = new Point(model.getX() + model.getWidth(), model.getY());
-		points.add(topLeft);
-		points.add(topRight);
-		points.add(bottomLeft);
-		points.add(bottomRight);
+		Point left = new Point(model.getX(), model.getY());
+		Point right = new Point(model.getX() + model.getWidth(), model.getY() + model.getHeight());
+
+		points.add(left);
+		points.add(right);
 		
 		return points;
 	}
@@ -60,7 +60,22 @@ public class DLine extends DShape implements ModelListener{
 	@Override
 	public void drawKnobs(Graphics g) {
 		// TODO Auto-generated method stub
+		Graphics2D g2d = (Graphics2D) (g);
+		g2d.setColor(Color.RED);
 		
+		ArrayList<Point> knobs = getKnobs();
+		
+		Point leftKnob = knobs.get(0);
+		Point rightKnob = knobs.get(1);
+		
+		Rectangle2D left;
+		left = new Rectangle2D.Double(leftKnob.getX() - 5, leftKnob.getY() - 5, 10, 10);
+
+		Rectangle2D right;
+		right = new Rectangle2D.Double(rightKnob.getX() - 5,  rightKnob.getY() - 5, 10, 10);
+		
+		g2d.fill(left);
+		g2d.fill(right);
 	}
 
 }
