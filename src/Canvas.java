@@ -16,6 +16,8 @@ public class Canvas extends JPanel {
 	private int selectedShapeIndex;
 	private int xBeforeDrag = 0;
 	private int yBeforeDrag = 0;
+	private Point movingKnob;
+	private Point anchorKnob;
 
 	public Canvas() {
 		// TODO Auto-generated constructor stub
@@ -27,19 +29,6 @@ public class Canvas extends JPanel {
 			@Override
 			public void mouseClicked(MouseEvent m) {
 				super.mouseClicked(m);
-
-				if (selectedShape != null) {
-					// knobs are active
-					ArrayList<Point> knobPoints = selectedShape.getKnobs();
-					for (Point point : knobPoints) {
-						if ((m.getX() <= (point.getX() + Globals.KNOB_SIZE / 2))
-								&& (m.getX() >= (point.getX() - Globals.KNOB_SIZE / 2))
-								&& (m.getY() <= (point.getY() + Globals.KNOB_SIZE / 2))
-								&& (m.getY() >= (point.getY() - Globals.KNOB_SIZE / 2))) {
-								System.out.println("workz");
-						}
-					}
-				}
 
 				for (int i = shapesList.size() - 1; i >= 0; i--) {
 					DShape shape = shapesList.get(i);
@@ -59,11 +48,24 @@ public class Canvas extends JPanel {
 
 			}
 
+		
+			
 			@Override
 			public void mousePressed(MouseEvent e) {
 				System.out.println("pressed");
 				System.out.println(e.getX() + ", " + e.getY());
 				if (selectedShape != null) {
+					ArrayList<Point> knobPoints = selectedShape.getKnobs();
+					for (Point point : knobPoints) {
+						if ((e.getX() <= (point.getX() + Globals.KNOB_SIZE / 2))
+								&& (e.getX() >= (point.getX() - Globals.KNOB_SIZE / 2))
+								&& (e.getY() <= (point.getY() + Globals.KNOB_SIZE / 2))
+								&& (e.getY() >= (point.getY() - Globals.KNOB_SIZE / 2))) {
+								movingKnob = point;
+								
+								System.out.println("MovingKnobselected");
+						}
+					}
 					xBeforeDrag = e.getX();
 					yBeforeDrag = e.getY();
 				}
@@ -72,6 +74,8 @@ public class Canvas extends JPanel {
 			@Override
 			public void mouseReleased(MouseEvent e) {
 				System.out.println("released");
+				movingKnob = null;
+				
 				//System.out.println(e.getX() + ", " + e.getY());
 			}
 		});
@@ -83,7 +87,11 @@ public class Canvas extends JPanel {
 				Point point = e.getPoint();
 				//System.out.println(point.getX() + ", " + point.getY());
 				if (selectedShape != null) {
-					if (selectedShape.contains(point)) {
+					if(movingKnob != null){ //resizing object
+
+						System.out.println("moving");
+					}
+					else if (selectedShape.contains(point)) { //moving object
 						DShapeModel model;
 						if (selectedShape instanceof DRect) {
 							model = ((DRect) selectedShape).model;
