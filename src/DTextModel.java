@@ -1,10 +1,10 @@
+import java.awt.Color;
 
 public class DTextModel extends DShapeModel {
 	private String text;
 	private String fontName;
 	private int fontStyle;
 	private int fontSize;
-
 	private int textSize;
 
 	public String getText() {
@@ -15,6 +15,9 @@ public class DTextModel extends DShapeModel {
 		this.text = text;
 	}
 
+
+	
+	
 	public int getTextSize() {
 		return textSize;
 	}
@@ -46,5 +49,6 @@ public class DTextModel extends DShapeModel {
 	public void setFontSize(int fontSize) {
 		this.fontSize = fontSize;
 	}
+
 
 }

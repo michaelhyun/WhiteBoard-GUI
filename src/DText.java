@@ -43,9 +43,12 @@ public class DText extends DShape implements ModelListener {
 		model.setWidth(metrics.stringWidth(model.getText()));
 		model.setHeight(metrics.getHeight());
 		// end bad code ^
-
+		
+		g.setColor(model.getColor());
+		
 		// draw the string
 		g.drawString(model.getText(), x, y);
+		
 
 	}
 
