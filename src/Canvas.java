@@ -48,8 +48,6 @@ public class Canvas extends JPanel {
 
 			}
 
-		
-			
 			@Override
 			public void mousePressed(MouseEvent e) {
 				System.out.println("pressed");
@@ -61,9 +59,17 @@ public class Canvas extends JPanel {
 								&& (e.getX() >= (point.getX() - Globals.KNOB_SIZE / 2))
 								&& (e.getY() <= (point.getY() + Globals.KNOB_SIZE / 2))
 								&& (e.getY() >= (point.getY() - Globals.KNOB_SIZE / 2))) {
-								movingKnob = point;
-								
-								System.out.println("MovingKnobselected");
+							movingKnob = point;
+							if (knobPoints.get(0).equals(movingKnob)) {
+								anchorKnob = knobPoints.get(3);
+							} else if (knobPoints.get(1).equals(movingKnob)) {
+								anchorKnob = knobPoints.get(2);
+							} else if (knobPoints.get(2).equals(movingKnob)) {
+								anchorKnob = knobPoints.get(1);
+							} else if (knobPoints.get(3).equals(movingKnob)) {
+								anchorKnob = knobPoints.get(0);
+							}
+							System.out.println("MovingKnobselected");
 						}
 					}
 					xBeforeDrag = e.getX();
@@ -75,33 +81,66 @@ public class Canvas extends JPanel {
 			public void mouseReleased(MouseEvent e) {
 				System.out.println("released");
 				movingKnob = null;
-				
-				//System.out.println(e.getX() + ", " + e.getY());
+				anchorKnob = null;
+
+				// System.out.println(e.getX() + ", " + e.getY());
 			}
 		});
 
 		addMouseMotionListener(new MouseAdapter() {
 			@Override
 			public void mouseDragged(MouseEvent e) {
-				//System.out.println("dragged");
+				// System.out.println("dragged");
 				Point point = e.getPoint();
-				//System.out.println(point.getX() + ", " + point.getY());
+				// System.out.println(point.getX() + ", " + point.getY());
 				if (selectedShape != null) {
-					if(movingKnob != null){ //resizing object
-						
+					if (movingKnob != null) { // resizing object
+						ArrayList<Point> knobPoints = selectedShape.getKnobs();
 						DShapeModel model;
 						if (selectedShape instanceof DRect) {
-							model = ((DRect) selectedShape).model;
-							model.setWidth((int)model.getWidth()+ (int)(point.x - movingKnob.getX()));
-							model.setHeight((int)model.getHeight()+ (int)(point.y - movingKnob.getY()));
-							selectedShape.modelChanged(model);
-							shapesList.set(selectedShapeIndex, selectedShape);
-							repaint();
+							double dx = point.x - movingKnob.getX();
+							double dy = point.y - movingKnob.getY();
+							
+							if (anchorKnob.equals(knobPoints.get(0))) {
+								model = ((DRect) selectedShape).model;
+								model.setWidth((int) model.getWidth() + (int) (dx));
+								model.setHeight((int) model.getHeight() + (int) (dy));
+								selectedShape.modelChanged(model);
+								shapesList.set(selectedShapeIndex, selectedShape);
+								repaint();
+							}
+							else if (anchorKnob.equals(knobPoints.get(1))) {
+								model = ((DRect) selectedShape).model;
+								model.setX((int)(model.getX()+ dx));
+								model.setWidth((int)(model.getWidth() - dx));
+								model.setHeight((int)(model.getHeight() + dy));
+								selectedShape.modelChanged(model);
+								shapesList.set(selectedShapeIndex, selectedShape);
+								repaint();
+							}
+							else if (anchorKnob.equals(knobPoints.get(2))) {
+								model = ((DRect) selectedShape).model;
+								model.setY((int)(model.getY() + dy));
+								model.setWidth((int) model.getWidth() + (int) (dx));
+								model.setHeight((int) model.getHeight() - (int) (dy));
+								selectedShape.modelChanged(model);
+								shapesList.set(selectedShapeIndex, selectedShape);
+								repaint();
+							}
+							else if (anchorKnob.equals(knobPoints.get(3))) {
+								model = ((DRect) selectedShape).model;
+								model.setX((int) (model.getX() + dx));
+								model.setY((int) (model.getY() + dy));
+								model.setWidth((int) model.getWidth() - (int) (dx));
+								model.setHeight((int) model.getHeight() - (int) (dy));
+								selectedShape.modelChanged(model);
+								shapesList.set(selectedShapeIndex, selectedShape);
+								repaint();
+							}
 						}
 						System.out.println("moving");
 						movingKnob = point;
-					}
-					else if (selectedShape.contains(point)) { //moving object
+					} else if (selectedShape.contains(point)) { // moving object
 						DShapeModel model;
 						if (selectedShape instanceof DRect) {
 							model = ((DRect) selectedShape).model;
