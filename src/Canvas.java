@@ -60,6 +60,7 @@ public class Canvas extends JPanel {
 								&& (e.getY() <= (point.getY() + Globals.KNOB_SIZE / 2))
 								&& (e.getY() >= (point.getY() - Globals.KNOB_SIZE / 2))) {
 							movingKnob = point;
+							
 							if (knobPoints.get(0).equals(movingKnob)) {
 								anchorKnob = knobPoints.get(3);
 							} else if (knobPoints.get(1).equals(movingKnob)) {
@@ -82,8 +83,6 @@ public class Canvas extends JPanel {
 				System.out.println("released");
 				movingKnob = null;
 				anchorKnob = null;
-
-				// System.out.println(e.getX() + ", " + e.getY());
 			}
 		});
 
@@ -156,7 +155,7 @@ public class Canvas extends JPanel {
 
 	}
 
-	public void resize(DShapeModel model, double dx, double dy) {
+	public void resize(DShapeModel model, double dx, double dy) { //for OVAL AND RECT
 
 		ArrayList<Point> knobPoints = selectedShape.getKnobs();
 

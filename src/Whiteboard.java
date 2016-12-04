@@ -13,6 +13,8 @@ import javax.swing.JColorChooser;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JTable;
 import javax.swing.JTextArea;
 
 public class Whiteboard extends JFrame {
@@ -36,6 +38,8 @@ public class Whiteboard extends JFrame {
 		// create canvas
 		Canvas canvas = new Canvas();
 		canvas.setPreferredSize(new Dimension(400, 400));
+		
+
 
 		// create control panel for buttons
 		JPanel controlPanel = new JPanel();
@@ -100,7 +104,7 @@ public class Whiteboard extends JFrame {
 
 				// font must be set in this order
 				model.setColor(Color.GRAY);
-				model.setText("Hello, World");
+				model.setText("Hello");
 				model.setFontName("Dialog");
 				model.setFontStyle(Font.PLAIN);
 				model.setFontSize(30);
@@ -226,7 +230,7 @@ public class Whiteboard extends JFrame {
 		leftPanel.add(saveBox);
 
 		controlPanel.add(leftPanel, BorderLayout.WEST);
-
+		
 		frame.add(controlPanel, BorderLayout.WEST);
 		frame.add(canvas, BorderLayout.CENTER);
 		frame.pack();
