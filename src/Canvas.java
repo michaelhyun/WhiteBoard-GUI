@@ -79,7 +79,12 @@ public class Canvas extends JPanel {
 							shapesList.set(selectedShapeIndex, selectedShape);
 							repaint();
 						} else if (selectedShape instanceof DOval) {
-
+							model = ((DOval) selectedShape).model;
+							model.setX(model.getX() + (point.x - xBeforeDrag));
+							model.setY(model.getY() + (point.y - yBeforeDrag));
+							selectedShape.modelChanged(model);
+							shapesList.set(selectedShapeIndex, selectedShape);
+							repaint();
 						} else if (selectedShape instanceof DText) {
 
 						} else if (selectedShape instanceof DLine) {
