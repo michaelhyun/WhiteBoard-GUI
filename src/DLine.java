@@ -69,10 +69,10 @@ public class DLine extends DShape implements ModelListener{
 		Point rightKnob = knobs.get(1);
 		
 		Rectangle2D left;
-		left = new Rectangle2D.Double(leftKnob.getX() - 5, leftKnob.getY() - 5, 10, 10);
+		left = new Rectangle2D.Double(leftKnob.getX() - Globals.KNOB_SIZE/2, leftKnob.getY() - Globals.KNOB_SIZE/2, Globals.KNOB_SIZE, Globals.KNOB_SIZE);
 
 		Rectangle2D right;
-		right = new Rectangle2D.Double(rightKnob.getX() - 5,  rightKnob.getY() - 5, 10, 10);
+		right = new Rectangle2D.Double(rightKnob.getX() - Globals.KNOB_SIZE/2,  rightKnob.getY() - Globals.KNOB_SIZE/2, Globals.KNOB_SIZE, Globals.KNOB_SIZE);
 		
 		g2d.fill(left);
 		g2d.fill(right);

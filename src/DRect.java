@@ -5,7 +5,6 @@ import java.awt.Point;
 import java.awt.geom.Rectangle2D;
 import java.util.ArrayList;
 
-
 public class DRect extends DShape implements ModelListener {
 	public DRectModel model;
 
@@ -77,16 +76,20 @@ public class DRect extends DShape implements ModelListener {
 		Point bottomLeft = knobs.get(2);
 
 		Rectangle2D topLeftRect;
-		topLeftRect = new Rectangle2D.Double(topLeft.getX() - 5, topLeft.getY() - 5, 10, 10);
+		topLeftRect = new Rectangle2D.Double(topLeft.getX() - Globals.KNOB_SIZE / 2,
+				topLeft.getY() - Globals.KNOB_SIZE / 2, Globals.KNOB_SIZE, Globals.KNOB_SIZE);
 
 		Rectangle2D topRightRect;
-		topRightRect = new Rectangle2D.Double(topRight.getX() - 5, topRight.getY() - 5, 10, 10);
+		topRightRect = new Rectangle2D.Double(topRight.getX() - Globals.KNOB_SIZE / 2,
+				topRight.getY() - Globals.KNOB_SIZE / 2, Globals.KNOB_SIZE, Globals.KNOB_SIZE);
 
 		Rectangle2D bottomLeftRect;
-		bottomLeftRect = new Rectangle2D.Double(bottomLeft.getX() - 5, bottomLeft.getY() - 5, 10, 10);
+		bottomLeftRect = new Rectangle2D.Double(bottomLeft.getX() - Globals.KNOB_SIZE / 2,
+				bottomLeft.getY() - Globals.KNOB_SIZE / 2, Globals.KNOB_SIZE, Globals.KNOB_SIZE);
 
 		Rectangle2D bottomRightRect;
-		bottomRightRect = new Rectangle2D.Double(bottomRight.getX() - 5, bottomRight.getY() - 5, 10, 10);
+		bottomRightRect = new Rectangle2D.Double(bottomRight.getX() - Globals.KNOB_SIZE / 2,
+				bottomRight.getY() - Globals.KNOB_SIZE / 2, Globals.KNOB_SIZE, Globals.KNOB_SIZE);
 
 		g2d.fill(topLeftRect);
 		g2d.fill(topRightRect);
