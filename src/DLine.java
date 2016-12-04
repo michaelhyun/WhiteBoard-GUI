@@ -5,7 +5,7 @@ import java.awt.Point;
 import java.awt.geom.Rectangle2D;
 import java.util.ArrayList;
 
-public class DLine extends DShape implements ModelListener{
+public class DLine extends DShape implements ModelListener {
 	DLineModel model;
 
 	public DLine(DLineModel model) {
@@ -19,13 +19,13 @@ public class DLine extends DShape implements ModelListener{
 		g.setColor(model.getColor());
 		g.drawLine(model.getX(), model.getY(), model.getX() + model.getWidth(), model.getY() + model.getHeight());
 	}
-	
-	public boolean contains(Point point){
+
+	public boolean contains(Point point) {
 		int x = point.x;
 		int y = point.y;
-		
-		if(model.getX() <= x && x <= (model.getX() + model.getWidth())){
-			if(model.getY() <= y && y <= (model.getY() + model.getHeight())){
+
+		if (model.getX() <= x && x <= (model.getX() + model.getWidth())) {
+			if (model.getY() <= y && y <= (model.getY() + model.getHeight())) {
 				return true;
 			}
 		}
@@ -41,7 +41,7 @@ public class DLine extends DShape implements ModelListener{
 	@Override
 	public void modelChanged(DShapeModel model) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
@@ -53,7 +53,7 @@ public class DLine extends DShape implements ModelListener{
 
 		points.add(left);
 		points.add(right);
-		
+
 		return points;
 	}
 
@@ -62,18 +62,20 @@ public class DLine extends DShape implements ModelListener{
 		// TODO Auto-generated method stub
 		Graphics2D g2d = (Graphics2D) (g);
 		g2d.setColor(Color.RED);
-		
+
 		ArrayList<Point> knobs = getKnobs();
-		
+
 		Point leftKnob = knobs.get(0);
 		Point rightKnob = knobs.get(1);
-		
+
 		Rectangle2D left;
-		left = new Rectangle2D.Double(leftKnob.getX() - Globals.KNOB_SIZE/2, leftKnob.getY() - Globals.KNOB_SIZE/2, Globals.KNOB_SIZE, Globals.KNOB_SIZE);
+		left = new Rectangle2D.Double(leftKnob.getX() - Globals.KNOB_SIZE / 2, leftKnob.getY() - Globals.KNOB_SIZE / 2,
+				Globals.KNOB_SIZE, Globals.KNOB_SIZE);
 
 		Rectangle2D right;
-		right = new Rectangle2D.Double(rightKnob.getX() - Globals.KNOB_SIZE/2,  rightKnob.getY() - Globals.KNOB_SIZE/2, Globals.KNOB_SIZE, Globals.KNOB_SIZE);
-		
+		right = new Rectangle2D.Double(rightKnob.getX() - Globals.KNOB_SIZE / 2,
+				rightKnob.getY() - Globals.KNOB_SIZE / 2, Globals.KNOB_SIZE, Globals.KNOB_SIZE);
+
 		g2d.fill(left);
 		g2d.fill(right);
 	}
