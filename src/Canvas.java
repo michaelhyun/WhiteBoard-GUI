@@ -1,12 +1,9 @@
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
-import java.awt.Graphics2D;
 import java.awt.Point;
-import java.awt.Rectangle;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.awt.geom.Rectangle2D;
 import java.util.ArrayList;
 
 import javax.swing.JPanel;
@@ -16,6 +13,9 @@ public class Canvas extends JPanel {
 	private final int HEIGHT = 400, WIDTH = 400;
 	private ArrayList<DShape> shapesList;
 	private DShape selectedShape;
+	private int selectedShapeIndex;
+	private int xBeforeDrag = 0;
+	private int yBeforeDrag = 0;
 
 	public Canvas() {
 		// TODO Auto-generated constructor stub
@@ -31,26 +31,28 @@ public class Canvas extends JPanel {
 					DShape shape = shapesList.get(i);
 					if (shape.contains(me.getPoint())) {
 						selectedShape = shape;
+						repaint();
+						selectedShapeIndex = i;
+						selectedShape.drawKnobs(getGraphics());
 						System.out.println(selectedShape.description());
 						break;
+					} else {
+						selectedShape = null;
+						repaint();
 					}
+
 				}
-				if (selectedShape != null) {
-					selectedShape.drawKnobs(getGraphics());
-				}
-				// ArrayList<Point> points = selectedShape.getKnobs();
-				//
-				// for(Point p : points){
-				// Rectangle rectangle = new Rectangle(p.x,p.y, 9, 9);
-				//
-				// }
-				// need to do something to selected shape here
+
 			}
 
 			@Override
 			public void mousePressed(MouseEvent e) {
 				System.out.println("pressed");
 				System.out.println(e.getX() + ", " + e.getY());
+				if (selectedShape != null) {
+					xBeforeDrag = e.getX();
+					yBeforeDrag = e.getY();
+				}
 			}
 
 			@Override
@@ -66,6 +68,27 @@ public class Canvas extends JPanel {
 				System.out.println("dragged");
 				Point point = e.getPoint();
 				System.out.println(point.getX() + ", " + point.getY());
+				if (selectedShape != null) {
+					if (selectedShape.contains(point)) {
+						DShapeModel model;
+						if (selectedShape instanceof DRect) {
+							model = ((DRect) selectedShape).model;
+							model.setX(model.getX() + (point.x - xBeforeDrag));
+							model.setY(model.getY() + (point.y - yBeforeDrag));
+							selectedShape.modelChanged(model);
+							shapesList.set(selectedShapeIndex, selectedShape);
+							repaint();
+						} else if (selectedShape instanceof DOval) {
+
+						} else if (selectedShape instanceof DText) {
+
+						} else if (selectedShape instanceof DLine) {
+
+						}
+					}
+				}
+				xBeforeDrag = point.x;
+				yBeforeDrag = point.y;
 			}
 		});
 
@@ -97,6 +120,18 @@ public class Canvas extends JPanel {
 			shapesList.remove(shape);
 		} catch (Exception e) {
 			System.out.println("Hello");
+		}
+	}
+
+
+	@Override
+	public void paintComponent(Graphics g) {
+		super.paintComponent(g);
+		for (DShape shape : shapesList) {
+			shape.draw(g);
+		}
+		if(selectedShape != null){
+			selectedShape.drawKnobs(g);
 		}
 	}
 

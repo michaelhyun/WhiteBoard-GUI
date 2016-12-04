@@ -13,4 +13,5 @@ public abstract class DShape {
 	
 	public abstract void drawKnobs(Graphics g);
 
+	public abstract void modelChanged(DShapeModel model);
 }
