@@ -31,12 +31,14 @@ public class Canvas extends JPanel {
 					DShape shape = shapesList.get(i);
 					if (shape.contains(me.getPoint())) {
 						selectedShape = shape;
+						repaint();
 						selectedShapeIndex = i;
 						selectedShape.drawKnobs(getGraphics());
 						System.out.println(selectedShape.description());
 						break;
 					} else {
-
+						selectedShape = null;
+						repaint();
 					}
 
 				}
@@ -127,6 +129,9 @@ public class Canvas extends JPanel {
 		super.paintComponent(g);
 		for (DShape shape : shapesList) {
 			shape.draw(g);
+		}
+		if(selectedShape != null){
+			selectedShape.drawKnobs(g);
 		}
 	}
 
