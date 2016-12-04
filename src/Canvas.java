@@ -86,7 +86,12 @@ public class Canvas extends JPanel {
 							shapesList.set(selectedShapeIndex, selectedShape);
 							repaint();
 						} else if (selectedShape instanceof DText) {
-
+							model = ((DText) selectedShape).model;
+							model.setX(model.getX() + (point.x - xBeforeDrag));
+							model.setY(model.getY() + (point.y - yBeforeDrag));
+							selectedShape.modelChanged(model);
+							shapesList.set(selectedShapeIndex, selectedShape);
+							repaint();
 						} else if (selectedShape instanceof DLine) {
 
 						}
@@ -120,6 +125,34 @@ public class Canvas extends JPanel {
 		}
 	}
 
+	public void colorUpdated(final Color c) {
+		if (selectedShape != null) {
+			DShapeModel model;
+			if (selectedShape instanceof DRect) {
+				model = ((DRect) selectedShape).model;
+				model.setColor(c);
+				selectedShape.modelChanged(model);
+				shapesList.set(selectedShapeIndex, selectedShape);
+				repaint();
+			} else if (selectedShape instanceof DOval) {
+				model = ((DOval) selectedShape).model;
+				model.setColor(c);
+				selectedShape.modelChanged(model);
+				shapesList.set(selectedShapeIndex, selectedShape);
+				repaint();
+			} else if (selectedShape instanceof DText) {
+				model = ((DText) selectedShape).model;
+				model.setColor(c);
+				selectedShape.modelChanged(model);
+				shapesList.set(selectedShapeIndex, selectedShape);
+				repaint();
+			} else if (selectedShape instanceof DLine) {
+
+			}
+		}
+
+	}
+
 	public void removeShape(DShape shape) {
 		try {
 			shapesList.remove(shape);
@@ -128,14 +161,13 @@ public class Canvas extends JPanel {
 		}
 	}
 
-
 	@Override
 	public void paintComponent(Graphics g) {
 		super.paintComponent(g);
 		for (DShape shape : shapesList) {
 			shape.draw(g);
 		}
-		if(selectedShape != null){
+		if (selectedShape != null) {
 			selectedShape.drawKnobs(g);
 		}
 	}

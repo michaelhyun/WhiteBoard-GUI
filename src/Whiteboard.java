@@ -8,6 +8,7 @@ import java.awt.event.ActionListener;
 
 import javax.swing.Box;
 import javax.swing.JButton;
+import javax.swing.JColorChooser;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -117,8 +118,8 @@ public class Whiteboard extends JFrame {
 		// action listeners for setting color
 		setColorButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent evt) {
-				// update model for the selected shape
-				
+				Color newColor = JColorChooser.showDialog(null, "Choose a color: ", Color.GREEN);				
+				canvas.colorUpdated(newColor);
 			}
 
 		});
