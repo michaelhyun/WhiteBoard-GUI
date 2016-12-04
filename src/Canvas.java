@@ -25,11 +25,25 @@ public class Canvas extends JPanel {
 
 		addMouseListener(new MouseAdapter() {
 			@Override
-			public void mouseClicked(MouseEvent me) {
-				super.mouseClicked(me);
+			public void mouseClicked(MouseEvent m) {
+				super.mouseClicked(m);
+
+				if (selectedShape != null) {
+					// knobs are active
+					ArrayList<Point> knobPoints = selectedShape.getKnobs();
+					for (Point point : knobPoints) {
+						if ((m.getX() <= (point.getX() + Globals.KNOB_SIZE / 2))
+								&& (m.getX() >= (point.getX() - Globals.KNOB_SIZE / 2))
+								&& (m.getY() <= (point.getY() + Globals.KNOB_SIZE / 2))
+								&& (m.getY() >= (point.getY() - Globals.KNOB_SIZE / 2))) {
+								System.out.println("workz");
+						}
+					}
+				}
+
 				for (int i = shapesList.size() - 1; i >= 0; i--) {
 					DShape shape = shapesList.get(i);
-					if (shape.contains(me.getPoint())) {
+					if (shape.contains(m.getPoint())) {
 						selectedShape = shape;
 						repaint();
 						selectedShapeIndex = i;
@@ -58,16 +72,16 @@ public class Canvas extends JPanel {
 			@Override
 			public void mouseReleased(MouseEvent e) {
 				System.out.println("released");
-				System.out.println(e.getX() + ", " + e.getY());
+				//System.out.println(e.getX() + ", " + e.getY());
 			}
 		});
 
 		addMouseMotionListener(new MouseAdapter() {
 			@Override
 			public void mouseDragged(MouseEvent e) {
-				System.out.println("dragged");
+				//System.out.println("dragged");
 				Point point = e.getPoint();
-				System.out.println(point.getX() + ", " + point.getY());
+				//System.out.println(point.getX() + ", " + point.getY());
 				if (selectedShape != null) {
 					if (selectedShape.contains(point)) {
 						DShapeModel model;
