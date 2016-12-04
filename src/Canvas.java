@@ -147,7 +147,11 @@ public class Canvas extends JPanel {
 				shapesList.set(selectedShapeIndex, selectedShape);
 				repaint();
 			} else if (selectedShape instanceof DLine) {
-
+				model = ((DLine) selectedShape).model;
+				model.setColor(c);
+				selectedShape.modelChanged(model);
+				shapesList.set(selectedShapeIndex, selectedShape);
+				repaint();
 			}
 		}
 
