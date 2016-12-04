@@ -90,9 +90,7 @@ public class Canvas extends JPanel {
 		addMouseMotionListener(new MouseAdapter() {
 			@Override
 			public void mouseDragged(MouseEvent e) {
-				// System.out.println("dragged");
 				Point point = e.getPoint();
-				// System.out.println(point.getX() + ", " + point.getY());
 				if (selectedShape != null) {
 					if (movingKnob != null) { // resizing object
 						if (selectedShape instanceof DRect) {
@@ -110,10 +108,10 @@ public class Canvas extends JPanel {
 							resize(model, dx, dy);
 						}
 						if (selectedShape instanceof DLine) {
-							//resize
+							// resize
 						}
 						if (selectedShape instanceof DText) {
-							//resize
+							// resize
 						}
 						System.out.println("moving");
 						movingKnob = point;
@@ -244,6 +242,26 @@ public class Canvas extends JPanel {
 			}
 		}
 
+	}
+
+	public void moveToBack() {
+		if (selectedShape != null) {
+			shapesList.remove(selectedShape);
+			shapesList.add(shapesList.size(), selectedShape);
+			repaint();
+		} else {
+			System.out.print("No shape selected");
+		}
+	}
+
+	public void moveToFront() {
+		if (selectedShape != null) {
+			shapesList.remove(selectedShape);
+			shapesList.add(0, selectedShape);
+			repaint();
+		} else {
+			System.out.print("No shape selected");
+		}
 	}
 
 	public void removeShape() {
