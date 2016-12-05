@@ -62,7 +62,7 @@ public class Canvas extends JPanel {
 								&& (e.getY() <= (point.getY() + Globals.KNOB_SIZE / 2))
 								&& (e.getY() >= (point.getY() - Globals.KNOB_SIZE / 2))) {
 							movingKnob = point;
-							
+
 							if (knobPoints.get(0).equals(movingKnob)) {
 								anchorKnob = knobPoints.get(3);
 							} else if (knobPoints.get(1).equals(movingKnob)) {
@@ -157,7 +157,8 @@ public class Canvas extends JPanel {
 
 	}
 
-	public void resize(DShapeModel model, double dx, double dy) { //for OVAL AND RECT
+	public void resize(DShapeModel model, double dx, double dy) { // for OVAL
+																	// AND RECT
 
 		ArrayList<Point> knobPoints = selectedShape.getKnobs();
 
@@ -288,11 +289,20 @@ public class Canvas extends JPanel {
 			selectedShape.drawKnobs(g);
 		}
 	}
-	
+
 	public Element getRootElementForXML(Element rootElement) {
 		for (DShape dShape : shapesList) {
 			if (dShape instanceof DRect) {
 				DShapeModel model = ((DRect) dShape).model;
+				model.addModelTo(rootElement);
+			} else if (dShape instanceof DOval) {
+				DShapeModel model = ((DOval) dShape).model;
+				model.addModelTo(rootElement);
+			} else if (dShape instanceof DLine) {
+				DShapeModel model = ((DLine) dShape).model;
+				model.addModelTo(rootElement);
+			} else if (dShape instanceof DText) {
+				DShapeModel model = ((DText) dShape).model;
 				model.addModelTo(rootElement);
 			}
 		}
