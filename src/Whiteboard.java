@@ -3,19 +3,28 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Font;
-import java.awt.GraphicsEnvironment;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.File;
 
 import javax.swing.Box;
 import javax.swing.JButton;
 import javax.swing.JColorChooser;
+import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
-import javax.swing.JScrollPane;
-import javax.swing.JTable;
 import javax.swing.JTextArea;
+import javax.swing.filechooser.FileNameExtensionFilter;
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.transform.Transformer;
+import javax.xml.transform.TransformerFactory;
+import javax.xml.transform.dom.DOMSource;
+import javax.xml.transform.stream.StreamResult;
+
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
 
 public class Whiteboard extends JFrame {
 	private static final long serialVersionUID = 1L;
@@ -38,8 +47,6 @@ public class Whiteboard extends JFrame {
 		// create canvas
 		Canvas canvas = new Canvas();
 		canvas.setPreferredSize(new Dimension(400, 400));
-		
-
 
 		// create control panel for buttons
 		JPanel controlPanel = new JPanel();
@@ -125,7 +132,7 @@ public class Whiteboard extends JFrame {
 		// action listeners for setting color
 		setColorButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent evt) {
-				Color newColor = JColorChooser.showDialog(null, "Choose a color: ", Color.GREEN);				
+				Color newColor = JColorChooser.showDialog(null, "Choose a color: ", Color.GREEN);
 				canvas.colorUpdated(newColor);
 			}
 
@@ -204,6 +211,32 @@ public class Whiteboard extends JFrame {
 		saveButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent evt) {
 				// save file
+				DocumentBuilderFactory docFactory = DocumentBuilderFactory.newInstance();
+				DocumentBuilder docBuilder;
+				try {
+					docBuilder = docFactory.newDocumentBuilder();
+					// root elements
+					Document doc = docBuilder.newDocument();
+					Element rootElement = doc.createElement("shapes");
+					doc.appendChild(rootElement);
+					rootElement = canvas.getRootElementForXML(rootElement);
+
+					TransformerFactory transformerFactory = TransformerFactory.newInstance();
+					Transformer transformer = transformerFactory.newTransformer();
+					DOMSource source = new DOMSource(doc);
+					JFileChooser fileChooser = new JFileChooser();
+					fileChooser.setFileSelectionMode(JFileChooser.SAVE_DIALOG);
+
+					fileChooser.showSaveDialog(null);
+					StreamResult result = new StreamResult(fileChooser.getSelectedFile());
+
+					transformer.transform(source, result);
+
+				} catch (Exception e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+
 			}
 
 		});
@@ -218,6 +251,7 @@ public class Whiteboard extends JFrame {
 		saveImageButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent evt) {
 				// save image
+
 			}
 
 		});
@@ -230,7 +264,7 @@ public class Whiteboard extends JFrame {
 		leftPanel.add(saveBox);
 
 		controlPanel.add(leftPanel, BorderLayout.WEST);
-		
+
 		frame.add(controlPanel, BorderLayout.WEST);
 		frame.add(canvas, BorderLayout.CENTER);
 		frame.pack();
