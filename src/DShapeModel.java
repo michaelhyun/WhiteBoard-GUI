@@ -1,6 +1,4 @@
 import java.awt.Color;
-import org.w3c.*;
-import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
 public abstract class DShapeModel {
@@ -46,6 +44,34 @@ public abstract class DShapeModel {
 	public void setColor(Color color) {
 		this.color = color;
 	}
-	
-	public abstract Element addModelTo(Element rootElement); 
+
+	public Element addModelTo(Element rootElement) {
+		// TODO Auto-generated method stub
+		Element shape = rootElement.getOwnerDocument().createElement("shape");
+
+		Element xElement = rootElement.getOwnerDocument().createElement("x");
+		xElement.appendChild(rootElement.getOwnerDocument().createTextNode(getX() + ""));
+		shape.appendChild(xElement);
+
+		Element yElement = rootElement.getOwnerDocument().createElement("y");
+		yElement.appendChild(rootElement.getOwnerDocument().createTextNode(getY() + ""));
+		shape.appendChild(yElement);
+
+		Element widthElement = rootElement.getOwnerDocument().createElement("width");
+		widthElement.appendChild(rootElement.getOwnerDocument().createTextNode(getWidth() + ""));
+		shape.appendChild(widthElement);
+
+		Element heightElement = rootElement.getOwnerDocument().createElement("height");
+		heightElement.appendChild(rootElement.getOwnerDocument().createTextNode(getHeight() + ""));
+		shape.appendChild(heightElement);
+
+		Element colorElement = rootElement.getOwnerDocument().createElement("color");
+		heightElement.appendChild(rootElement.getOwnerDocument().createTextNode(getColor().getRGB() + ""));
+		shape.appendChild(colorElement);
+
+		rootElement.appendChild(shape);
+
+		return rootElement;
+	}
+
 }
