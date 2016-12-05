@@ -28,7 +28,7 @@ public class DRectModel extends DShapeModel {
 		shape.appendChild(heightElement);
 		
 		Element colorElement = rootElement.getOwnerDocument().createElement("color");
-		heightElement.appendChild(rootElement.getOwnerDocument().createTextNode(getColor().getRGB()+""));
+		colorElement.appendChild(rootElement.getOwnerDocument().createTextNode(getColor().getRGB()+""));
 		shape.appendChild(colorElement);
 		
 		rootElement.appendChild(shape);
