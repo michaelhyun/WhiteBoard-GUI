@@ -5,14 +5,17 @@ import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.File;
 
 import javax.swing.Box;
 import javax.swing.JButton;
 import javax.swing.JColorChooser;
+import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextArea;
+import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.transform.Transformer;
@@ -221,10 +224,12 @@ public class Whiteboard extends JFrame {
 					TransformerFactory transformerFactory = TransformerFactory.newInstance();
 					Transformer transformer = transformerFactory.newTransformer();
 					DOMSource source = new DOMSource(doc);
-					// StreamResult result = new StreamResult(new
-					// File("C:\\file.xml"));
+					JFileChooser fileChooser = new JFileChooser();
+					fileChooser.setFileSelectionMode(JFileChooser.SAVE_DIALOG);
 
-					StreamResult result = new StreamResult(System.out);
+					fileChooser.showSaveDialog(null);
+					StreamResult result = new StreamResult(fileChooser.getSelectedFile());
+
 					transformer.transform(source, result);
 
 				} catch (Exception e) {
