@@ -14,6 +14,8 @@ import javax.swing.JColorChooser;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JTable;
 import javax.swing.JTextArea;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -47,6 +49,8 @@ public class Whiteboard extends JFrame {
 		// create canvas
 		Canvas canvas = new Canvas();
 		canvas.setPreferredSize(new Dimension(400, 400));
+		
+
 
 		// create control panel for buttons
 		JPanel controlPanel = new JPanel();
@@ -69,10 +73,10 @@ public class Whiteboard extends JFrame {
 		rectButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent evt) {
 				DShapeModel model = new DRectModel();
-				model.setX(0);
-				model.setY(0);
-				model.setHeight(50);
-				model.setWidth(100);
+				model.setX(10);
+				model.setY(10);
+				model.setHeight(20);
+				model.setWidth(20);
 				model.setColor(Color.GRAY);
 				canvas.addShape(model);
 			}
@@ -82,10 +86,10 @@ public class Whiteboard extends JFrame {
 		ovalButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent evt) {
 				DShapeModel model = new DOvalModel();
-				model.setX(0);
-				model.setY(0);
-				model.setWidth(100);
-				model.setHeight(50);
+				model.setX(10);
+				model.setY(10);
+				model.setWidth(20);
+				model.setHeight(20);
 				model.setColor(Color.GRAY);
 				canvas.addShape(model);
 			}
@@ -95,10 +99,10 @@ public class Whiteboard extends JFrame {
 		lineButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent evt) {
 				DShapeModel model = new DLineModel();
-				model.setX(0);
-				model.setY(0);
-				model.setWidth(100);
-				model.setHeight(50);
+				model.setX(10);
+				model.setY(10);
+				model.setWidth(20);
+				model.setHeight(20);
 				model.setColor(Color.GRAY);
 				canvas.addShape(model);
 			}
@@ -111,12 +115,14 @@ public class Whiteboard extends JFrame {
 
 				// font must be set in this order
 				model.setColor(Color.GRAY);
-				model.setText("Hello, World");
+				model.setText("Hello");
 				model.setFontName("Dialog");
 				model.setFontStyle(Font.PLAIN);
 				model.setFontSize(30);
-				model.setX(0);
-				model.setY(0);
+				model.setX(10);
+				model.setY(10);
+				model.setWidth(20);
+				model.setHeight(20);
 				canvas.addShape(model);
 			}
 
@@ -148,6 +154,7 @@ public class Whiteboard extends JFrame {
 			public void actionPerformed(ActionEvent evt) {
 				DTextModel model = new DTextModel();
 				String text = textArea.getText();
+				textArea.setText("");
 				model.setColor(Color.GRAY);
 				model.setText(text);
 				model.setFontName("EdwardianScriptITC");
@@ -173,6 +180,7 @@ public class Whiteboard extends JFrame {
 		frontButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent evt) {
 				// move object in list
+				canvas.moveToBack();
 
 			}
 
@@ -181,6 +189,7 @@ public class Whiteboard extends JFrame {
 		backButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent evt) {
 				// move object in list
+				canvas.moveToFront();
 			}
 
 		});
@@ -188,7 +197,7 @@ public class Whiteboard extends JFrame {
 		removeButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent evt) {
 				// remove shape
-				// canvas.removeShape(shape);
+				canvas.removeShape();
 			}
 
 		});
@@ -257,7 +266,7 @@ public class Whiteboard extends JFrame {
 		leftPanel.add(saveBox);
 
 		controlPanel.add(leftPanel, BorderLayout.WEST);
-
+		
 		frame.add(controlPanel, BorderLayout.WEST);
 		frame.add(canvas, BorderLayout.CENTER);
 		frame.pack();

@@ -19,6 +19,7 @@ public class DLine extends DShape implements ModelListener {
 		g.setColor(model.getColor());
 		g.drawLine(model.getX(), model.getY(), model.getX() + model.getWidth(), model.getY() + model.getHeight());
 	}
+	
 
 	public boolean contains(Point point) {
 		int x = point.x;
