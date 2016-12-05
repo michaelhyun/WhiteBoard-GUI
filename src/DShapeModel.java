@@ -45,33 +45,6 @@ public abstract class DShapeModel {
 		this.color = color;
 	}
 
-	public Element addModelTo(Element rootElement) {
-		// TODO Auto-generated method stub
-		Element shape = rootElement.getOwnerDocument().createElement("shape");
-
-		Element xElement = rootElement.getOwnerDocument().createElement("x");
-		xElement.appendChild(rootElement.getOwnerDocument().createTextNode(getX() + ""));
-		shape.appendChild(xElement);
-
-		Element yElement = rootElement.getOwnerDocument().createElement("y");
-		yElement.appendChild(rootElement.getOwnerDocument().createTextNode(getY() + ""));
-		shape.appendChild(yElement);
-
-		Element widthElement = rootElement.getOwnerDocument().createElement("width");
-		widthElement.appendChild(rootElement.getOwnerDocument().createTextNode(getWidth() + ""));
-		shape.appendChild(widthElement);
-
-		Element heightElement = rootElement.getOwnerDocument().createElement("height");
-		heightElement.appendChild(rootElement.getOwnerDocument().createTextNode(getHeight() + ""));
-		shape.appendChild(heightElement);
-
-		Element colorElement = rootElement.getOwnerDocument().createElement("color");
-		heightElement.appendChild(rootElement.getOwnerDocument().createTextNode(getColor().getRGB() + ""));
-		shape.appendChild(colorElement);
-
-		rootElement.appendChild(shape);
-
-		return rootElement;
-	}
+	public abstract Element addModelTo(Element rootElement);
 
 }
