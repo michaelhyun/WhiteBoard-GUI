@@ -6,6 +6,7 @@ import java.awt.Font;
 import java.awt.GraphicsEnvironment;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.File;
 
 import javax.swing.Box;
 import javax.swing.JButton;
@@ -14,6 +15,16 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextArea;
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.transform.Transformer;
+import javax.xml.transform.TransformerFactory;
+import javax.xml.transform.dom.DOMSource;
+import javax.xml.transform.stream.StreamResult;
+
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
 
 public class Whiteboard extends JFrame {
 	private static final long serialVersionUID = 1L;
@@ -195,6 +206,30 @@ public class Whiteboard extends JFrame {
 		saveButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent evt) {
 				// save file
+				DocumentBuilderFactory docFactory = DocumentBuilderFactory.newInstance();
+				DocumentBuilder docBuilder;
+				try {
+					docBuilder = docFactory.newDocumentBuilder();
+					// root elements
+					Document doc = docBuilder.newDocument();
+					Element rootElement = doc.createElement("shapes");
+					doc.appendChild(rootElement);
+					rootElement = canvas.getRootElementForXML(rootElement);
+					
+					
+					TransformerFactory transformerFactory = TransformerFactory.newInstance();
+					Transformer transformer = transformerFactory.newTransformer();
+					DOMSource source = new DOMSource(doc);
+//					StreamResult result = new StreamResult(new File("C:\\file.xml"));
+					
+					StreamResult result = new StreamResult(System.out);
+					transformer.transform(source, result);
+
+				} catch (Exception e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+
 			}
 
 		});
@@ -209,6 +244,7 @@ public class Whiteboard extends JFrame {
 		saveImageButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent evt) {
 				// save image
+				
 			}
 
 		});

@@ -8,6 +8,8 @@ import java.util.ArrayList;
 
 import javax.swing.JPanel;
 
+import org.w3c.dom.Element;
+
 public class Canvas extends JPanel {
 	private static final long serialVersionUID = 1L;
 	private final int HEIGHT = 400, WIDTH = 400;
@@ -211,6 +213,16 @@ public class Canvas extends JPanel {
 		if (selectedShape != null) {
 			selectedShape.drawKnobs(g);
 		}
+	}
+	
+	public Element getRootElementForXML(Element rootElement) {
+		for (DShape dShape : shapesList) {
+			if (dShape instanceof DRect) {
+				DShapeModel model = ((DRect) dShape).model;
+				model.addModelTo(rootElement);
+			}
+		}
+		return rootElement;
 	}
 
 }
