@@ -1,16 +1,25 @@
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.Graphics;
+import java.awt.Point;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 
 import javax.swing.JPanel;
 
+import org.w3c.dom.Element;
+
 public class Canvas extends JPanel {
 	private static final long serialVersionUID = 1L;
 	private final int HEIGHT = 400, WIDTH = 400;
 	private ArrayList<DShape> shapesList;
 	private DShape selectedShape;
+	private int selectedShapeIndex;
+	private int xBeforeDrag = 0;
+	private int yBeforeDrag = 0;
+	private Point movingKnob;
+	private Point anchorKnob;
 
 	public Canvas() {
 		// TODO Auto-generated constructor stub
@@ -20,20 +29,168 @@ public class Canvas extends JPanel {
 
 		addMouseListener(new MouseAdapter() {
 			@Override
-			public void mouseClicked(MouseEvent me) {
-				super.mouseClicked(me);
-				for(int i=shapesList.size()-1;i>=0;i--){
+			public void mouseClicked(MouseEvent m) {
+				super.mouseClicked(m);
+
+				for (int i = shapesList.size() - 1; i >= 0; i--) {
 					DShape shape = shapesList.get(i);
-					if (shape.contains(me.getPoint())) {
+					if (shape.contains(m.getPoint())) {
 						selectedShape = shape;
+						repaint();
+						selectedShapeIndex = i;
+						selectedShape.drawKnobs(getGraphics());
 						System.out.println(selectedShape.description());
 						break;
+					} else {
+						selectedShape = null;
+						repaint();
 					}
+
 				}
-				//need to do something to selected shape here
+
+			}
+
+			@Override
+			public void mousePressed(MouseEvent e) {
+				System.out.println("pressed");
+				System.out.println(e.getX() + ", " + e.getY());
+				if (selectedShape != null) {
+					ArrayList<Point> knobPoints = selectedShape.getKnobs();
+					for (Point point : knobPoints) {
+						if ((e.getX() <= (point.getX() + Globals.KNOB_SIZE / 2))
+								&& (e.getX() >= (point.getX() - Globals.KNOB_SIZE / 2))
+								&& (e.getY() <= (point.getY() + Globals.KNOB_SIZE / 2))
+								&& (e.getY() >= (point.getY() - Globals.KNOB_SIZE / 2))) {
+							movingKnob = point;
+
+							if (knobPoints.get(0).equals(movingKnob)) {
+								anchorKnob = knobPoints.get(3);
+							} else if (knobPoints.get(1).equals(movingKnob)) {
+								anchorKnob = knobPoints.get(2);
+							} else if (knobPoints.get(2).equals(movingKnob)) {
+								anchorKnob = knobPoints.get(1);
+							} else if (knobPoints.get(3).equals(movingKnob)) {
+								anchorKnob = knobPoints.get(0);
+							}
+							System.out.println("MovingKnobselected");
+						}
+					}
+					xBeforeDrag = e.getX();
+					yBeforeDrag = e.getY();
+				}
+			}
+
+			@Override
+			public void mouseReleased(MouseEvent e) {
+				System.out.println("released");
+				movingKnob = null;
+				anchorKnob = null;
 			}
 		});
 
+		addMouseMotionListener(new MouseAdapter() {
+			@Override
+			public void mouseDragged(MouseEvent e) {
+				Point point = e.getPoint();
+				if (selectedShape != null) {
+					if (movingKnob != null) { // resizing object
+						if (selectedShape instanceof DRect) {
+							DShapeModel model;
+							model = ((DRect) selectedShape).model;
+							double dx = point.x - movingKnob.getX();
+							double dy = point.y - movingKnob.getY();
+							resize(model, dx, dy);
+						}
+						if (selectedShape instanceof DOval) {
+							DShapeModel model;
+							model = ((DOval) selectedShape).model;
+							double dx = point.x - movingKnob.getX();
+							double dy = point.y - movingKnob.getY();
+							resize(model, dx, dy);
+						}
+						if (selectedShape instanceof DLine) {
+							// resize
+						}
+						if (selectedShape instanceof DText) {
+							// resize
+						}
+						System.out.println("moving");
+						movingKnob = point;
+
+					} else if (selectedShape.contains(point)) { // moving object
+						DShapeModel model;
+						if (selectedShape instanceof DRect) {
+							model = ((DRect) selectedShape).model;
+							model.setX(model.getX() + (point.x - xBeforeDrag));
+							model.setY(model.getY() + (point.y - yBeforeDrag));
+							selectedShape.modelChanged(model);
+							shapesList.set(selectedShapeIndex, selectedShape);
+							repaint();
+						} else if (selectedShape instanceof DOval) {
+							model = ((DOval) selectedShape).model;
+							model.setX(model.getX() + (point.x - xBeforeDrag));
+							model.setY(model.getY() + (point.y - yBeforeDrag));
+							selectedShape.modelChanged(model);
+							shapesList.set(selectedShapeIndex, selectedShape);
+							repaint();
+						} else if (selectedShape instanceof DText) {
+							model = ((DText) selectedShape).model;
+							model.setX(model.getX() + (point.x - xBeforeDrag));
+							model.setY(model.getY() + (point.y - yBeforeDrag));
+							selectedShape.modelChanged(model);
+							shapesList.set(selectedShapeIndex, selectedShape);
+							repaint();
+						} else if (selectedShape instanceof DLine) {
+							model = ((DLine) selectedShape).model;
+							model.setX(model.getX() + (point.x - xBeforeDrag));
+							model.setY(model.getY() + (point.y - yBeforeDrag));
+							selectedShape.modelChanged(model);
+							shapesList.set(selectedShapeIndex, selectedShape);
+							repaint();
+						}
+					}
+				}
+				xBeforeDrag = point.x;
+				yBeforeDrag = point.y;
+			}
+		});
+
+	}
+
+	public void resize(DShapeModel model, double dx, double dy) { // for OVAL
+																	// AND RECT
+
+		ArrayList<Point> knobPoints = selectedShape.getKnobs();
+
+		if (anchorKnob.equals(knobPoints.get(0))) {
+			model.setWidth((int) model.getWidth() + (int) (dx));
+			model.setHeight((int) model.getHeight() + (int) (dy));
+			selectedShape.modelChanged(model);
+			shapesList.set(selectedShapeIndex, selectedShape);
+			repaint();
+		} else if (anchorKnob.equals(knobPoints.get(1))) {
+			model.setX((int) (model.getX() + dx));
+			model.setWidth((int) (model.getWidth() - dx));
+			model.setHeight((int) (model.getHeight() + dy));
+			selectedShape.modelChanged(model);
+			shapesList.set(selectedShapeIndex, selectedShape);
+			repaint();
+		} else if (anchorKnob.equals(knobPoints.get(2))) {
+			model.setY((int) (model.getY() + dy));
+			model.setWidth((int) model.getWidth() + (int) (dx));
+			model.setHeight((int) model.getHeight() - (int) (dy));
+			selectedShape.modelChanged(model);
+			shapesList.set(selectedShapeIndex, selectedShape);
+			repaint();
+		} else if (anchorKnob.equals(knobPoints.get(3))) {
+			model.setX((int) (model.getX() + dx));
+			model.setY((int) (model.getY() + dy));
+			model.setWidth((int) model.getWidth() - (int) (dx));
+			model.setHeight((int) model.getHeight() - (int) (dy));
+			selectedShape.modelChanged(model);
+			shapesList.set(selectedShapeIndex, selectedShape);
+			repaint();
+		}
 	}
 
 	public void addShape(DShapeModel model) {
@@ -57,12 +214,99 @@ public class Canvas extends JPanel {
 		}
 	}
 
-	public void removeShape(DShape shape) {
-		try {
-			shapesList.remove(shape);
-		} catch (Exception e) {
-			System.out.println("Hello");
+	public void colorUpdated(final Color c) {
+		if (selectedShape != null) {
+			DShapeModel model;
+			if (selectedShape instanceof DRect) {
+				model = ((DRect) selectedShape).model;
+				model.setColor(c);
+				selectedShape.modelChanged(model);
+				shapesList.set(selectedShapeIndex, selectedShape);
+				repaint();
+			} else if (selectedShape instanceof DOval) {
+				model = ((DOval) selectedShape).model;
+				model.setColor(c);
+				selectedShape.modelChanged(model);
+				shapesList.set(selectedShapeIndex, selectedShape);
+				repaint();
+			} else if (selectedShape instanceof DText) {
+				model = ((DText) selectedShape).model;
+				model.setColor(c);
+				selectedShape.modelChanged(model);
+				shapesList.set(selectedShapeIndex, selectedShape);
+				repaint();
+			} else if (selectedShape instanceof DLine) {
+				model = ((DLine) selectedShape).model;
+				model.setColor(c);
+				selectedShape.modelChanged(model);
+				shapesList.set(selectedShapeIndex, selectedShape);
+				repaint();
+			}
 		}
+
+	}
+
+	public void moveToBack() {
+		if (selectedShape != null) {
+			shapesList.remove(selectedShape);
+			shapesList.add(shapesList.size(), selectedShape);
+			repaint();
+		} else {
+			System.out.print("No shape selected");
+		}
+	}
+
+	public void moveToFront() {
+		if (selectedShape != null) {
+			shapesList.remove(selectedShape);
+			shapesList.add(0, selectedShape);
+			repaint();
+		} else {
+			System.out.print("No shape selected");
+		}
+	}
+
+	public void removeShape() {
+
+		if (selectedShape != null) {
+			shapesList.remove(selectedShape);
+			selectedShape = null;
+
+			repaint();
+		} else {
+			System.out.print("No shape selected");
+		}
+
+	}
+
+	@Override
+	public void paintComponent(Graphics g) {
+		super.paintComponent(g);
+		for (DShape shape : shapesList) {
+			shape.draw(g);
+		}
+		if (selectedShape != null) {
+			selectedShape.drawKnobs(g);
+		}
+	}
+
+	public Element getRootElementForXML(Element rootElement) {
+		for (DShape dShape : shapesList) {
+			if (dShape instanceof DRect) {
+				DShapeModel model = ((DRect) dShape).model;
+				model.addModelTo(rootElement);
+			} else if (dShape instanceof DOval) {
+				DShapeModel model = ((DOval) dShape).model;
+				model.addModelTo(rootElement);
+			} else if (dShape instanceof DLine) {
+				DShapeModel model = ((DLine) dShape).model;
+				model.addModelTo(rootElement);
+			} else if (dShape instanceof DText) {
+				DShapeModel model = ((DText) dShape).model;
+				model.addModelTo(rootElement);
+			}
+		}
+		return rootElement;
 	}
 
 }

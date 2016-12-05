@@ -5,13 +5,26 @@ import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.File;
 
 import javax.swing.Box;
 import javax.swing.JButton;
+import javax.swing.JColorChooser;
+import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextArea;
+import javax.swing.filechooser.FileNameExtensionFilter;
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.transform.Transformer;
+import javax.xml.transform.TransformerFactory;
+import javax.xml.transform.dom.DOMSource;
+import javax.xml.transform.stream.StreamResult;
+
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
 
 public class Whiteboard extends JFrame {
 	private static final long serialVersionUID = 1L;
@@ -56,10 +69,10 @@ public class Whiteboard extends JFrame {
 		rectButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent evt) {
 				DShapeModel model = new DRectModel();
-				model.setX(0);
-				model.setY(0);
-				model.setHeight(50);
-				model.setWidth(100);
+				model.setX(10);
+				model.setY(10);
+				model.setHeight(20);
+				model.setWidth(20);
 				model.setColor(Color.GRAY);
 				canvas.addShape(model);
 			}
@@ -69,10 +82,10 @@ public class Whiteboard extends JFrame {
 		ovalButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent evt) {
 				DShapeModel model = new DOvalModel();
-				model.setX(0);
-				model.setY(0);
-				model.setWidth(100);
-				model.setHeight(50);
+				model.setX(10);
+				model.setY(10);
+				model.setWidth(20);
+				model.setHeight(20);
 				model.setColor(Color.GRAY);
 				canvas.addShape(model);
 			}
@@ -82,10 +95,10 @@ public class Whiteboard extends JFrame {
 		lineButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent evt) {
 				DShapeModel model = new DLineModel();
-				model.setX(0);
-				model.setY(0);
-				model.setWidth(100);
-				model.setHeight(50);
+				model.setX(10);
+				model.setY(10);
+				model.setWidth(20);
+				model.setHeight(20);
 				model.setColor(Color.GRAY);
 				canvas.addShape(model);
 			}
@@ -98,12 +111,14 @@ public class Whiteboard extends JFrame {
 
 				// font must be set in this order
 				model.setColor(Color.GRAY);
-				model.setText("Hello, World");
+				model.setText("Hello");
 				model.setFontName("Dialog");
 				model.setFontStyle(Font.PLAIN);
 				model.setFontSize(30);
-				model.setX(0);
-				model.setY(0);
+				model.setX(10);
+				model.setY(10);
+				model.setWidth(20);
+				model.setHeight(20);
 				canvas.addShape(model);
 			}
 
@@ -117,7 +132,8 @@ public class Whiteboard extends JFrame {
 		// action listeners for setting color
 		setColorButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent evt) {
-				// update model for the selected shape
+				Color newColor = JColorChooser.showDialog(null, "Choose a color: ", Color.GREEN);
+				canvas.colorUpdated(newColor);
 			}
 
 		});
@@ -134,14 +150,14 @@ public class Whiteboard extends JFrame {
 			public void actionPerformed(ActionEvent evt) {
 				DTextModel model = new DTextModel();
 				String text = textArea.getText();
+				textArea.setText("");
+				model.setColor(Color.GRAY);
 				model.setText(text);
+				model.setFontName("EdwardianScriptITC");
+				model.setFontStyle(Font.PLAIN);
+				model.setFontSize(30);
 				model.setX(0);
 				model.setY(0);
-				model.setWidth(0);
-				model.setHeight(100);
-				model.setColor(Color.GRAY);
-				model.setFontSize(30);
-				model.setFontName("Edwardian Script");
 				canvas.addShape(model);
 			}
 
@@ -160,6 +176,7 @@ public class Whiteboard extends JFrame {
 		frontButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent evt) {
 				// move object in list
+				canvas.moveToBack();
 
 			}
 
@@ -168,6 +185,7 @@ public class Whiteboard extends JFrame {
 		backButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent evt) {
 				// move object in list
+				canvas.moveToFront();
 			}
 
 		});
@@ -175,7 +193,7 @@ public class Whiteboard extends JFrame {
 		removeButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent evt) {
 				// remove shape
-				// canvas.removeShape(shape);
+				canvas.removeShape();
 			}
 
 		});
@@ -193,6 +211,32 @@ public class Whiteboard extends JFrame {
 		saveButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent evt) {
 				// save file
+				DocumentBuilderFactory docFactory = DocumentBuilderFactory.newInstance();
+				DocumentBuilder docBuilder;
+				try {
+					docBuilder = docFactory.newDocumentBuilder();
+					// root elements
+					Document doc = docBuilder.newDocument();
+					Element rootElement = doc.createElement("shapes");
+					doc.appendChild(rootElement);
+					rootElement = canvas.getRootElementForXML(rootElement);
+
+					TransformerFactory transformerFactory = TransformerFactory.newInstance();
+					Transformer transformer = transformerFactory.newTransformer();
+					DOMSource source = new DOMSource(doc);
+					JFileChooser fileChooser = new JFileChooser();
+					fileChooser.setFileSelectionMode(JFileChooser.SAVE_DIALOG);
+
+					fileChooser.showSaveDialog(null);
+					StreamResult result = new StreamResult(fileChooser.getSelectedFile());
+
+					transformer.transform(source, result);
+
+				} catch (Exception e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+
 			}
 
 		});
@@ -207,6 +251,7 @@ public class Whiteboard extends JFrame {
 		saveImageButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent evt) {
 				// save image
+
 			}
 
 		});

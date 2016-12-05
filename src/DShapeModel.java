@@ -1,4 +1,5 @@
 import java.awt.Color;
+import org.w3c.dom.Element;
 
 public abstract class DShapeModel {
 	private int x, y, width, height;
@@ -43,4 +44,7 @@ public abstract class DShapeModel {
 	public void setColor(Color color) {
 		this.color = color;
 	}
+
+	public abstract Element addModelTo(Element rootElement);
+
 }
