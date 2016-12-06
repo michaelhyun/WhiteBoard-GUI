@@ -18,6 +18,7 @@ import javax.swing.JTextArea;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.Transformer;
 import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
@@ -25,6 +26,8 @@ import javax.xml.transform.stream.StreamResult;
 
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
 
 public class Whiteboard extends JFrame {
 	private static final long serialVersionUID = 1L;
@@ -244,6 +247,68 @@ public class Whiteboard extends JFrame {
 		openButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent evt) {
 				// open file
+				JFileChooser fileChooser = new JFileChooser();
+				fileChooser.setFileSelectionMode(JFileChooser.OPEN_DIALOG);
+
+				fileChooser.showOpenDialog(null);
+				File fXmlFile = fileChooser.getSelectedFile();
+				DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
+				DocumentBuilder dBuilder = null;
+				try {
+					dBuilder = dbFactory.newDocumentBuilder();
+				} catch (ParserConfigurationException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+				Document doc = null;
+				try {
+					doc = dBuilder.parse(fXmlFile);
+				} catch (Exception e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+
+				doc.getDocumentElement().normalize();
+
+				System.out.println("Root element :" + doc.getDocumentElement().getNodeName());
+
+				NodeList nList = doc.getElementsByTagName("shape");
+
+				System.out.println("----------------------------");
+
+				for (int temp = 0; temp < nList.getLength(); temp++) {
+
+					Node nNode = nList.item(temp);
+
+					System.out.println("\nCurrent Element :" + nNode.getNodeName());
+
+					if (nNode.getNodeType() == Node.ELEMENT_NODE) {
+
+						Element eElement = (Element) nNode;
+						DShapeModel shapeModel = null;
+						String shapeType = eElement.getElementsByTagName("type").item(0).getTextContent();
+						
+						shapeModel.setX(Integer.parseInt(eElement.getElementsByTagName("x").item(0).getTextContent()));
+						
+						
+						if (shapeType.equals("rect")) {
+							shapeModel = new DRectModel();
+						}else if (shapeType.equals("oval")) {
+							shapeModel = new DOvalModel();
+						}else if (shapeType.equals("line")) {
+							shapeModel = new DLineModel();
+						}else if (shapeType.equals("text")) {
+							shapeModel = new DTextModel();
+						}
+						
+						System.out.println(eElement.getElementsByTagName("x").item(0).getTextContent());
+						System.out.println(eElement.getElementsByTagName("y").item(0).getTextContent());
+						System.out.println(eElement.getElementsByTagName("width").item(0).getTextContent());
+						System.out.println(eElement.getElementsByTagName("height").item(0).getTextContent());
+						System.out.println(eElement.getElementsByTagName("color").item(0).getTextContent());
+
+					}
+				}
 			}
 
 		});
