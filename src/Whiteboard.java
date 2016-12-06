@@ -15,9 +15,9 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextArea;
-import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.Transformer;
 import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
@@ -25,6 +25,8 @@ import javax.xml.transform.stream.StreamResult;
 
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
 
 public class Whiteboard extends JFrame {
 	private static final long serialVersionUID = 1L;
@@ -244,6 +246,83 @@ public class Whiteboard extends JFrame {
 		openButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent evt) {
 				// open file
+				JFileChooser fileChooser = new JFileChooser();
+				fileChooser.setFileSelectionMode(JFileChooser.OPEN_DIALOG);
+
+				fileChooser.showOpenDialog(null);
+				File fXmlFile = fileChooser.getSelectedFile();
+				DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
+				DocumentBuilder dBuilder = null;
+				try {
+					dBuilder = dbFactory.newDocumentBuilder();
+				} catch (ParserConfigurationException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+				Document doc = null;
+				try {
+					doc = dBuilder.parse(fXmlFile);
+				} catch (Exception e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+
+				doc.getDocumentElement().normalize();
+
+				NodeList nList = doc.getElementsByTagName("shape");
+
+				for (int temp = 0; temp < nList.getLength(); temp++) {
+
+					Node nNode = nList.item(temp);
+					if (nNode.getNodeType() == Node.ELEMENT_NODE) {
+
+						Element eElement = (Element) nNode;
+						String shapeType = eElement.getElementsByTagName("type").item(0).getTextContent();
+
+						if (!shapeType.equals("text")) {
+							DShapeModel shapeModel = null; // applies for Rect,
+															// Oval, Line
+							if (shapeType.equals("rect")) {
+								shapeModel = new DRectModel();
+							} else if (shapeType.equals("oval")) {
+								shapeModel = new DOvalModel();
+							} else if (shapeType.equals("line")) {
+								shapeModel = new DLineModel();
+							}
+							shapeModel.setX(
+									Integer.parseInt(eElement.getElementsByTagName("x").item(0).getTextContent()));
+							shapeModel.setY(
+									Integer.parseInt(eElement.getElementsByTagName("y").item(0).getTextContent()));
+							shapeModel.setWidth(
+									Integer.parseInt(eElement.getElementsByTagName("width").item(0).getTextContent()));
+							shapeModel.setHeight(
+									Integer.parseInt(eElement.getElementsByTagName("height").item(0).getTextContent()));
+							shapeModel.setColor(new Color(
+									Integer.parseInt(eElement.getElementsByTagName("color").item(0).getTextContent())));
+							canvas.addShape(shapeModel);
+						} else {
+							DTextModel textModel = new DTextModel();
+							textModel.setX(
+									Integer.parseInt(eElement.getElementsByTagName("x").item(0).getTextContent()));
+							textModel.setY(
+									Integer.parseInt(eElement.getElementsByTagName("y").item(0).getTextContent()));
+							textModel.setWidth(
+									Integer.parseInt(eElement.getElementsByTagName("width").item(0).getTextContent()));
+							textModel.setHeight(
+									Integer.parseInt(eElement.getElementsByTagName("height").item(0).getTextContent()));
+							textModel.setColor(new Color(
+									Integer.parseInt(eElement.getElementsByTagName("color").item(0).getTextContent())));
+							textModel.setText(eElement.getElementsByTagName("text").item(0).getTextContent());
+							textModel.setFontName(eElement.getElementsByTagName("fontName").item(0).getTextContent());
+							textModel.setFontStyle(Integer
+									.parseInt(eElement.getElementsByTagName("fontStyle").item(0).getTextContent()));
+							textModel.setFontSize(Integer
+									.parseInt(eElement.getElementsByTagName("fontSize").item(0).getTextContent()));
+							canvas.addShape(textModel);
+						}
+
+					}
+				}
 			}
 
 		});
