@@ -16,6 +16,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextArea;
 import javax.swing.filechooser.FileNameExtensionFilter;
+import javax.xml.datatype.DatatypeConfigurationException;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
@@ -270,42 +271,57 @@ public class Whiteboard extends JFrame {
 
 				doc.getDocumentElement().normalize();
 
-				System.out.println("Root element :" + doc.getDocumentElement().getNodeName());
-
 				NodeList nList = doc.getElementsByTagName("shape");
-
-				System.out.println("----------------------------");
 
 				for (int temp = 0; temp < nList.getLength(); temp++) {
 
 					Node nNode = nList.item(temp);
-
-					System.out.println("\nCurrent Element :" + nNode.getNodeName());
-
 					if (nNode.getNodeType() == Node.ELEMENT_NODE) {
 
 						Element eElement = (Element) nNode;
-						DShapeModel shapeModel = null;
 						String shapeType = eElement.getElementsByTagName("type").item(0).getTextContent();
-						
-						shapeModel.setX(Integer.parseInt(eElement.getElementsByTagName("x").item(0).getTextContent()));
-						
-						
-						if (shapeType.equals("rect")) {
-							shapeModel = new DRectModel();
-						}else if (shapeType.equals("oval")) {
-							shapeModel = new DOvalModel();
-						}else if (shapeType.equals("line")) {
-							shapeModel = new DLineModel();
-						}else if (shapeType.equals("text")) {
-							shapeModel = new DTextModel();
+
+						if (!shapeType.equals("text")) {
+							DShapeModel shapeModel = null; // applies for Rect,
+															// Oval, Line
+							if (shapeType.equals("rect")) {
+								shapeModel = new DRectModel();
+							} else if (shapeType.equals("oval")) {
+								shapeModel = new DOvalModel();
+							} else if (shapeType.equals("line")) {
+								shapeModel = new DLineModel();
+							}
+							shapeModel.setX(
+									Integer.parseInt(eElement.getElementsByTagName("x").item(0).getTextContent()));
+							shapeModel.setY(
+									Integer.parseInt(eElement.getElementsByTagName("y").item(0).getTextContent()));
+							shapeModel.setWidth(
+									Integer.parseInt(eElement.getElementsByTagName("width").item(0).getTextContent()));
+							shapeModel.setHeight(
+									Integer.parseInt(eElement.getElementsByTagName("height").item(0).getTextContent()));
+							shapeModel.setColor(new Color(
+									Integer.parseInt(eElement.getElementsByTagName("color").item(0).getTextContent())));
+							canvas.addShape(shapeModel);
+						} else {
+							DTextModel textModel = new DTextModel();
+							textModel.setX(
+									Integer.parseInt(eElement.getElementsByTagName("x").item(0).getTextContent()));
+							textModel.setY(
+									Integer.parseInt(eElement.getElementsByTagName("y").item(0).getTextContent()));
+							textModel.setWidth(
+									Integer.parseInt(eElement.getElementsByTagName("width").item(0).getTextContent()));
+							textModel.setHeight(
+									Integer.parseInt(eElement.getElementsByTagName("height").item(0).getTextContent()));
+							textModel.setColor(new Color(
+									Integer.parseInt(eElement.getElementsByTagName("color").item(0).getTextContent())));
+							textModel.setText(eElement.getElementsByTagName("text").item(0).getTextContent());
+							textModel.setFontName(eElement.getElementsByTagName("fontName").item(0).getTextContent());
+							textModel.setFontStyle(Integer
+									.parseInt(eElement.getElementsByTagName("fontStyle").item(0).getTextContent()));
+							textModel.setFontSize(Integer
+									.parseInt(eElement.getElementsByTagName("fontSize").item(0).getTextContent()));
+							canvas.addShape(textModel);
 						}
-						
-						System.out.println(eElement.getElementsByTagName("x").item(0).getTextContent());
-						System.out.println(eElement.getElementsByTagName("y").item(0).getTextContent());
-						System.out.println(eElement.getElementsByTagName("width").item(0).getTextContent());
-						System.out.println(eElement.getElementsByTagName("height").item(0).getTextContent());
-						System.out.println(eElement.getElementsByTagName("color").item(0).getTextContent());
 
 					}
 				}
