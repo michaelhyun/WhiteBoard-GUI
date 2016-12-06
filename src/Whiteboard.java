@@ -143,12 +143,12 @@ public class Whiteboard extends JFrame {
 
 		});
 
-		Box middleBot = Box.createHorizontalBox();
-		middleBot.setAlignmentX(Box.LEFT_ALIGNMENT);
+		Box middleBox = Box.createHorizontalBox();
+		middleBox.setAlignmentX(Box.LEFT_ALIGNMENT);
 		JTextArea textArea = new JTextArea();
 		JButton edwardianButton = new JButton("Edwardian Script");
-		middleBot.add(textArea);
-		middleBot.add(edwardianButton);
+		middleBox.add(textArea);
+		middleBox.add(edwardianButton);
 
 		// action listeners for adding Text
 		edwardianButton.addActionListener(new ActionListener() {
@@ -349,13 +349,40 @@ public class Whiteboard extends JFrame {
 			}
 
 		});
+		
+		Box serverBox = Box.createHorizontalBox();
+		serverBox.setAlignmentX(LEFT_ALIGNMENT);
+		JButton serverStartButton = new JButton("Server Start");
+		JButton clientStartButton = new JButton("Client Start");
+		serverBox.add(serverStartButton);
+		serverBox.add(clientStartButton);
+		
+		serverStartButton.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+		});
+		
+		clientStartButton.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+		});
+		
 
 		Box leftPanel = Box.createVerticalBox();
 		leftPanel.add(top);
 		leftPanel.add(middle);
-		leftPanel.add(middleBot);
+		leftPanel.add(middleBox);
 		leftPanel.add(bottom);
 		leftPanel.add(saveBox);
+		leftPanel.add(serverBox);
 
 		controlPanel.add(leftPanel, BorderLayout.WEST);
 
