@@ -7,7 +7,14 @@ import java.awt.Graphics;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.PrintWriter;
+import java.net.ServerSocket;
+import java.net.Socket;
+import java.io.DataOutputStream;
 
 import javax.imageio.ImageIO;
 import javax.swing.Box;
@@ -16,6 +23,7 @@ import javax.swing.JColorChooser;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextArea;
 import javax.xml.parsers.DocumentBuilder;
@@ -349,32 +357,50 @@ public class Whiteboard extends JFrame {
 			}
 
 		});
-		
+
 		Box serverBox = Box.createHorizontalBox();
 		serverBox.setAlignmentX(LEFT_ALIGNMENT);
 		JButton serverStartButton = new JButton("Server Start");
 		JButton clientStartButton = new JButton("Client Start");
 		serverBox.add(serverStartButton);
 		serverBox.add(clientStartButton);
-		
+
 		serverStartButton.addActionListener(new ActionListener() {
-			
+
 			@Override
-			public void actionPerformed(ActionEvent e) {
-				// TODO Auto-generated method stub
+			public void actionPerformed(ActionEvent e){
+				int portNumber = Integer.parseInt(JOptionPane.showInputDialog("Enter port number for server:"));
+				String clientSentence;
+		        String capitalizedSentence;
+		        ServerSocket welcomeSocket = null;
+				try {
+					welcomeSocket = new ServerSocket(portNumber);
+					while(true) {
+			            Socket connectionSocket = welcomeSocket.accept();
+			            BufferedReader inFromClient = new BufferedReader(new InputStreamReader(connectionSocket.getInputStream()));
+			            DataOutputStream outToClient = new DataOutputStream(connectionSocket.getOutputStream());
+			            clientSentence = inFromClient.readLine();
+			            capitalizedSentence = clientSentence.toUpperCase() + '\n';
+			            outToClient.writeBytes(capitalizedSentence);
+			        }
+				} catch (IOException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+		    }
 				
-			}
+
+			
 		});
-		
+
 		clientStartButton.addActionListener(new ActionListener() {
-			
+
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				// TODO Auto-generated method stub
-				
+
 			}
 		});
-		
 
 		Box leftPanel = Box.createVerticalBox();
 		leftPanel.add(top);
