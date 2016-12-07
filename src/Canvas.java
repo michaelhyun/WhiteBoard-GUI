@@ -1,5 +1,6 @@
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Point;
 import java.awt.event.MouseAdapter;
@@ -310,6 +311,32 @@ public class Canvas extends JPanel {
 			}
 		}
 		return rootElement;
+	}
+
+	public void changeFont(String font) {
+		if(selectedShape != null){
+			if(selectedShape instanceof DText){
+				DTextModel model;
+				model = ((DText) selectedShape).model;
+				model.setFontName(font);
+				selectedShape.modelChanged(model);
+				shapesList.set(selectedShapeIndex, selectedShape);
+				repaint();
+			}
+		}
+	}
+
+	public void changeText(String text) {
+		if(selectedShape != null){
+			if(selectedShape instanceof DText){
+				DTextModel model;
+				model = ((DText) selectedShape).model;
+				model.setText(text);
+				selectedShape.modelChanged(model);
+				shapesList.set(selectedShapeIndex, selectedShape);
+				repaint();
+			}
+		}
 	}
 
 }
