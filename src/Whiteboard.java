@@ -69,8 +69,6 @@ public class Whiteboard extends JFrame {
 		// create control panel for buttons
 		JPanel controlPanel = new JPanel();
 		controlPanel.setLayout(new FlowLayout());
-        
-
 
 		Box top = Box.createHorizontalBox();
 		top.setAlignmentX(Box.LEFT_ALIGNMENT);
@@ -161,45 +159,43 @@ public class Whiteboard extends JFrame {
 		Box middleBox = Box.createHorizontalBox();
 		middleBox.setAlignmentX(Box.LEFT_ALIGNMENT);
 		JTextArea textArea = new JTextArea();
-		GraphicsEnvironment graphEnviron = 
-			       GraphicsEnvironment.getLocalGraphicsEnvironment();
-			Font[] allFonts = graphEnviron.getAllFonts();
+		GraphicsEnvironment graphEnviron = GraphicsEnvironment.getLocalGraphicsEnvironment();
+		Font[] allFonts = graphEnviron.getAllFonts();
 
 		JComboBox<Font> fontBox = new JComboBox<>(allFonts);
 		fontBox.setSelectedIndex(0);
-        fontBox.setPreferredSize(new Dimension(100, 60));
+		fontBox.setPreferredSize(new Dimension(100, 60));
 		fontBox.setRenderer(new DefaultListCellRenderer() {
-		   @Override
-		   public Component getListCellRendererComponent(JList<?> list,
-		         Object value, int index, boolean isSelected, boolean cellHasFocus) {
-		      if (value != null) {
-		         Font font = (Font) value;
-		         value = font.getName();
-		      }
-		      return super.getListCellRendererComponent(list, value, index,
-		            isSelected, cellHasFocus);
-		   }
+			@Override
+			public Component getListCellRendererComponent(JList<?> list, Object value, int index, boolean isSelected,
+					boolean cellHasFocus) {
+				if (value != null) {
+					Font font = (Font) value;
+					value = font.getName();
+				}
+				return super.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
+			}
 		});
 		middleBox.add(textArea);
 		middleBox.add(fontBox);
 		// action listeners for adding Text
 		fontBox.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent evt) {
-				Font font = (Font)fontBox.getSelectedItem();
-				
+				Font font = (Font) fontBox.getSelectedItem();
+
 				DTextModel model = new DTextModel();
 				String text = textArea.getText();
 
-//				textArea.setText("");
-//				model.setColor(Color.GRAY);
-//				model.setText(text);
-//				model.setFontName("EdwardianScriptITC");
-//				model.setFontStyle(Font.PLAIN);
-//				model.setFontSize(30);
-//				model.setX(0);
-//				model.setY(0);
-//				canvas.addShape(model);
-				
+				// textArea.setText("");
+				// model.setColor(Color.GRAY);
+				// model.setText(text);
+				// model.setFontName("EdwardianScriptITC");
+				// model.setFontStyle(Font.PLAIN);
+				// model.setFontSize(30);
+				// model.setX(0);
+				// model.setY(0);
+				// canvas.addShape(model);
+
 			}
 
 		});
@@ -396,29 +392,28 @@ public class Whiteboard extends JFrame {
 		serverStartButton.addActionListener(new ActionListener() {
 
 			@Override
-			public void actionPerformed(ActionEvent e){
+			public void actionPerformed(ActionEvent e) {
 				int portNumber = Integer.parseInt(JOptionPane.showInputDialog("Enter port number for server:"));
-				String clientSentence;
-		        String capitalizedSentence;
-		        ServerSocket welcomeSocket = null;
-				try {
-					welcomeSocket = new ServerSocket(portNumber);
-					while(true) {
-			            Socket connectionSocket = welcomeSocket.accept();
-			            BufferedReader inFromClient = new BufferedReader(new InputStreamReader(connectionSocket.getInputStream()));
-			            DataOutputStream outToClient = new DataOutputStream(connectionSocket.getOutputStream());
-			            clientSentence = inFromClient.readLine();
-			            capitalizedSentence = clientSentence.toUpperCase() + '\n';
-			            outToClient.writeBytes(capitalizedSentence);
-			        }
-				} catch (IOException e1) {
-					// TODO Auto-generated catch block
-					e1.printStackTrace();
-				}
-		    }
-				
+				ServerSocket serverSocket = null;
+				Socket socket = null;
 
-			
+				try {
+					serverSocket = new ServerSocket(portNumber);
+				} catch (IOException e2) {
+					e2.printStackTrace();
+				}
+				
+				for(;;){
+					try{
+						socket = serverSocket.accept();
+						System.out.println("Client connected");
+					}catch (IOException e2) {
+						e2.printStackTrace();
+					}
+					new ClientThread(socket).start();
+				}
+			}
+
 		});
 
 		clientStartButton.addActionListener(new ActionListener() {
