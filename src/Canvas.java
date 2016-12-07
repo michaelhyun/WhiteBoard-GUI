@@ -133,7 +133,7 @@ public class Canvas extends JPanel {
 							}
 
 						} else if (selectedShape instanceof DLine) {
-							// resize
+							//resize
 						} else if (selectedShape instanceof DText) {
 							// resize
 						}
@@ -174,16 +174,17 @@ public class Canvas extends JPanel {
 
 	public void resize(Point point, DShapeModel model, int x, int y, int width, int height) {
 																										
-		if (width <= 0) {
-			model.setX(point.x);
+		if (width < 0) {
+			model.setX(x - Math.abs(width));
 			model.setWidth(Math.abs((int)(anchorKnob.getX() - point.x)));
 		}
 		else{
 			model.setX(x);
 			model.setWidth(width);
 		}
-		if (height <= 0) {
-			model.setY(point.y);
+		
+		if (height < 0) {
+			model.setY(y - Math.abs(height));
 			model.setHeight(Math.abs((int)(anchorKnob.getY() - point.y)));
 		}
 		else{

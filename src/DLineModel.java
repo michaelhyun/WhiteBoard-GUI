@@ -7,7 +7,24 @@ public class DLineModel extends DShapeModel {
 	
 	private Point p1;
 	private Point p2;
+	
+	public Point getP1(){
+		return p1;
+	}
 
+	public void setP1(Point point){
+		this.p1 = point;
+	}
+	public Point getP2(){
+		return p2;
+	}
+
+	public void setP2(Point point){
+		this.p2 = point;
+	}
+	
+	
+	
 	@Override
 	public Element addModelTo(Element rootElement) {
 		// TODO Auto-generated method stub
