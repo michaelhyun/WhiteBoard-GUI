@@ -1,7 +1,12 @@
 
+import java.awt.Point;
+
 import org.w3c.dom.Element;
 
 public class DLineModel extends DShapeModel {
+	
+	private Point p1;
+	private Point p2;
 
 	@Override
 	public Element addModelTo(Element rootElement) {
