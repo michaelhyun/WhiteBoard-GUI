@@ -3,10 +3,13 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Font;
+import java.awt.Graphics;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.image.BufferedImage;
 import java.io.File;
 
+import javax.imageio.ImageIO;
 import javax.swing.Box;
 import javax.swing.JButton;
 import javax.swing.JColorChooser;
@@ -330,7 +333,19 @@ public class Whiteboard extends JFrame {
 		saveImageButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent evt) {
 				// save image
+				BufferedImage bi = new BufferedImage(canvas.getSize().width, canvas.getSize().height,
+						BufferedImage.TYPE_INT_ARGB);
+				Graphics g = bi.createGraphics();
+				canvas.paint(g); // this == JComponent
+				g.dispose();
+				try {
+					JFileChooser fileChooser = new JFileChooser();
+					fileChooser.setFileSelectionMode(JFileChooser.SAVE_DIALOG);
 
+					fileChooser.showSaveDialog(null);
+					ImageIO.write(bi, "png", fileChooser.getSelectedFile());
+				} catch (Exception e) {
+				}
 			}
 
 		});
