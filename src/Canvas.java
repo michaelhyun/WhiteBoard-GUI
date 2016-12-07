@@ -1,5 +1,6 @@
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Point;
 import java.awt.event.MouseAdapter;
@@ -61,6 +62,7 @@ public class Canvas extends JPanel {
 								&& (e.getX() >= (point.getX() - Globals.KNOB_SIZE / 2))
 								&& (e.getY() <= (point.getY() + Globals.KNOB_SIZE / 2))
 								&& (e.getY() >= (point.getY() - Globals.KNOB_SIZE / 2))) {
+
 							movingKnob = point;
 
 							if (knobPoints.get(0).equals(movingKnob)) {
@@ -72,7 +74,7 @@ public class Canvas extends JPanel {
 							} else if (knobPoints.get(3).equals(movingKnob)) {
 								anchorKnob = knobPoints.get(0);
 							}
-							System.out.println("MovingKnobselected");
+							System.out.println("MovingKnob selected");
 						}
 					}
 					xBeforeDrag = e.getX();
@@ -94,59 +96,65 @@ public class Canvas extends JPanel {
 				Point point = e.getPoint();
 				if (selectedShape != null) {
 					if (movingKnob != null) { // resizing object
+						ArrayList<Point> knobPoints = selectedShape.getKnobs();
 						if (selectedShape instanceof DRect) {
 							DShapeModel model;
 							model = ((DRect) selectedShape).model;
-							double dx = point.x - movingKnob.getX();
-							double dy = point.y - movingKnob.getY();
-							resize(model, dx, dy);
-						}
-						if (selectedShape instanceof DOval) {
+							int dx = (int) (point.x - anchorKnob.getX());
+							int dy = (int) (point.y - anchorKnob.getY());
+							int currentX = (int) model.getX();
+							int currentY = (int) model.getY();
+
+							if (anchorKnob.equals(knobPoints.get(0))) {
+								resize(point, model, currentX, currentY, dx, dy);
+							} else if (anchorKnob.equals(knobPoints.get(1))) {
+								resize(point, model, point.x, currentY, -dx, dy);
+							} else if (anchorKnob.equals(knobPoints.get(2))) {
+								resize(point, model, currentX, point.y, dx, -dy);
+							} else if (anchorKnob.equals(knobPoints.get(3))) {
+								resize(point, model, point.x, point.y, -dx, -dy);
+							}
+
+						} else if (selectedShape instanceof DOval) {
 							DShapeModel model;
 							model = ((DOval) selectedShape).model;
-							double dx = point.x - movingKnob.getX();
-							double dy = point.y - movingKnob.getY();
-							resize(model, dx, dy);
-						}
-						if (selectedShape instanceof DLine) {
-							// resize
-						}
-						if (selectedShape instanceof DText) {
+							int dx = (int) (point.x - anchorKnob.getX());
+							int dy = (int) (point.y - anchorKnob.getY());
+							int currentX = (int) model.getX();
+							int currentY = (int) model.getY();
+							
+							if (anchorKnob.equals(knobPoints.get(0))) {
+								resize(point, model, currentX, currentY, dx, dy);
+							} else if (anchorKnob.equals(knobPoints.get(1))) {
+								resize(point, model, point.x, currentY, -dx, dy);
+							} else if (anchorKnob.equals(knobPoints.get(2))) {
+								resize(point, model, currentX, point.y, dx, -dy);
+							} else if (anchorKnob.equals(knobPoints.get(3))) {
+								resize(point, model, point.x, point.y, -dx, -dy);
+							}
+
+						} else if (selectedShape instanceof DLine) {
+							//resize
+						} else if (selectedShape instanceof DText) {
 							// resize
 						}
 						System.out.println("moving");
-						movingKnob = point;
 
 					} else if (selectedShape.contains(point)) { // moving object
 						DShapeModel model;
 						if (selectedShape instanceof DRect) {
 							model = ((DRect) selectedShape).model;
-							model.setX(model.getX() + (point.x - xBeforeDrag));
-							model.setY(model.getY() + (point.y - yBeforeDrag));
-							selectedShape.modelChanged(model);
-							shapesList.set(selectedShapeIndex, selectedShape);
-							repaint();
+							moveShape(model, point);
+
 						} else if (selectedShape instanceof DOval) {
 							model = ((DOval) selectedShape).model;
-							model.setX(model.getX() + (point.x - xBeforeDrag));
-							model.setY(model.getY() + (point.y - yBeforeDrag));
-							selectedShape.modelChanged(model);
-							shapesList.set(selectedShapeIndex, selectedShape);
-							repaint();
+							moveShape(model, point);
 						} else if (selectedShape instanceof DText) {
 							model = ((DText) selectedShape).model;
-							model.setX(model.getX() + (point.x - xBeforeDrag));
-							model.setY(model.getY() + (point.y - yBeforeDrag));
-							selectedShape.modelChanged(model);
-							shapesList.set(selectedShapeIndex, selectedShape);
-							repaint();
+							moveShape(model, point);
 						} else if (selectedShape instanceof DLine) {
 							model = ((DLine) selectedShape).model;
-							model.setX(model.getX() + (point.x - xBeforeDrag));
-							model.setY(model.getY() + (point.y - yBeforeDrag));
-							selectedShape.modelChanged(model);
-							shapesList.set(selectedShapeIndex, selectedShape);
-							repaint();
+							moveShape(model, point);
 						}
 					}
 				}
@@ -157,40 +165,37 @@ public class Canvas extends JPanel {
 
 	}
 
-	public void resize(DShapeModel model, double dx, double dy) { // for OVAL
-																	// AND RECT
+	public void moveShape(DShapeModel model, Point point) {
+		model.setX(model.getX() + (point.x - xBeforeDrag));
+		model.setY(model.getY() + (point.y - yBeforeDrag));
+		selectedShape.modelChanged(model);
+		shapesList.set(selectedShapeIndex, selectedShape);
+		repaint();
+	}
 
-		ArrayList<Point> knobPoints = selectedShape.getKnobs();
-
-		if (anchorKnob.equals(knobPoints.get(0))) {
-			model.setWidth((int) model.getWidth() + (int) (dx));
-			model.setHeight((int) model.getHeight() + (int) (dy));
-			selectedShape.modelChanged(model);
-			shapesList.set(selectedShapeIndex, selectedShape);
-			repaint();
-		} else if (anchorKnob.equals(knobPoints.get(1))) {
-			model.setX((int) (model.getX() + dx));
-			model.setWidth((int) (model.getWidth() - dx));
-			model.setHeight((int) (model.getHeight() + dy));
-			selectedShape.modelChanged(model);
-			shapesList.set(selectedShapeIndex, selectedShape);
-			repaint();
-		} else if (anchorKnob.equals(knobPoints.get(2))) {
-			model.setY((int) (model.getY() + dy));
-			model.setWidth((int) model.getWidth() + (int) (dx));
-			model.setHeight((int) model.getHeight() - (int) (dy));
-			selectedShape.modelChanged(model);
-			shapesList.set(selectedShapeIndex, selectedShape);
-			repaint();
-		} else if (anchorKnob.equals(knobPoints.get(3))) {
-			model.setX((int) (model.getX() + dx));
-			model.setY((int) (model.getY() + dy));
-			model.setWidth((int) model.getWidth() - (int) (dx));
-			model.setHeight((int) model.getHeight() - (int) (dy));
-			selectedShape.modelChanged(model);
-			shapesList.set(selectedShapeIndex, selectedShape);
-			repaint();
+	public void resize(Point point, DShapeModel model, int x, int y, int width, int height) {
+																										
+		if (width < 0) {
+			model.setX(x - Math.abs(width));
+			model.setWidth(Math.abs((int)(anchorKnob.getX() - point.x)));
 		}
+		else{
+			model.setX(x);
+			model.setWidth(width);
+		}
+		
+		if (height < 0) {
+			model.setY(y - Math.abs(height));
+			model.setHeight(Math.abs((int)(anchorKnob.getY() - point.y)));
+		}
+		else{
+			model.setY(y);
+			model.setHeight(height);
+		}
+		
+		selectedShape.modelChanged(model);
+		shapesList.set(selectedShapeIndex, selectedShape);
+		repaint();
 	}
 
 	public void addShape(DShapeModel model) {
@@ -208,7 +213,6 @@ public class Canvas extends JPanel {
 			DShape text = new DText((DTextModel) model);
 			shapesList.add(text);
 		}
-
 		for (DShape shape : shapesList) {
 			shape.draw(this.getGraphics());
 		}
@@ -307,6 +311,32 @@ public class Canvas extends JPanel {
 			}
 		}
 		return rootElement;
+	}
+
+	public void changeFont(String font) {
+		if(selectedShape != null){
+			if(selectedShape instanceof DText){
+				DTextModel model;
+				model = ((DText) selectedShape).model;
+				model.setFontName(font);
+				selectedShape.modelChanged(model);
+				shapesList.set(selectedShapeIndex, selectedShape);
+				repaint();
+			}
+		}
+	}
+
+	public void changeText(String text) {
+		if(selectedShape != null){
+			if(selectedShape instanceof DText){
+				DTextModel model;
+				model = ((DText) selectedShape).model;
+				model.setText(text);
+				selectedShape.modelChanged(model);
+				shapesList.set(selectedShapeIndex, selectedShape);
+				repaint();
+			}
+		}
 	}
 
 }

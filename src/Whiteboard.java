@@ -1,19 +1,31 @@
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Font;
+import java.awt.Graphics;
+import java.awt.GraphicsEnvironment;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
+import java.awt.image.BufferedImage;
 import java.io.File;
 
+import javax.imageio.ImageIO;
 import javax.swing.Box;
+import javax.swing.DefaultListCellRenderer;
 import javax.swing.JButton;
 import javax.swing.JColorChooser;
+import javax.swing.JComboBox;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JList;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -53,6 +65,8 @@ public class Whiteboard extends JFrame {
 		// create control panel for buttons
 		JPanel controlPanel = new JPanel();
 		controlPanel.setLayout(new FlowLayout());
+        
+
 
 		Box top = Box.createHorizontalBox();
 		top.setAlignmentX(Box.LEFT_ALIGNMENT);
@@ -143,28 +157,54 @@ public class Whiteboard extends JFrame {
 		Box middleBot = Box.createHorizontalBox();
 		middleBot.setAlignmentX(Box.LEFT_ALIGNMENT);
 		JTextArea textArea = new JTextArea();
-		JButton edwardianButton = new JButton("Edwardian Script");
+		textArea.setPreferredSize(new Dimension(300,50));
+		GraphicsEnvironment graphEnviron = 
+			       GraphicsEnvironment.getLocalGraphicsEnvironment();
+			Font[] allFonts = graphEnviron.getAllFonts();
+
+		JComboBox<Font> fontBox = new JComboBox<>(allFonts);
+		fontBox.setSelectedIndex(0);
+		fontBox.setPreferredSize(new Dimension(150, 50));
+        fontBox.setMaximumSize(new Dimension(70, 50));
+		fontBox.setRenderer(new DefaultListCellRenderer() {
+		   @Override
+		   public Component getListCellRendererComponent(JList<?> list,
+		         Object value, int index, boolean isSelected, boolean cellHasFocus) {
+		      if (value != null) {
+		         Font font = (Font) value;
+		         value = font.getName();
+		      }
+		      return super.getListCellRendererComponent(list, value, index,
+		            isSelected, cellHasFocus);
+		   }
+		});
 		middleBot.add(textArea);
-		middleBot.add(edwardianButton);
+		middleBot.add(fontBox);
 
 		// action listeners for adding Text
-		edwardianButton.addActionListener(new ActionListener() {
+		fontBox.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent evt) {
-				DTextModel model = new DTextModel();
-				String text = textArea.getText();
-				textArea.setText("");
-				model.setColor(Color.GRAY);
-				model.setText(text);
-				model.setFontName("EdwardianScriptITC");
-				model.setFontStyle(Font.PLAIN);
-				model.setFontSize(30);
-				model.setX(0);
-				model.setY(0);
-				canvas.addShape(model);
+				Font font = (Font) fontBox.getSelectedItem();
+				String fontName = font.getFontName();
+				canvas.changeFont(fontName);
+				
 			}
 
 		});
+		
+		textArea.addKeyListener(new KeyAdapter() {
+		      /**
+		       * When you type the character "a" into the text field you will see
+		       * an information dialog box
+		       */
+		      public void keyReleased(KeyEvent ke) {
+				String text = textArea.getText();
+				canvas.changeText(text);
 
+		      }
+		});
+		      
+		      
 		Box bottom = Box.createHorizontalBox();
 		bottom.setAlignmentX(Box.LEFT_ALIGNMENT);
 		JButton frontButton = new JButton("Move to Front");
@@ -330,7 +370,19 @@ public class Whiteboard extends JFrame {
 		saveImageButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent evt) {
 				// save image
+				BufferedImage bi = new BufferedImage(canvas.getSize().width, canvas.getSize().height,
+						BufferedImage.TYPE_INT_ARGB);
+				Graphics g = bi.createGraphics();
+				canvas.paint(g); // this == JComponent
+				g.dispose();
+				try {
+					JFileChooser fileChooser = new JFileChooser();
+					fileChooser.setFileSelectionMode(JFileChooser.SAVE_DIALOG);
 
+					fileChooser.showSaveDialog(null);
+					ImageIO.write(bi, "png", fileChooser.getSelectedFile());
+				} catch (Exception e) {
+				}
 			}
 
 		});
