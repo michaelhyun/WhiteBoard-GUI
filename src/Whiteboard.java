@@ -8,6 +8,8 @@ import java.awt.Graphics;
 import java.awt.GraphicsEnvironment;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 import java.awt.image.BufferedImage;
 import java.io.BufferedReader;
 import java.io.File;
@@ -159,12 +161,15 @@ public class Whiteboard extends JFrame {
 		Box middleBox = Box.createHorizontalBox();
 		middleBox.setAlignmentX(Box.LEFT_ALIGNMENT);
 		JTextArea textArea = new JTextArea();
-		GraphicsEnvironment graphEnviron = GraphicsEnvironment.getLocalGraphicsEnvironment();
-		Font[] allFonts = graphEnviron.getAllFonts();
+		textArea.setPreferredSize(new Dimension(300,50));
+		GraphicsEnvironment graphEnviron = 
+			       GraphicsEnvironment.getLocalGraphicsEnvironment();
+			Font[] allFonts = graphEnviron.getAllFonts();
 
 		JComboBox<Font> fontBox = new JComboBox<>(allFonts);
 		fontBox.setSelectedIndex(0);
-		fontBox.setPreferredSize(new Dimension(100, 60));
+		fontBox.setPreferredSize(new Dimension(150, 50));
+        fontBox.setMaximumSize(new Dimension(70, 50));
 		fontBox.setRenderer(new DefaultListCellRenderer() {
 			@Override
 			public Component getListCellRendererComponent(JList<?> list, Object value, int index, boolean isSelected,
@@ -182,24 +187,26 @@ public class Whiteboard extends JFrame {
 		fontBox.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent evt) {
 				Font font = (Font) fontBox.getSelectedItem();
-
-				DTextModel model = new DTextModel();
-				String text = textArea.getText();
-
-				// textArea.setText("");
-				// model.setColor(Color.GRAY);
-				// model.setText(text);
-				// model.setFontName("EdwardianScriptITC");
-				// model.setFontStyle(Font.PLAIN);
-				// model.setFontSize(30);
-				// model.setX(0);
-				// model.setY(0);
-				// canvas.addShape(model);
-
+				String fontName = font.getFontName();
+				canvas.changeFont(fontName);
+				
 			}
 
 		});
+		
+		textArea.addKeyListener(new KeyAdapter() {
+		      /**
+		       * When you type the character "a" into the text field you will see
+		       * an information dialog box
+		       */
+		      public void keyReleased(KeyEvent ke) {
+				String text = textArea.getText();
+				canvas.changeText(text);
 
+		      }
+		});
+		      
+		      
 		Box bottom = Box.createHorizontalBox();
 		bottom.setAlignmentX(Box.LEFT_ALIGNMENT);
 		JButton frontButton = new JButton("Move to Front");
