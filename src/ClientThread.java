@@ -14,6 +14,7 @@ public class ClientThread extends Thread {
 
 	@Override
 	public void run() {
+		System.out.println("Client on thread:" + Thread.currentThread().getId() + " connected");
 		InputStream in = null;
 		BufferedReader bufferedReader = null;
 		DataOutputStream out = null;

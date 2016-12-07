@@ -401,24 +401,29 @@ public class Whiteboard extends JFrame {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				int portNumber = Integer.parseInt(JOptionPane.showInputDialog("Enter port number for server:"));
-				ServerSocket serverSocket = null;
-				Socket socket = null;
+				new Thread(){
+					@Override
+					public void run(){
+						ServerSocket serverSocket = null;
+						Socket socket = null;
 
-				try {
-					serverSocket = new ServerSocket(portNumber);
-				} catch (IOException e2) {
-					e2.printStackTrace();
-				}
-				
-				for(;;){
-					try{
-						socket = serverSocket.accept();
-						System.out.println("Client connected");
-					}catch (IOException e2) {
-						e2.printStackTrace();
+						try {
+							serverSocket = new ServerSocket(portNumber);
+						} catch (IOException e2) {
+							e2.printStackTrace();
+						}
+						
+						for(;;){
+							try{
+								socket = serverSocket.accept();
+							}catch (IOException e2) {
+								e2.printStackTrace();
+							}
+							new ClientThread(socket).start();
+						}
 					}
-					new ClientThread(socket).start();
-				}
+				}.start();
+				
 			}
 
 		});
