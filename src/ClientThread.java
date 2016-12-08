@@ -7,9 +7,11 @@ import java.net.Socket;
 
 public class ClientThread extends Thread {
 	protected Socket socket;
+	private Canvas canvas;
 
-	public ClientThread(Socket socket) {
+	public ClientThread(Socket socket, Canvas canvas) {
 		this.socket = socket;
+		this.canvas = canvas;
 	}
 
 	@Override
@@ -27,9 +29,10 @@ public class ClientThread extends Thread {
 		}
 		String line;
 		while (true) {
+			System.out.println("selected shape index: " + canvas.getSelectedShapeIndex());
 			try {
 				line = bufferedReader.readLine();
-				System.out.println("Client on thread: "+ Thread.currentThread().getId() +" sent message: " + line);
+				System.out.println("Client on thread: " + Thread.currentThread().getId() + " sent message: " + line);
 				if ((line == null) || line.equalsIgnoreCase("QUIT")) {
 					socket.close();
 					return;

@@ -40,7 +40,7 @@ public class Canvas extends JPanel {
 						repaint();
 						selectedShapeIndex = i;
 						selectedShape.drawKnobs(getGraphics());
-						System.out.println(selectedShape.description());
+//						System.out.println(selectedShape.description());
 						break;
 					} else {
 						selectedShape = null;
@@ -53,8 +53,8 @@ public class Canvas extends JPanel {
 
 			@Override
 			public void mousePressed(MouseEvent e) {
-				System.out.println("pressed");
-				System.out.println(e.getX() + ", " + e.getY());
+//				System.out.println("pressed");
+//				System.out.println(e.getX() + ", " + e.getY());
 				if (selectedShape != null) {
 					ArrayList<Point> knobPoints = selectedShape.getKnobs();
 					for (Point point : knobPoints) {
@@ -74,7 +74,7 @@ public class Canvas extends JPanel {
 							} else if (knobPoints.get(3).equals(movingKnob)) {
 								anchorKnob = knobPoints.get(0);
 							}
-							System.out.println("MovingKnob selected");
+//							System.out.println("MovingKnob selected");
 						}
 					}
 					xBeforeDrag = e.getX();
@@ -84,7 +84,7 @@ public class Canvas extends JPanel {
 
 			@Override
 			public void mouseReleased(MouseEvent e) {
-				System.out.println("released");
+//				System.out.println("released");
 				movingKnob = null;
 				anchorKnob = null;
 			}
@@ -138,7 +138,7 @@ public class Canvas extends JPanel {
 						} else if (selectedShape instanceof DText) {
 							// resize
 						}
-						System.out.println("moving");
+//						System.out.println("moving");
 
 					} else if (selectedShape.contains(point)) { // moving object
 						DShapeModel model;
@@ -268,6 +268,14 @@ public class Canvas extends JPanel {
 		} else {
 			System.out.print("No shape selected");
 		}
+	}
+
+	public ArrayList<DShape> getShapesList() {
+		return shapesList;
+	}
+
+	public int getSelectedShapeIndex() {
+		return selectedShapeIndex;
 	}
 
 	public void removeShape() {

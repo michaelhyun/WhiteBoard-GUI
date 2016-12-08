@@ -419,7 +419,7 @@ public class Whiteboard extends JFrame {
 							}catch (IOException e2) {
 								e2.printStackTrace();
 							}
-							new ClientThread(socket).start();
+							new ClientThread(socket,canvas).start();
 						}
 					}
 				}.start();
