@@ -11,6 +11,18 @@ public class DLineModel extends DShapeModel {
 	public Point getP1(){
 		return p1;
 	}
+	public int getP1X(){
+		return p1.x;
+	}
+	public void setP1X(int x){
+		p1.x = x;
+	}	
+	public int getP1Y(){
+		return p1.y;
+	}
+	public void setP1Y(int y){
+		p1.y = y;
+	}
 
 	public void setP1(Point point){
 		this.p1 = point;
@@ -18,7 +30,18 @@ public class DLineModel extends DShapeModel {
 	public Point getP2(){
 		return p2;
 	}
-
+	public int getP2X(){
+		return p2.x;
+	}
+	public void setP2X(int x){
+		p2.x = x;
+	}
+	public int getP2Y(){
+		return p2.y;
+	}
+	public void setP2Y(int y){
+		p2.y = y;
+	}
 	public void setP2(Point point){
 		this.p2 = point;
 	}

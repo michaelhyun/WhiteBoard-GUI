@@ -3,6 +3,7 @@ import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Point;
+import java.awt.Rectangle;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
@@ -57,27 +58,48 @@ public class Canvas extends JPanel {
 				System.out.println(e.getX() + ", " + e.getY());
 				if (selectedShape != null) {
 					ArrayList<Point> knobPoints = selectedShape.getKnobs();
-					for (Point point : knobPoints) {
-						if ((e.getX() <= (point.getX() + Globals.KNOB_SIZE / 2))
-								&& (e.getX() >= (point.getX() - Globals.KNOB_SIZE / 2))
-								&& (e.getY() <= (point.getY() + Globals.KNOB_SIZE / 2))
-								&& (e.getY() >= (point.getY() - Globals.KNOB_SIZE / 2))) {
-							movingKnob = point;
+					if (knobPoints.size() == 4) { //moving all rectangle bounds
 
+						for (Point point : knobPoints) {
+							if ((e.getX() <= (point.getX() + Globals.KNOB_SIZE / 2))
+									&& (e.getX() >= (point.getX() - Globals.KNOB_SIZE / 2))
+									&& (e.getY() <= (point.getY() + Globals.KNOB_SIZE / 2))
+									&& (e.getY() >= (point.getY() - Globals.KNOB_SIZE / 2))) {
+								movingKnob = point;
+
+								if (knobPoints.get(0).equals(movingKnob)) {
+									anchorKnob = knobPoints.get(3);
+								} else if (knobPoints.get(1).equals(movingKnob)) {
+									anchorKnob = knobPoints.get(2);
+								} else if (knobPoints.get(2).equals(movingKnob)) {
+									anchorKnob = knobPoints.get(1);
+								} else if (knobPoints.get(3).equals(movingKnob)) {
+									anchorKnob = knobPoints.get(0);
+								}
+								System.out.println("MovingKnob selected");
+							}
+						}
+						xBeforeDrag = e.getX();
+						yBeforeDrag = e.getY();
+					}
+					else{ //moving DLine
+						for (Point point : knobPoints) {
+							
+							if ((e.getX() <= (point.x + Globals.KNOB_SIZE / 2))
+									&& (e.getX() >= (point.x - Globals.KNOB_SIZE / 2))
+									&& (e.getY() <= (point.y + Globals.KNOB_SIZE / 2))
+									&& (e.getY() >= (point.y - Globals.KNOB_SIZE / 2))) {
+								movingKnob = point;
+							}
 							if (knobPoints.get(0).equals(movingKnob)) {
-								anchorKnob = knobPoints.get(3);
-							} else if (knobPoints.get(1).equals(movingKnob)) {
-								anchorKnob = knobPoints.get(2);
-							} else if (knobPoints.get(2).equals(movingKnob)) {
 								anchorKnob = knobPoints.get(1);
-							} else if (knobPoints.get(3).equals(movingKnob)) {
+							} else if (knobPoints.get(1).equals(movingKnob)) {
 								anchorKnob = knobPoints.get(0);
 							}
-							System.out.println("MovingKnob selected");
 						}
+						xBeforeDrag = e.getX();
+						yBeforeDrag = e.getY();
 					}
-					xBeforeDrag = e.getX();
-					yBeforeDrag = e.getY();
 				}
 			}
 
@@ -121,7 +143,7 @@ public class Canvas extends JPanel {
 							int dy = (int) (point.y - anchorKnob.getY());
 							int currentX = (int) model.getX();
 							int currentY = (int) model.getY();
-							
+
 							if (anchorKnob.equals(knobPoints.get(0))) {
 								resize(point, model, currentX, currentY, dx, dy);
 							} else if (anchorKnob.equals(knobPoints.get(1))) {
@@ -133,7 +155,23 @@ public class Canvas extends JPanel {
 							}
 
 						} else if (selectedShape instanceof DLine) {
-							//resize
+							DShapeModel model;
+							model = ((DLine) selectedShape).model;
+							int xChange = e.getX() - (int) movingKnob.getX();
+					        int yChange = e.getY() - (int) movingKnob.getY();
+					        if(((DLineModel) model).getP1() == movingKnob){
+					        	((DLineModel) model).setP1X(((DLineModel) model).getP1X() + xChange);
+					        	((DLineModel) model).setP1Y(((DLineModel) model).getP1Y() + yChange);
+					        	repaint();
+					        }
+					        else if(((DLineModel) model).getP2() == movingKnob){
+					        	((DLineModel) model).setP2X(((DLineModel) model).getP2X() + xChange);
+					        	((DLineModel) model).setP2Y(((DLineModel) model).getP2Y() + yChange);
+					        	repaint();
+					        }
+					        
+					        
+					        
 						} else if (selectedShape instanceof DText) {
 							// resize
 						}
@@ -153,7 +191,7 @@ public class Canvas extends JPanel {
 							moveShape(model, point);
 						} else if (selectedShape instanceof DLine) {
 							model = ((DLine) selectedShape).model;
-							moveShape(model, point);
+							 moveShape(model, point);
 						}
 					}
 				}
@@ -165,35 +203,41 @@ public class Canvas extends JPanel {
 	}
 
 	public void moveShape(DShapeModel model, Point point) {
+		if (model instanceof DLineModel){
+			
+			((DLineModel) model).setP1(new Point(((DLineModel) model).getP1X()+ (point.x - xBeforeDrag), ((DLineModel) model).getP1Y()+ (point.y - yBeforeDrag)));
+			((DLineModel) model).setP2(new Point(((DLineModel) model).getP2X()+ (point.x - xBeforeDrag), ((DLineModel) model).getP2Y()+ (point.y - yBeforeDrag)));
+			repaint();
+		}
 		model.setX(model.getX() + (point.x - xBeforeDrag));
 		model.setY(model.getY() + (point.y - yBeforeDrag));
 		selectedShape.modelChanged(model);
-//		shapesList.set(selectedShapeIndex, selectedShape);
 		repaint();
 	}
 
 	public void resize(Point point, DShapeModel model, int x, int y, int width, int height) {
-																										
+
+		if(model instanceof DLineModel){
+			
+		}
+		
+		
 		if (width < 0) {
 			model.setX(x - Math.abs(width));
-			model.setWidth(Math.abs((int)(anchorKnob.getX() - point.x)));
-		}
-		else{
+			model.setWidth(Math.abs((int) (anchorKnob.getX() - point.x)));
+		} else {
 			model.setX(x);
 			model.setWidth(width);
 		}
-		
 		if (height < 0) {
 			model.setY(y - Math.abs(height));
-			model.setHeight(Math.abs((int)(anchorKnob.getY() - point.y)));
-		}
-		else{
+			model.setHeight(Math.abs((int) (anchorKnob.getY() - point.y)));
+		} else {
 			model.setY(y);
 			model.setHeight(height);
 		}
-		
+
 		selectedShape.modelChanged(model);
-//		shapesList.set(selectedShapeIndex, selectedShape);
 		repaint();
 	}
 
@@ -313,8 +357,8 @@ public class Canvas extends JPanel {
 	}
 
 	public void changeFont(String font) {
-		if(selectedShape != null){
-			if(selectedShape instanceof DText){
+		if (selectedShape != null) {
+			if (selectedShape instanceof DText) {
 				DTextModel model;
 				model = ((DText) selectedShape).model;
 				model.setFontName(font);
@@ -326,8 +370,8 @@ public class Canvas extends JPanel {
 	}
 
 	public void changeText(String text) {
-		if(selectedShape != null){
-			if(selectedShape instanceof DText){
+		if (selectedShape != null) {
+			if (selectedShape instanceof DText) {
 				DTextModel model;
 				model = ((DText) selectedShape).model;
 				model.setText(text);

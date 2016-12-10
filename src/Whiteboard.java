@@ -6,6 +6,7 @@ import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.GraphicsEnvironment;
+import java.awt.Point;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
@@ -110,11 +111,9 @@ public class Whiteboard extends JFrame {
 		// action listeners for adding Line
 		lineButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent evt) {
-				DShapeModel model = new DLineModel();
-				model.setX(10);
-				model.setY(10);
-				model.setWidth(20);
-				model.setHeight(20);
+				DLineModel model = new DLineModel();
+				model.setP1(new Point(10,10));
+				model.setP2(new Point(40,40));
 				model.setColor(Color.GRAY);
 				canvas.addShape(model);
 			}
