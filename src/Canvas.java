@@ -62,7 +62,6 @@ public class Canvas extends JPanel {
 								&& (e.getX() >= (point.getX() - Globals.KNOB_SIZE / 2))
 								&& (e.getY() <= (point.getY() + Globals.KNOB_SIZE / 2))
 								&& (e.getY() >= (point.getY() - Globals.KNOB_SIZE / 2))) {
-
 							movingKnob = point;
 
 							if (knobPoints.get(0).equals(movingKnob)) {
@@ -169,7 +168,7 @@ public class Canvas extends JPanel {
 		model.setX(model.getX() + (point.x - xBeforeDrag));
 		model.setY(model.getY() + (point.y - yBeforeDrag));
 		selectedShape.modelChanged(model);
-		shapesList.set(selectedShapeIndex, selectedShape);
+//		shapesList.set(selectedShapeIndex, selectedShape);
 		repaint();
 	}
 
@@ -194,7 +193,7 @@ public class Canvas extends JPanel {
 		}
 		
 		selectedShape.modelChanged(model);
-		shapesList.set(selectedShapeIndex, selectedShape);
+//		shapesList.set(selectedShapeIndex, selectedShape);
 		repaint();
 	}
 
@@ -253,7 +252,7 @@ public class Canvas extends JPanel {
 	public void moveToBack() {
 		if (selectedShape != null) {
 			shapesList.remove(selectedShape);
-			shapesList.add(shapesList.size(), selectedShape);
+			shapesList.add(selectedShape);
 			repaint();
 		} else {
 			System.out.print("No shape selected");
