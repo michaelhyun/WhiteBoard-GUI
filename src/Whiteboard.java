@@ -45,6 +45,9 @@ public class Whiteboard extends JFrame {
 	private static final long serialVersionUID = 1L;
 	private final String PROJECT_FRAME_NAME = "Whiteboard";
 	WhiteBoardController controller;
+	JTextArea textArea;
+	JComboBox<String> fontBox;
+	
 
 	public Whiteboard(WhiteBoardController controller) {
 		// TODO Auto-generated constructor stub
@@ -52,7 +55,7 @@ public class Whiteboard extends JFrame {
 		controller.attachView(this);
 		showGUI();
 	}
-
+    
 	private void showGUI() {
 		JFrame frame = new JFrame(PROJECT_FRAME_NAME);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -60,7 +63,7 @@ public class Whiteboard extends JFrame {
 		frame.setPreferredSize(new Dimension(700, 700));
 
 		// create canvas
-		Canvas canvas = new Canvas();
+		Canvas canvas = new Canvas(this);
 		canvas.setPreferredSize(new Dimension(400, 400));
 
 		// create control panel for buttons
@@ -155,26 +158,19 @@ public class Whiteboard extends JFrame {
 
 		Box middleBot = Box.createHorizontalBox();
 		middleBot.setAlignmentX(Box.LEFT_ALIGNMENT);
-		JTextArea textArea = new JTextArea();
+		textArea = new JTextArea();
 		textArea.setPreferredSize(new Dimension(300,50));
 		GraphicsEnvironment graphEnviron = 
 			       GraphicsEnvironment.getLocalGraphicsEnvironment();
-			Font[] allFonts = graphEnviron.getAllFonts();
-
-		JComboBox<Font> fontBox = new JComboBox<>(allFonts);
+        String[] fonts = graphEnviron.getAvailableFontFamilyNames();
+			
+		fontBox = new JComboBox<String>(fonts);
 		fontBox.setSelectedIndex(0);
 		fontBox.setPreferredSize(new Dimension(150, 50));
         fontBox.setMaximumSize(new Dimension(70, 50));
 		fontBox.setRenderer(new DefaultListCellRenderer() {
-		   @Override
-		   public Component getListCellRendererComponent(JList<?> list,
-		         Object value, int index, boolean isSelected, boolean cellHasFocus) {
-		      if (value != null) {
-		         Font font = (Font) value;
-		         value = font.getName();
-		      }
-		      return super.getListCellRendererComponent(list, value, index,
-		            isSelected, cellHasFocus);
+		   public Component getListCellRendererComponent(JList<?> list, Object value, int index) {
+		      return getListCellRendererComponent(list, value, index);
 		   }
 		});
 		middleBot.add(textArea);
@@ -183,19 +179,14 @@ public class Whiteboard extends JFrame {
 		// action listeners for adding Text
 		fontBox.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent evt) {
-				Font font = (Font) fontBox.getSelectedItem();
-				String fontName = font.getFontName();
+				String fontName = (String) fontBox.getSelectedItem();
 				canvas.changeFont(fontName);
-				
 			}
 
 		});
 		
 		textArea.addKeyListener(new KeyAdapter() {
-		      /**
-		       * When you type the character "a" into the text field you will see
-		       * an information dialog box
-		       */
+
 		      public void keyReleased(KeyEvent ke) {
 				String text = textArea.getText();
 				canvas.changeText(text);
@@ -203,6 +194,9 @@ public class Whiteboard extends JFrame {
 		      }
 		});
 		      
+		
+
+	        
 		      
 		Box bottom = Box.createHorizontalBox();
 		bottom.setAlignmentX(Box.LEFT_ALIGNMENT);

@@ -22,9 +22,11 @@ public class Canvas extends JPanel {
 	private int yBeforeDrag = 0;
 	private Point movingKnob;
 	private Point anchorKnob;
+	Whiteboard whiteboard;
 
-	public Canvas() {
+	public Canvas(Whiteboard whiteboard) {
 		// TODO Auto-generated constructor stub
+		this.whiteboard = whiteboard;
 		super.setBackground(Color.WHITE);
 		super.setPreferredSize(new Dimension(WIDTH, HEIGHT));
 		shapesList = new ArrayList<DShape>();
@@ -38,7 +40,6 @@ public class Canvas extends JPanel {
 					DShape shape = shapesList.get(i);
 					if (shape.contains(m.getPoint())) {
 						selectedShape = shape;
-						repaint();
 						selectedShapeIndex = i;
 						selectedShape.drawKnobs(getGraphics());
 						System.out.println(selectedShape.description());
@@ -47,8 +48,23 @@ public class Canvas extends JPanel {
 						selectedShape = null;
 						repaint();
 					}
-
 				}
+				
+				if(selectedShape instanceof DText){
+					String shapeText = ((DText) selectedShape).model.getText();
+					whiteboard.textArea.setEnabled(true);
+					whiteboard.textArea.setText(shapeText);
+					whiteboard.fontBox.setEnabled(true);
+					whiteboard.fontBox.setSelectedItem(((DText) selectedShape).model.getFontName());
+				}
+				else{
+					whiteboard.textArea.setText("");
+					whiteboard.fontBox.setSelectedItem("Dialog");;
+					whiteboard.textArea.setEnabled(false);
+					whiteboard.fontBox.setEnabled(false);
+				}
+				repaint();
+				
 
 			}
 
@@ -175,6 +191,10 @@ public class Canvas extends JPanel {
 						} else if (selectedShape instanceof DText) {
 							// resize
 						}
+						
+						
+						
+						
 						System.out.println("moving");
 
 					} else if (selectedShape.contains(point)) { // moving object
@@ -217,10 +237,6 @@ public class Canvas extends JPanel {
 
 	public void resize(Point point, DShapeModel model, int x, int y, int width, int height) {
 
-		if(model instanceof DLineModel){
-			
-		}
-		
 		
 		if (width < 0) {
 			model.setX(x - Math.abs(width));
@@ -332,9 +348,17 @@ public class Canvas extends JPanel {
 		for (DShape shape : shapesList) {
 			shape.draw(g);
 		}
+
 		if (selectedShape != null) {
 			selectedShape.drawKnobs(g);
 		}
+		else{
+			whiteboard.textArea.setEnabled(false);
+			whiteboard.fontBox.setEnabled(false);
+			whiteboard.fontBox.setSelectedItem("Dialog");;
+		}
+		
+		
 	}
 
 	public Element getRootElementForXML(Element rootElement) {

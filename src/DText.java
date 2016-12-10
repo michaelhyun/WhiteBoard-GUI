@@ -18,7 +18,7 @@ public class DText extends DShape implements ModelListener {
 	public boolean contains(Point point) {
 		int x = point.x;
 		int y = point.y;
-
+		
 		if (model.getX() <= x && x <= (model.getX() + model.getWidth())) {
 			if (model.getY() <= y && y <= (model.getY() + model.getHeight())) {
 				return true;
