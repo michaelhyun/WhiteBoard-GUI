@@ -6,6 +6,7 @@ import java.awt.Point;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
+import java.util.List;
 
 import javax.swing.JPanel;
 
@@ -15,6 +16,7 @@ public class Canvas extends JPanel {
 	private static final long serialVersionUID = 1L;
 	private final int HEIGHT = 400, WIDTH = 400;
 	private ArrayList<DShape> shapesList;
+	private List<Observer> observers = new ArrayList<Observer>();
 	private DShape selectedShape;
 	private int selectedShapeIndex;
 	private int xBeforeDrag = 0;
@@ -300,6 +302,7 @@ public class Canvas extends JPanel {
 		if (selectedShape != null) {
 			selectedShape.drawKnobs(g);
 		}
+		notifyAllObservers();
 	}
 
 	public Element getRootElementForXML(Element rootElement) {
@@ -346,5 +349,15 @@ public class Canvas extends JPanel {
 			}
 		}
 	}
+	
+	 public void attach(Observer observer){
+	      observers.add(observer);		
+	   }
+
+	   public void notifyAllObservers(){
+	      for (Observer observer : observers) {
+	         observer.update();
+	      }
+	   } 	
 
 }
