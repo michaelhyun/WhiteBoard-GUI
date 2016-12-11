@@ -35,7 +35,7 @@ public class DText extends DShape implements ModelListener {
         Font theFont = new Font(model.getFontName(), Font.PLAIN, (int)size);
         FontMetrics fontMetrics = g.getFontMetrics(theFont);
         
-        while(fontMetrics.getHeight() < this.model.getHeight()){
+        while(fontMetrics.getHeight() < model.getHeight()){
             previous = size;
             size = (size*1.10) + 1;
             theFont = new Font(this.model.getFontName(), Font.PLAIN, (int)size);
@@ -47,11 +47,16 @@ public class DText extends DShape implements ModelListener {
 	@Override
 	public void draw(Graphics g) {
 		Font f = computeFont(g);
-		 FontMetrics metrics = g.getFontMetrics(f);
-
+		FontMetrics metrics = g.getFontMetrics(f);
+		
+		Graphics2D g2d = (Graphics2D) g;
+		Shape oldClip = g.getClip();
+		Rectangle rect = new Rectangle(model.getX(), model.getY(), model.getWidth(), model.getHeight());
+		g.setClip(oldClip.getBounds().createIntersection(rect.getBounds2D()));
 	    g.setColor(model.getColor());
         g.setFont(f);
-		g.drawString(model.getText(), model.getX(), model.getY() + metrics.getHeight());
+		g.drawString(model.getText(), model.getX(), model.getY() + metrics.getAscent());
+		g.setClip(oldClip);
 	    
 
 	}
