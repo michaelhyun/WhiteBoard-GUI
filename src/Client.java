@@ -73,15 +73,12 @@ public class Client extends Thread {
 							Element eElement = (Element) nNode;
 							String shapeType = eElement.getElementsByTagName("type").item(0).getTextContent();
 
-							if (!shapeType.equals("text")) {
-								DShapeModel shapeModel = null; // applies for Rect,
-																// Oval, Line
+							if (!shapeType.equals("text") && !shapeType.equals("line")) {
+								DShapeModel shapeModel = null; // applies for Rect, line
 								if (shapeType.equals("rect")) {
 									shapeModel = new DRectModel();
 								} else if (shapeType.equals("oval")) {
 									shapeModel = new DOvalModel();
-								} else if (shapeType.equals("line")) {
-									shapeModel = new DLineModel();
 								}
 								shapeModel.setX(
 										Integer.parseInt(eElement.getElementsByTagName("x").item(0).getTextContent()));
@@ -94,7 +91,7 @@ public class Client extends Thread {
 								shapeModel.setColor(new Color(
 										Integer.parseInt(eElement.getElementsByTagName("color").item(0).getTextContent())));
 								canvas.addShape(shapeModel);
-							} else {
+							} else if(shapeType.equals("text")){
 								DTextModel textModel = new DTextModel();
 								textModel.setX(
 										Integer.parseInt(eElement.getElementsByTagName("x").item(0).getTextContent()));
@@ -113,8 +110,24 @@ public class Client extends Thread {
 								textModel.setFontSize(Integer
 										.parseInt(eElement.getElementsByTagName("fontSize").item(0).getTextContent()));
 								canvas.addShape(textModel);
+							}else if (shapeType.equals("line")) {
+								DLineModel lineModel = new DLineModel();
+								lineModel.setX(
+										Integer.parseInt(eElement.getElementsByTagName("x").item(0).getTextContent()));
+								lineModel.setY(
+										Integer.parseInt(eElement.getElementsByTagName("y").item(0).getTextContent()));
+								lineModel.setWidth(
+										Integer.parseInt(eElement.getElementsByTagName("width").item(0).getTextContent()));
+								lineModel.setHeight(
+										Integer.parseInt(eElement.getElementsByTagName("height").item(0).getTextContent()));
+								lineModel.setColor(new Color(
+										Integer.parseInt(eElement.getElementsByTagName("color").item(0).getTextContent())));
+								
+								lineModel.setP1X(Integer.parseInt(eElement.getElementsByTagName("p1x").item(0).getTextContent()));
+								lineModel.setP1Y(Integer.parseInt(eElement.getElementsByTagName("p1y").item(0).getTextContent()));
+								lineModel.setP2X(Integer.parseInt(eElement.getElementsByTagName("p2x").item(0).getTextContent()));
+								lineModel.setP2Y(Integer.parseInt(eElement.getElementsByTagName("p2y").item(0).getTextContent()));
 							}
-
 						}
 					}
 				} catch (Exception e) {
