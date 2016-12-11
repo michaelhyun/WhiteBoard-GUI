@@ -176,14 +176,18 @@ public class Canvas extends JPanel {
 								((DLineModel) model).setP1Y(((DLineModel) model).getP1Y() + yChange);
 								((DLineModel) model).setX(((DLineModel) model).getP1X());
 								((DLineModel) model).setY(((DLineModel) model).getP1Y());
-								((DLineModel) model).setWidth(Math.abs(((DLineModel) model).getP2X() - ((DLineModel) model).getP1X()));
-								((DLineModel) model).setHeight(Math.abs(((DLineModel) model).getP2Y() - ((DLineModel) model).getP1Y()));
+								((DLineModel) model).setWidth(
+										Math.abs(((DLineModel) model).getP2X() - ((DLineModel) model).getP1X()));
+								((DLineModel) model).setHeight(
+										Math.abs(((DLineModel) model).getP2Y() - ((DLineModel) model).getP1Y()));
 								repaint();
 							} else if (((DLineModel) model).getP2() == movingKnob) {
 								((DLineModel) model).setP2X(((DLineModel) model).getP2X() + xChange);
 								((DLineModel) model).setP2Y(((DLineModel) model).getP2Y() + yChange);
-								((DLineModel) model).setWidth(Math.abs(((DLineModel) model).getP2X() - ((DLineModel) model).getP1X()));
-								((DLineModel) model).setHeight(Math.abs(((DLineModel) model).getP2Y() - ((DLineModel) model).getP1Y()));
+								((DLineModel) model).setWidth(
+										Math.abs(((DLineModel) model).getP2X() - ((DLineModel) model).getP1X()));
+								((DLineModel) model).setHeight(
+										Math.abs(((DLineModel) model).getP2Y() - ((DLineModel) model).getP1Y()));
 								repaint();
 							}
 
@@ -215,13 +219,13 @@ public class Canvas extends JPanel {
 							moveShape(model, dx, dy);
 						} else if (selectedShape instanceof DOval) {
 							model = ((DOval) selectedShape).model;
-							moveShape(model, dx, dy);						
+							moveShape(model, dx, dy);
 						} else if (selectedShape instanceof DText) {
 							model = ((DText) selectedShape).model;
 							moveShape(model, dx, dy);
 						} else if (selectedShape instanceof DLine) {
 							model = ((DLine) selectedShape).model;
-							moveShape(model, dx, dy);					
+							moveShape(model, dx, dy);
 						}
 					}
 				}
@@ -234,38 +238,59 @@ public class Canvas extends JPanel {
 
 	public void moveShape(DShapeModel model, int dx, int dy) {
 		if (model instanceof DLineModel) {
-			((DLineModel) model).setP1(new Point(((DLineModel) model).getP1X() + dx,
-					((DLineModel) model).getP1Y() + dy));
-			((DLineModel) model).setP2(new Point(((DLineModel) model).getP2X() + dx,
-					((DLineModel) model).getP2Y() + dy));
+			((DLineModel) model)
+					.setP1(new Point(((DLineModel) model).getP1X() + dx, ((DLineModel) model).getP1Y() + dy));
+			((DLineModel) model)
+					.setP2(new Point(((DLineModel) model).getP2X() + dx, ((DLineModel) model).getP2Y() + dy));
 			repaint();
 		}
-		
-			model.setX(model.getX() + dx);
-			model.setY(model.getY() + dy);
-			selectedShape.modelChanged(model);
-			repaint();
-		
+
+		model.setX(model.getX() + dx);
+		model.setY(model.getY() + dy);
+		selectedShape.modelChanged(model);
+		repaint();
+
 	}
 
 	public void resize(Point point, DShapeModel model, int x, int y, int width, int height) {
 
-		if (width < 0) {
-			model.setX(x - Math.abs(width));
-			model.setWidth(Math.abs((int) (anchorKnob.getX() - point.x)));
+		if (model instanceof DTextModel) {
+			if (width < 0) {
+				model.setX(model.getX());
+				model.setWidth(0);
+			} else {
+				model.setX(x);
+				model.setWidth(width);
+			}
+			if (height < 0) {
+				model.setY(model.getY());
+				model.setHeight(0);
+			} else {
+				model.setY(y);
+				model.setHeight(height);
+			}			
+			selectedShape.modelChanged(model);
+			repaint();
+			
 		} else {
-			model.setX(x);
-			model.setWidth(width);
+
+			if (width < 0) {
+				model.setX(x - Math.abs(width));
+				model.setWidth(Math.abs((int) (anchorKnob.getX() - point.x)));
+			} else {
+				model.setX(x);
+				model.setWidth(width);
+			}
+			if (height < 0) {
+				model.setY(y - Math.abs(height));
+				model.setHeight(Math.abs((int) (anchorKnob.getY() - point.y)));
+			} else {
+				model.setY(y);
+				model.setHeight(height);
+			}
+			selectedShape.modelChanged(model);
+			repaint();
 		}
-		if (height < 0) {
-			model.setY(y - Math.abs(height));
-			model.setHeight(Math.abs((int) (anchorKnob.getY() - point.y)));
-		} else {
-			model.setY(y);
-			model.setHeight(height);
-		}
-		selectedShape.modelChanged(model);
-		repaint();
 	}
 
 	public void addShape(DShapeModel model) {
@@ -362,8 +387,8 @@ public class Canvas extends JPanel {
 		}
 
 	}
-	
-	public void removeAll(){
+
+	public void removeAll() {
 		shapesList.clear();
 		selectedShape = null;
 		repaint();
@@ -387,7 +412,6 @@ public class Canvas extends JPanel {
 		whiteboard.dataPanel.dataModel.updateTable();
 
 		notifyAllObservers();
-		
 
 	}
 
@@ -435,8 +459,8 @@ public class Canvas extends JPanel {
 			}
 		}
 	}
-	
-	public void clearCanvas(){
+
+	public void clearCanvas() {
 		shapesList.clear();
 		selectedShape = null;
 		repaint();

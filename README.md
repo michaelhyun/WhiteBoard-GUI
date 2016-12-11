@@ -1,3 +1,6 @@
+Hyun, Michael (009828299)
+Sardal, Ravin (009558549)
+
 # cs151finalproject
 
 For this assignment, you will build a simple but functional Whiteboard/drawing program, such as you might use to make a diagram in a lecture. Part A of the program deals with the GUI and drawing. Part B deals with file saving that we have not covered yet. Unfortunately, absolutely no lateness is allowed on this assignment ­­ think of it as giving you practice in the valuable skill of hitting a hard deadline..
