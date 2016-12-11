@@ -429,7 +429,9 @@ public class Whiteboard extends JFrame {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				int portNumber;
-				String portNumString = JOptionPane.showInputDialog("Enter port number for server:");
+				String portNumString = (String) JOptionPane.showInputDialog(null, "Enter port number for server",
+						"Enter port number for server. Hit enter for default.", JOptionPane.QUESTION_MESSAGE, null,
+						null, Globals.DEFAULT_PORT_NUMBER);
 				if (portNumString.trim().equals("")) {
 					portNumber = Globals.DEFAULT_PORT_NUMBER;
 				} else {
@@ -468,9 +470,10 @@ public class Whiteboard extends JFrame {
 			public void actionPerformed(ActionEvent e) {
 				// TODO Auto-generated method stub
 				String serverInfo = (String) JOptionPane.showInputDialog(null,
-						"Enter the ip address/port number of the server you would like to connect to:",
+						"Enter the ip address/port number of the server you would like to connect to",
 						"Enter the ip address/port number of the server you would like to connect to. Hit enter for default.",
-						JOptionPane.QUESTION_MESSAGE, null, null, Globals.DEFAULT_IP_ADDRESS + ":" + Globals.DEFAULT_PORT_NUMBER);
+						JOptionPane.QUESTION_MESSAGE, null, null,
+						Globals.DEFAULT_IP_ADDRESS + ":" + Globals.DEFAULT_PORT_NUMBER);
 				String serverInfoArr[] = serverInfo.split(":");
 				new Client(canvas, serverInfoArr[0], Integer.parseInt(serverInfoArr[1])).start();
 			}
