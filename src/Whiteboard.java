@@ -451,7 +451,8 @@ public class Whiteboard extends JFrame {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				// TODO Auto-generated method stub
-
+				int portNumber = Integer.parseInt(JOptionPane.showInputDialog("Enter port number for server:"));
+				new Client(canvas, portNumber).start();;
 			}
 		});
 
