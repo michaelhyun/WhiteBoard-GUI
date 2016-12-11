@@ -12,7 +12,13 @@ import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.image.BufferedImage;
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.net.ServerSocket;
+import java.net.Socket;
+import java.io.DataOutputStream;
 
 import javax.imageio.ImageIO;
 import javax.swing.Box;
@@ -23,9 +29,11 @@ import javax.swing.JComboBox;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+
 import javax.swing.JList;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.JTextArea;
@@ -75,9 +83,6 @@ public class Whiteboard extends JFrame {
 		// create control panel for buttons
 		JPanel controlPanel = new JPanel();
 		controlPanel.setLayout(new FlowLayout());
-        
-		
-
 
 		Box top = Box.createHorizontalBox();
 		top.setAlignmentX(Box.LEFT_ALIGNMENT);
@@ -163,8 +168,8 @@ public class Whiteboard extends JFrame {
 
 		});
 
-		Box middleBot = Box.createHorizontalBox();
-		middleBot.setAlignmentX(Box.LEFT_ALIGNMENT);
+		Box middleBox = Box.createHorizontalBox();
+		middleBox.setAlignmentX(Box.LEFT_ALIGNMENT);
 		textArea = new JTextArea();
 		textArea.setPreferredSize(new Dimension(300,50));
 		GraphicsEnvironment graphEnviron = 
@@ -176,13 +181,13 @@ public class Whiteboard extends JFrame {
 		fontBox.setPreferredSize(new Dimension(150, 50));
         fontBox.setMaximumSize(new Dimension(70, 50));
 		fontBox.setRenderer(new DefaultListCellRenderer() {
+
 		   public Component getListCellRendererComponent(JList<?> list, Object value, int index) {
 		      return getListCellRendererComponent(list, value, index);
 		   }
 		});
-		middleBot.add(textArea);
-		middleBot.add(fontBox);
-
+		middleBox.add(textArea);
+		middleBox.add(fontBox);
 		// action listeners for adding Text
 		fontBox.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent evt) {
@@ -387,12 +392,61 @@ public class Whiteboard extends JFrame {
 
 		});
 
+		Box serverBox = Box.createHorizontalBox();
+		serverBox.setAlignmentX(LEFT_ALIGNMENT);
+		JButton serverStartButton = new JButton("Server Start");
+		JButton clientStartButton = new JButton("Client Start");
+		serverBox.add(serverStartButton);
+		serverBox.add(clientStartButton);
+
+		serverStartButton.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				int portNumber = Integer.parseInt(JOptionPane.showInputDialog("Enter port number for server:"));
+				new Thread(){
+					@Override
+					public void run(){
+						ServerSocket serverSocket = null;
+						Socket socket = null;
+
+						try {
+							serverSocket = new ServerSocket(portNumber);
+						} catch (IOException e2) {
+							e2.printStackTrace();
+						}
+						
+						for(;;){
+							try{
+								socket = serverSocket.accept();
+							}catch (IOException e2) {
+								e2.printStackTrace();
+							}
+							new ClientThread(socket,canvas).start();
+						}
+					}
+				}.start();
+				
+			}
+
+		});
+
+		clientStartButton.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				// TODO Auto-generated method stub
+
+			}
+		});
+
 		Box leftPanel = Box.createVerticalBox();
 		leftPanel.add(top);
 		leftPanel.add(middle);
-		leftPanel.add(middleBot);
+		leftPanel.add(middleBox);
 		leftPanel.add(bottom);
 		leftPanel.add(saveBox);
+		leftPanel.add(serverBox);
 
 //		DataPanel dataPanel = new DataPanel();
 //		controlPanel.add(dataPanel);
