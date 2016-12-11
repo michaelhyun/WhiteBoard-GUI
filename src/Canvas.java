@@ -249,7 +249,6 @@ public class Canvas extends JPanel {
 	}
 
 	public void resize(Point point, DShapeModel model, int x, int y, int width, int height) {
-
 		
 		if (width < 0) {
 			model.setX(x - Math.abs(width));
