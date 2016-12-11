@@ -420,8 +420,10 @@ public class Whiteboard extends JFrame {
 		serverBox.setAlignmentX(LEFT_ALIGNMENT);
 		JButton serverStartButton = new JButton("Server Start");
 		JButton clientStartButton = new JButton("Client Start");
+		JLabel statusLabel = new JLabel("Status: ");
 		serverBox.add(serverStartButton);
 		serverBox.add(clientStartButton);
+		serverBox.add(statusLabel);
 
 		serverStartButton.addActionListener(new ActionListener() {
 
@@ -436,6 +438,7 @@ public class Whiteboard extends JFrame {
 				} else {
 					portNumber = Integer.parseInt(portNumString);
 				}
+				statusLabel.setText("Status: Server mode");
 				new Thread() {
 					@Override
 					public void run() {
@@ -473,6 +476,7 @@ public class Whiteboard extends JFrame {
 						"Enter the ip address/port number of the server you would like to connect to. Hit enter for default.",
 						JOptionPane.QUESTION_MESSAGE, null, null,
 						Globals.DEFAULT_IP_ADDRESS + ":" + Globals.DEFAULT_PORT_NUMBER);
+				statusLabel.setText("Status: Client mode");
 				String serverInfoArr[] = serverInfo.split(":");
 				new Client(canvas, serverInfoArr[0], Integer.parseInt(serverInfoArr[1])).start();
 			}
