@@ -435,12 +435,6 @@ public class Canvas extends JPanel {
 			}
 		}
 	}
-	
-	public void clearCanvas(){
-		shapesList.clear();
-		selectedShape = null;
-		repaint();
-	}
 
 	public void attach(Observer observer) {
 		observers.add(observer);

@@ -55,7 +55,7 @@ public class Client extends Thread {
 			try {
 				String serverMessage = in.readLine();
 				System.out.println("message from server: " + serverMessage);
-				canvas.clearCanvas();
+				canvas.removeAll();
 				DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
 				DocumentBuilder builder;
 				try {
