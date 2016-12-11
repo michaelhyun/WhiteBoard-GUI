@@ -10,7 +10,6 @@ public class DTextModel extends DShapeModel {
 	public String getText() {
 		return text;
 	}
-	
 
 	public void setText(String text) {
 		this.text = text;
@@ -67,21 +66,21 @@ public class DTextModel extends DShapeModel {
 		Element colorElement = rootElement.getOwnerDocument().createElement("color");
 		colorElement.appendChild(rootElement.getOwnerDocument().createTextNode(getColor().getRGB() + ""));
 		shape.appendChild(colorElement);
-		
+
 		Element textElement = rootElement.getOwnerDocument().createElement("text");
 		textElement.appendChild(rootElement.getOwnerDocument().createTextNode(getText()));
 		shape.appendChild(textElement);
-		
+
 		Element fontNameElement = rootElement.getOwnerDocument().createElement("fontName");
 		fontNameElement.appendChild(rootElement.getOwnerDocument().createTextNode(getFontName()));
 		shape.appendChild(fontNameElement);
-		
+
 		Element fontStyleElement = rootElement.getOwnerDocument().createElement("fontStyle");
-		fontStyleElement.appendChild(rootElement.getOwnerDocument().createTextNode(getFontStyle()+""));
+		fontStyleElement.appendChild(rootElement.getOwnerDocument().createTextNode(getFontStyle() + ""));
 		shape.appendChild(fontStyleElement);
-		
+
 		Element fontSizeElement = rootElement.getOwnerDocument().createElement("fontSize");
-		fontSizeElement.appendChild(rootElement.getOwnerDocument().createTextNode(getFontSize()+""));
+		fontSizeElement.appendChild(rootElement.getOwnerDocument().createTextNode(getFontSize() + ""));
 		shape.appendChild(fontSizeElement);
 
 		rootElement.appendChild(shape);

@@ -20,7 +20,7 @@ public class DText extends DShape implements ModelListener {
 	public boolean contains(Point point) {
 		int x = point.x;
 		int y = point.y;
-		
+
 		if (model.getX() <= x && x <= (model.getX() + model.getWidth())) {
 			if (model.getY() <= y && y <= (model.getY() + model.getHeight())) {
 				return true;
@@ -29,40 +29,37 @@ public class DText extends DShape implements ModelListener {
 		return false;
 	}
 
-	private Font computeFont(Graphics g){
-        double size = 1.0;
-        double previous = 1;
-        Font theFont = new Font(model.getFontName(), Font.PLAIN, (int)size);
-        FontMetrics fontMetrics = g.getFontMetrics(theFont);
-        
-        while(fontMetrics.getHeight() < model.getHeight()){
-            previous = size;
-            size = (size*1.10) + 1;
-            theFont = new Font(this.model.getFontName(), Font.PLAIN, (int)size);
-            fontMetrics = g.getFontMetrics(theFont);
-        }
-        return new Font(model.getFontName(), Font.PLAIN, (int)previous);
-    }
-	
+	private Font computeFont(Graphics g) {
+		double size = 1.0;
+		double previous = 1;
+		Font theFont = new Font(model.getFontName(), Font.PLAIN, (int) size);
+		FontMetrics fontMetrics = g.getFontMetrics(theFont);
+
+		while (fontMetrics.getHeight() < model.getHeight()) {
+			previous = size;
+			size = (size * 1.10) + 1;
+			theFont = new Font(this.model.getFontName(), Font.PLAIN, (int) size);
+			fontMetrics = g.getFontMetrics(theFont);
+		}
+		return new Font(model.getFontName(), Font.PLAIN, (int) previous);
+	}
+
 	@SuppressWarnings("unused")
 	@Override
 	public void draw(Graphics g) {
 		Font f = computeFont(g);
 		FontMetrics metrics = g.getFontMetrics(f);
-		
+
 		Graphics2D g2d = (Graphics2D) g;
 		Shape oldClip = g.getClip();
 		Rectangle rect = new Rectangle(model.getX(), model.getY(), model.getWidth(), model.getHeight());
 		g.setClip(oldClip.getBounds().createIntersection(rect.getBounds2D()));
-	    g.setColor(model.getColor());
-        g.setFont(f);
+		g.setColor(model.getColor());
+		g.setFont(f);
 		g.drawString(model.getText(), model.getX(), model.getY() + metrics.getAscent());
 		g.setClip(oldClip);
-	    
 
 	}
-	
-
 
 	@Override
 	public String description() {

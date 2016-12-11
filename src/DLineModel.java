@@ -4,50 +4,58 @@ import java.awt.Point;
 import org.w3c.dom.Element;
 
 public class DLineModel extends DShapeModel {
-	
+
 	private Point p1;
 	private Point p2;
-	
-	public Point getP1(){
+
+	public Point getP1() {
 		return p1;
 	}
-	public int getP1X(){
+
+	public int getP1X() {
 		return p1.x;
 	}
-	public void setP1X(int x){
+
+	public void setP1X(int x) {
 		p1.x = x;
-	}	
-	public int getP1Y(){
+	}
+
+	public int getP1Y() {
 		return p1.y;
 	}
-	public void setP1Y(int y){
+
+	public void setP1Y(int y) {
 		p1.y = y;
 	}
 
-	public void setP1(Point point){
+	public void setP1(Point point) {
 		this.p1 = point;
 	}
-	public Point getP2(){
+
+	public Point getP2() {
 		return p2;
 	}
-	public int getP2X(){
+
+	public int getP2X() {
 		return p2.x;
 	}
-	public void setP2X(int x){
+
+	public void setP2X(int x) {
 		p2.x = x;
 	}
-	public int getP2Y(){
+
+	public int getP2Y() {
 		return p2.y;
 	}
-	public void setP2Y(int y){
+
+	public void setP2Y(int y) {
 		p2.y = y;
 	}
-	public void setP2(Point point){
+
+	public void setP2(Point point) {
 		this.p2 = point;
 	}
-	
-	
-	
+
 	@Override
 	public Element addModelTo(Element rootElement) {
 		// TODO Auto-generated method stub
@@ -76,24 +84,22 @@ public class DLineModel extends DShapeModel {
 		Element colorElement = rootElement.getOwnerDocument().createElement("color");
 		colorElement.appendChild(rootElement.getOwnerDocument().createTextNode(getColor().getRGB() + ""));
 		shape.appendChild(colorElement);
-		
+
 		Element p1x = rootElement.getOwnerDocument().createElement("p1x");
-		p1x.appendChild(rootElement.getOwnerDocument().createTextNode(getP1X()+""));
+		p1x.appendChild(rootElement.getOwnerDocument().createTextNode(getP1X() + ""));
 		shape.appendChild(p1x);
-		
+
 		Element p1y = rootElement.getOwnerDocument().createElement("p1y");
-		p1y.appendChild(rootElement.getOwnerDocument().createTextNode(getP1Y()+""));
+		p1y.appendChild(rootElement.getOwnerDocument().createTextNode(getP1Y() + ""));
 		shape.appendChild(p1y);
-		
-		
+
 		Element p2x = rootElement.getOwnerDocument().createElement("p2x");
-		p2x.appendChild(rootElement.getOwnerDocument().createTextNode(getP2X()+""));
+		p2x.appendChild(rootElement.getOwnerDocument().createTextNode(getP2X() + ""));
 		shape.appendChild(p2x);
-		
+
 		Element p2y = rootElement.getOwnerDocument().createElement("p2y");
-		p2y.appendChild(rootElement.getOwnerDocument().createTextNode(getP2Y()+""));
+		p2y.appendChild(rootElement.getOwnerDocument().createTextNode(getP2Y() + ""));
 		shape.appendChild(p2y);
-		
 
 		rootElement.appendChild(shape);
 

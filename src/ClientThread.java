@@ -43,7 +43,7 @@ public class ClientThread extends Thread implements Observer {
 				if (inputLine.equals("BYE"))
 					break;
 			}
-			//test comment
+			// test comment
 			out.close();
 			in.close();
 			socket.close();
@@ -58,8 +58,8 @@ public class ClientThread extends Thread implements Observer {
 		// TODO Auto-generated method stub
 		sendMessageToClient();
 	}
-	
-	private void sendMessageToClient(){
+
+	private void sendMessageToClient() {
 		if (out != null) {
 			DocumentBuilderFactory docFactory = DocumentBuilderFactory.newInstance();
 			DocumentBuilder docBuilder;
@@ -82,7 +82,7 @@ public class ClientThread extends Thread implements Observer {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-			//send xml representation of canvas
+			// send xml representation of canvas
 			out.println(xmlModel);
 		}
 	}

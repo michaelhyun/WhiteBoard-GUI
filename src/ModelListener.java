@@ -4,5 +4,5 @@ The modelChanged() notification includes a pointer to the model that changed. Th
 what the exact change
 was. */
 public interface ModelListener {
-		public void modelChanged(DShapeModel model); 
+	public void modelChanged(DShapeModel model);
 }

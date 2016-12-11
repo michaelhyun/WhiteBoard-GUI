@@ -266,10 +266,10 @@ public class Canvas extends JPanel {
 			} else {
 				model.setY(y);
 				model.setHeight(height);
-			}			
+			}
 			selectedShape.modelChanged(model);
 			repaint();
-			
+
 		} else {
 
 			if (width < 0) {

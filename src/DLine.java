@@ -17,45 +17,41 @@ public class DLine extends DShape implements ModelListener {
 	public void draw(Graphics g) {
 		// TODO Auto-generated method stub
 		g.setColor(model.getColor());
-		g.drawLine(model.getP1X(), model.getP1Y(), model.getP2X(),model.getP2Y());
+		g.drawLine(model.getP1X(), model.getP1Y(), model.getP2X(), model.getP2Y());
 	}
-	
 
 	public boolean contains(Point point) {
 		int x = point.x;
 		int y = point.y;
 		int xDiff = model.getP1X() - model.getP2X();
 		int yDiff = model.getP1Y() - model.getP2Y();
-		
-		if(xDiff < 0 && yDiff < 0){ //bottom right
+
+		if (xDiff < 0 && yDiff < 0) { // bottom right
 			if (model.getP1X() <= x && x <= model.getP2X()) {
 				if (model.getP1Y() <= y && y <= model.getP2Y()) {
 					return true;
 				}
 			}
-		}
-		else if(xDiff < 0 && yDiff > 0){ //top right
+		} else if (xDiff < 0 && yDiff > 0) { // top right
 			if (model.getP1X() <= x && x <= model.getP2X()) {
 				if (model.getP1Y() >= y && y >= model.getP2Y()) {
 					return true;
 				}
 			}
-		}
-		else if(xDiff > 0 && yDiff < 0){ //bottom left
+		} else if (xDiff > 0 && yDiff < 0) { // bottom left
 			if (model.getP1X() >= x && x >= model.getP2X()) {
 				if (model.getP1Y() <= y && y <= model.getP2Y()) {
 					return true;
 				}
 			}
-		}
-		else if(xDiff > 0 && yDiff > 0){ //top left
+		} else if (xDiff > 0 && yDiff > 0) { // top left
 			if (model.getP1X() >= x && x >= model.getP2X()) {
 				if (model.getP1Y() >= y && y >= model.getP2Y()) {
 					return true;
 				}
 			}
 		}
-		
+
 		return false;
 	}
 

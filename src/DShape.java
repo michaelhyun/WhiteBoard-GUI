@@ -4,16 +4,15 @@ import java.util.ArrayList;
 
 public abstract class DShape {
 	public abstract void draw(Graphics g);
-	
+
 	public abstract boolean contains(Point point);
-	
+
 	public abstract String description();
 
 	public abstract ArrayList<Point> getKnobs();
-	
+
 	public abstract void drawKnobs(Graphics g);
 
 	public abstract void modelChanged(DShapeModel model);
-	
-	
+
 }
