@@ -388,10 +388,15 @@ public class Whiteboard extends JFrame {
 							lineModel.setColor(new Color(
 									Integer.parseInt(eElement.getElementsByTagName("color").item(0).getTextContent())));
 							
-							lineModel.setP1X(Integer.parseInt(eElement.getElementsByTagName("p1x").item(0).getTextContent()));
-							lineModel.setP1Y(Integer.parseInt(eElement.getElementsByTagName("p1y").item(0).getTextContent()));
-							lineModel.setP2X(Integer.parseInt(eElement.getElementsByTagName("p2x").item(0).getTextContent()));
-							lineModel.setP2Y(Integer.parseInt(eElement.getElementsByTagName("p2y").item(0).getTextContent()));
+							lineModel.setP1(new Point(
+									Integer.parseInt(eElement.getElementsByTagName("p1x").item(0).getTextContent()),
+									Integer.parseInt(
+											eElement.getElementsByTagName("p1y").item(0).getTextContent())));
+							lineModel.setP2(new Point(
+									Integer.parseInt(eElement.getElementsByTagName("p2x").item(0).getTextContent()),
+									Integer.parseInt(
+											eElement.getElementsByTagName("p2y").item(0).getTextContent())));
+							canvas.addShape(lineModel);
 						}
 
 					}

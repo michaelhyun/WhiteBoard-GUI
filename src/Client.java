@@ -1,4 +1,5 @@
 import java.awt.Color;
+import java.awt.Point;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -74,7 +75,8 @@ public class Client extends Thread {
 							String shapeType = eElement.getElementsByTagName("type").item(0).getTextContent();
 
 							if (!shapeType.equals("text") && !shapeType.equals("line")) {
-								DShapeModel shapeModel = null; // applies for Rect, line
+								DShapeModel shapeModel = null; // applies for
+																// Rect, line
 								if (shapeType.equals("rect")) {
 									shapeModel = new DRectModel();
 								} else if (shapeType.equals("oval")) {
@@ -84,49 +86,55 @@ public class Client extends Thread {
 										Integer.parseInt(eElement.getElementsByTagName("x").item(0).getTextContent()));
 								shapeModel.setY(
 										Integer.parseInt(eElement.getElementsByTagName("y").item(0).getTextContent()));
-								shapeModel.setWidth(
-										Integer.parseInt(eElement.getElementsByTagName("width").item(0).getTextContent()));
-								shapeModel.setHeight(
-										Integer.parseInt(eElement.getElementsByTagName("height").item(0).getTextContent()));
-								shapeModel.setColor(new Color(
-										Integer.parseInt(eElement.getElementsByTagName("color").item(0).getTextContent())));
+								shapeModel.setWidth(Integer
+										.parseInt(eElement.getElementsByTagName("width").item(0).getTextContent()));
+								shapeModel.setHeight(Integer
+										.parseInt(eElement.getElementsByTagName("height").item(0).getTextContent()));
+								shapeModel.setColor(new Color(Integer
+										.parseInt(eElement.getElementsByTagName("color").item(0).getTextContent())));
 								canvas.addShape(shapeModel);
-							} else if(shapeType.equals("text")){
+							} else if (shapeType.equals("text")) {
 								DTextModel textModel = new DTextModel();
 								textModel.setX(
 										Integer.parseInt(eElement.getElementsByTagName("x").item(0).getTextContent()));
 								textModel.setY(
 										Integer.parseInt(eElement.getElementsByTagName("y").item(0).getTextContent()));
-								textModel.setWidth(
-										Integer.parseInt(eElement.getElementsByTagName("width").item(0).getTextContent()));
-								textModel.setHeight(
-										Integer.parseInt(eElement.getElementsByTagName("height").item(0).getTextContent()));
-								textModel.setColor(new Color(
-										Integer.parseInt(eElement.getElementsByTagName("color").item(0).getTextContent())));
+								textModel.setWidth(Integer
+										.parseInt(eElement.getElementsByTagName("width").item(0).getTextContent()));
+								textModel.setHeight(Integer
+										.parseInt(eElement.getElementsByTagName("height").item(0).getTextContent()));
+								textModel.setColor(new Color(Integer
+										.parseInt(eElement.getElementsByTagName("color").item(0).getTextContent())));
 								textModel.setText(eElement.getElementsByTagName("text").item(0).getTextContent());
-								textModel.setFontName(eElement.getElementsByTagName("fontName").item(0).getTextContent());
+								textModel.setFontName(
+										eElement.getElementsByTagName("fontName").item(0).getTextContent());
 								textModel.setFontStyle(Integer
 										.parseInt(eElement.getElementsByTagName("fontStyle").item(0).getTextContent()));
 								textModel.setFontSize(Integer
 										.parseInt(eElement.getElementsByTagName("fontSize").item(0).getTextContent()));
 								canvas.addShape(textModel);
-							}else if (shapeType.equals("line")) {
+							} else if (shapeType.equals("line")) {
 								DLineModel lineModel = new DLineModel();
 								lineModel.setX(
 										Integer.parseInt(eElement.getElementsByTagName("x").item(0).getTextContent()));
 								lineModel.setY(
 										Integer.parseInt(eElement.getElementsByTagName("y").item(0).getTextContent()));
-								lineModel.setWidth(
-										Integer.parseInt(eElement.getElementsByTagName("width").item(0).getTextContent()));
-								lineModel.setHeight(
-										Integer.parseInt(eElement.getElementsByTagName("height").item(0).getTextContent()));
-								lineModel.setColor(new Color(
-										Integer.parseInt(eElement.getElementsByTagName("color").item(0).getTextContent())));
-								
-								lineModel.setP1X(Integer.parseInt(eElement.getElementsByTagName("p1x").item(0).getTextContent()));
-								lineModel.setP1Y(Integer.parseInt(eElement.getElementsByTagName("p1y").item(0).getTextContent()));
-								lineModel.setP2X(Integer.parseInt(eElement.getElementsByTagName("p2x").item(0).getTextContent()));
-								lineModel.setP2Y(Integer.parseInt(eElement.getElementsByTagName("p2y").item(0).getTextContent()));
+								lineModel.setWidth(Integer
+										.parseInt(eElement.getElementsByTagName("width").item(0).getTextContent()));
+								lineModel.setHeight(Integer
+										.parseInt(eElement.getElementsByTagName("height").item(0).getTextContent()));
+								lineModel.setColor(new Color(Integer
+										.parseInt(eElement.getElementsByTagName("color").item(0).getTextContent())));
+
+								lineModel.setP1(new Point(
+										Integer.parseInt(eElement.getElementsByTagName("p1x").item(0).getTextContent()),
+										Integer.parseInt(
+												eElement.getElementsByTagName("p1y").item(0).getTextContent())));
+								lineModel.setP2(new Point(
+										Integer.parseInt(eElement.getElementsByTagName("p2x").item(0).getTextContent()),
+										Integer.parseInt(
+												eElement.getElementsByTagName("p2y").item(0).getTextContent())));
+								canvas.addShape(lineModel);
 							}
 						}
 					}
