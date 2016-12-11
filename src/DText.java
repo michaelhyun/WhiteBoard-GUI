@@ -29,47 +29,34 @@ public class DText extends DShape implements ModelListener {
 		return false;
 	}
 
-	private Font computeFont(){
+	private Font computeFont(Graphics g){
         double size = 1.0;
         double previous = 1;
         Font theFont = new Font(model.getFontName(), Font.PLAIN, (int)size);
-        FontMetrics fontMetrics = new FontMetrics(theFont) {
-        };
+        FontMetrics fontMetrics = g.getFontMetrics(theFont);
+        
         while(fontMetrics.getHeight() < this.model.getHeight()){
             previous = size;
             size = (size*1.10) + 1;
             theFont = new Font(this.model.getFontName(), Font.PLAIN, (int)size);
-            fontMetrics = new FontMetrics(theFont) {
-                @Override
-                public int getHeight() {
-                    return super.getHeight();
-                }
-            };
+            fontMetrics = g.getFontMetrics(theFont);
         }
         return new Font(model.getFontName(), Font.PLAIN, (int)previous);
     }
 	
 	@Override
 	public void draw(Graphics g) {
-		// TODO Auto-generated method stub
-		Font f = computeFont();
-		 FontMetrics metrics = new FontMetrics(f) {
-	            @Override
-	            public int getDescent() {
-	                return super.getDescent();
-	            }
+		Font f = computeFont(g);
+		 FontMetrics metrics = g.getFontMetrics(f);
 
-	        };
-	        
-	    Rectangle rect = new Rectangle(model.getX(), model.getY(), model.getWidth(), model.getHeight()); 
-	    Shape clip = g.getClip();
-	    g.setClip(rect.getBounds());
-		g.setColor(model.getColor());
+	    g.setColor(model.getColor());
         g.setFont(f);
-		g.drawString(model.getText(), model.getX(), model.getY() + metrics.getAscent() + metrics.getDescent());
-	    g.setClip(clip);
+		g.drawString(model.getText(), model.getX(), model.getY() + metrics.getHeight());
+	    
 
 	}
+	
+
 
 	@Override
 	public String description() {
