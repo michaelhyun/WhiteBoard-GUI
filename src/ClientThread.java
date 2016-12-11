@@ -30,7 +30,7 @@ public class ClientThread extends Thread implements Observer {
 				if (inputLine.equals("BYE"))
 					break;
 			}
-
+			//test comment
 			out.close();
 			in.close();
 			socket.close();
