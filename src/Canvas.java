@@ -7,6 +7,7 @@ import java.awt.Rectangle;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
+import java.util.List;
 
 import javax.swing.JPanel;
 
@@ -16,6 +17,7 @@ public class Canvas extends JPanel {
 	private static final long serialVersionUID = 1L;
 	private final int HEIGHT = 400, WIDTH = 400;
 	ArrayList<DShape> shapesList;
+	private List<Observer> observers = new ArrayList<Observer>();
 	private DShape selectedShape;
 	private int selectedShapeIndex;
 	private int xBeforeDrag = 0;
@@ -42,39 +44,38 @@ public class Canvas extends JPanel {
 						selectedShape = shape;
 						selectedShapeIndex = i;
 						selectedShape.drawKnobs(getGraphics());
-						System.out.println(selectedShape.description());
+						// System.out.println(selectedShape.description());
 						break;
 					} else {
 						selectedShape = null;
 						repaint();
 					}
 				}
-				
-				if(selectedShape instanceof DText){
+
+				if (selectedShape instanceof DText) {
 					String shapeText = ((DText) selectedShape).model.getText();
 					whiteboard.textArea.setEnabled(true);
 					whiteboard.textArea.setText(shapeText);
 					whiteboard.fontBox.setEnabled(true);
 					whiteboard.fontBox.setSelectedItem(((DText) selectedShape).model.getFontName());
-				}
-				else{
+				} else {
 					whiteboard.textArea.setText("");
-					whiteboard.fontBox.setSelectedItem("Dialog");;
+					whiteboard.fontBox.setSelectedItem("Dialog");
+					;
 					whiteboard.textArea.setEnabled(false);
 					whiteboard.fontBox.setEnabled(false);
 				}
 				repaint();
-				
 
 			}
 
 			@Override
 			public void mousePressed(MouseEvent e) {
-				System.out.println("pressed");
-				System.out.println(e.getX() + ", " + e.getY());
+				// System.out.println("pressed");
+				// System.out.println(e.getX() + ", " + e.getY());
 				if (selectedShape != null) {
 					ArrayList<Point> knobPoints = selectedShape.getKnobs();
-					if (knobPoints.size() == 4) { //moving all rectangle bounds
+					if (knobPoints.size() == 4) { // moving all rectangle bounds
 
 						for (Point point : knobPoints) {
 							if ((e.getX() <= (point.getX() + Globals.KNOB_SIZE / 2))
@@ -95,10 +96,9 @@ public class Canvas extends JPanel {
 								System.out.println("MovingKnob selected");
 							}
 						}
-					}
-					else{ //moving DLine
+					} else { // moving DLine
 						for (Point point : knobPoints) {
-							
+
 							if ((e.getX() <= (point.x + Globals.KNOB_SIZE / 2))
 									&& (e.getX() >= (point.x - Globals.KNOB_SIZE / 2))
 									&& (e.getY() <= (point.y + Globals.KNOB_SIZE / 2))
@@ -120,7 +120,7 @@ public class Canvas extends JPanel {
 
 			@Override
 			public void mouseReleased(MouseEvent e) {
-				System.out.println("released");
+				// System.out.println("released");
 				movingKnob = null;
 				anchorKnob = null;
 			}
@@ -173,20 +173,17 @@ public class Canvas extends JPanel {
 							DShapeModel model;
 							model = ((DLine) selectedShape).model;
 							int xChange = e.getX() - (int) movingKnob.getX();
-					        int yChange = e.getY() - (int) movingKnob.getY();
-					        if(((DLineModel) model).getP1() == movingKnob){
-					        	((DLineModel) model).setP1X(((DLineModel) model).getP1X() + xChange);
-					        	((DLineModel) model).setP1Y(((DLineModel) model).getP1Y() + yChange);
-					        	repaint();
-					        }
-					        else if(((DLineModel) model).getP2() == movingKnob){
-					        	((DLineModel) model).setP2X(((DLineModel) model).getP2X() + xChange);
-					        	((DLineModel) model).setP2Y(((DLineModel) model).getP2Y() + yChange);
-					        	repaint();
-					        }
-					        
-					        
-					        
+							int yChange = e.getY() - (int) movingKnob.getY();
+							if (((DLineModel) model).getP1() == movingKnob) {
+								((DLineModel) model).setP1X(((DLineModel) model).getP1X() + xChange);
+								((DLineModel) model).setP1Y(((DLineModel) model).getP1Y() + yChange);
+								repaint();
+							} else if (((DLineModel) model).getP2() == movingKnob) {
+								((DLineModel) model).setP2X(((DLineModel) model).getP2X() + xChange);
+								((DLineModel) model).setP2Y(((DLineModel) model).getP2Y() + yChange);
+								repaint();
+							}
+
 						} else if (selectedShape instanceof DText) {
 							DShapeModel model;
 							model = ((DText) selectedShape).model;
@@ -205,11 +202,6 @@ public class Canvas extends JPanel {
 								resize(point, model, point.x, point.y, -dx, -dy);
 							}
 						}
-						
-						
-						
-						
-						System.out.println("moving");
 
 					} else if (selectedShape.contains(point)) { // moving object
 						DShapeModel model;
@@ -224,7 +216,7 @@ public class Canvas extends JPanel {
 							moveShape(model, point);
 						} else if (selectedShape instanceof DLine) {
 							model = ((DLine) selectedShape).model;
-							 moveShape(model, point);
+							moveShape(model, point);
 						}
 					}
 				}
@@ -236,10 +228,12 @@ public class Canvas extends JPanel {
 	}
 
 	public void moveShape(DShapeModel model, Point point) {
-		if (model instanceof DLineModel){
-			
-			((DLineModel) model).setP1(new Point(((DLineModel) model).getP1X()+ (point.x - xBeforeDrag), ((DLineModel) model).getP1Y()+ (point.y - yBeforeDrag)));
-			((DLineModel) model).setP2(new Point(((DLineModel) model).getP2X()+ (point.x - xBeforeDrag), ((DLineModel) model).getP2Y()+ (point.y - yBeforeDrag)));
+		if (model instanceof DLineModel) {
+
+			((DLineModel) model).setP1(new Point(((DLineModel) model).getP1X() + (point.x - xBeforeDrag),
+					((DLineModel) model).getP1Y() + (point.y - yBeforeDrag)));
+			((DLineModel) model).setP2(new Point(((DLineModel) model).getP2X() + (point.x - xBeforeDrag),
+					((DLineModel) model).getP2Y() + (point.y - yBeforeDrag)));
 			repaint();
 		}
 		model.setX(model.getX() + (point.x - xBeforeDrag));
@@ -249,7 +243,11 @@ public class Canvas extends JPanel {
 	}
 
 	public void resize(Point point, DShapeModel model, int x, int y, int width, int height) {
+<<<<<<< HEAD
 		
+=======
+
+>>>>>>> 2c7d906f3c47504dcb714c66a3ad35517cea36b4
 		if (width < 0) {
 			model.setX(x - Math.abs(width));
 			model.setWidth(Math.abs((int) (anchorKnob.getX() - point.x)));
@@ -284,8 +282,7 @@ public class Canvas extends JPanel {
 			DShape text = new DText((DTextModel) model);
 			shapesList.add(text);
 		}
-		
-        
+
 		for (DShape shape : shapesList) {
 			shape.draw(this.getGraphics());
 		}
@@ -343,6 +340,14 @@ public class Canvas extends JPanel {
 		}
 	}
 
+	public ArrayList<DShape> getShapesList() {
+		return shapesList;
+	}
+
+	public int getSelectedShapeIndex() {
+		return selectedShapeIndex;
+	}
+
 	public void removeShape() {
 
 		if (selectedShape != null) {
@@ -365,14 +370,13 @@ public class Canvas extends JPanel {
 
 		if (selectedShape != null) {
 			selectedShape.drawKnobs(g);
-		}
-		else{
+		} else {
 			whiteboard.textArea.setEnabled(false);
 			whiteboard.fontBox.setEnabled(false);
-			whiteboard.fontBox.setSelectedItem("Dialog");;
+			whiteboard.fontBox.setSelectedItem("Dialog");
 		}
-		
-		
+		notifyAllObservers();
+
 	}
 
 	public Element getRootElementForXML(Element rootElement) {
@@ -417,6 +421,16 @@ public class Canvas extends JPanel {
 				shapesList.set(selectedShapeIndex, selectedShape);
 				repaint();
 			}
+		}
+	}
+
+	public void attach(Observer observer) {
+		observers.add(observer);
+	}
+
+	public void notifyAllObservers() {
+		for (Observer observer : observers) {
+			observer.update();
 		}
 	}
 
