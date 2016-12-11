@@ -6,6 +6,7 @@ import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.GraphicsEnvironment;
+import java.awt.Point;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
@@ -32,7 +33,12 @@ import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+
+import javax.swing.JScrollPane;
+import javax.swing.JTable;
 import javax.swing.JTextArea;
+import javax.swing.table.AbstractTableModel;
+import javax.swing.table.TableCellRenderer;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
@@ -46,18 +52,24 @@ import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
+
 public class Whiteboard extends JFrame {
 	private static final long serialVersionUID = 1L;
 	private final String PROJECT_FRAME_NAME = "Whiteboard";
 	WhiteBoardController controller;
+	JTextArea textArea;
+	JComboBox<String> fontBox;
+	Canvas canvas;
+	
 
 	public Whiteboard(WhiteBoardController controller) {
 		// TODO Auto-generated constructor stub
+		canvas = new Canvas(this);
 		this.controller = controller;
 		controller.attachView(this);
 		showGUI();
 	}
-
+    
 	private void showGUI() {
 		JFrame frame = new JFrame(PROJECT_FRAME_NAME);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -65,7 +77,7 @@ public class Whiteboard extends JFrame {
 		frame.setPreferredSize(new Dimension(700, 700));
 
 		// create canvas
-		Canvas canvas = new Canvas();
+		
 		canvas.setPreferredSize(new Dimension(400, 400));
 
 		// create control panel for buttons
@@ -114,11 +126,9 @@ public class Whiteboard extends JFrame {
 		// action listeners for adding Line
 		lineButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent evt) {
-				DShapeModel model = new DLineModel();
-				model.setX(10);
-				model.setY(10);
-				model.setWidth(20);
-				model.setHeight(20);
+				DLineModel model = new DLineModel();
+				model.setP1(new Point(10,10));
+				model.setP2(new Point(40,40));
 				model.setColor(Color.GRAY);
 				canvas.addShape(model);
 			}
@@ -137,7 +147,7 @@ public class Whiteboard extends JFrame {
 				model.setFontSize(30);
 				model.setX(10);
 				model.setY(10);
-				model.setWidth(20);
+				model.setWidth(50);
 				model.setHeight(20);
 				canvas.addShape(model);
 			}
@@ -160,45 +170,35 @@ public class Whiteboard extends JFrame {
 
 		Box middleBox = Box.createHorizontalBox();
 		middleBox.setAlignmentX(Box.LEFT_ALIGNMENT);
-		JTextArea textArea = new JTextArea();
+		textArea = new JTextArea();
 		textArea.setPreferredSize(new Dimension(300,50));
 		GraphicsEnvironment graphEnviron = 
 			       GraphicsEnvironment.getLocalGraphicsEnvironment();
-			Font[] allFonts = graphEnviron.getAllFonts();
-
-		JComboBox<Font> fontBox = new JComboBox<>(allFonts);
+        String[] fonts = graphEnviron.getAvailableFontFamilyNames();
+			
+		fontBox = new JComboBox<String>(fonts);
 		fontBox.setSelectedIndex(0);
 		fontBox.setPreferredSize(new Dimension(150, 50));
         fontBox.setMaximumSize(new Dimension(70, 50));
 		fontBox.setRenderer(new DefaultListCellRenderer() {
-			@Override
-			public Component getListCellRendererComponent(JList<?> list, Object value, int index, boolean isSelected,
-					boolean cellHasFocus) {
-				if (value != null) {
-					Font font = (Font) value;
-					value = font.getName();
-				}
-				return super.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
-			}
+
+		   public Component getListCellRendererComponent(JList<?> list, Object value, int index) {
+		      return getListCellRendererComponent(list, value, index);
+		   }
 		});
 		middleBox.add(textArea);
 		middleBox.add(fontBox);
 		// action listeners for adding Text
 		fontBox.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent evt) {
-				Font font = (Font) fontBox.getSelectedItem();
-				String fontName = font.getFontName();
+				String fontName = (String) fontBox.getSelectedItem();
 				canvas.changeFont(fontName);
-				
 			}
 
 		});
 		
 		textArea.addKeyListener(new KeyAdapter() {
-		      /**
-		       * When you type the character "a" into the text field you will see
-		       * an information dialog box
-		       */
+
 		      public void keyReleased(KeyEvent ke) {
 				String text = textArea.getText();
 				canvas.changeText(text);
@@ -206,6 +206,9 @@ public class Whiteboard extends JFrame {
 		      }
 		});
 		      
+		
+
+	        
 		      
 		Box bottom = Box.createHorizontalBox();
 		bottom.setAlignmentX(Box.LEFT_ALIGNMENT);
@@ -445,12 +448,133 @@ public class Whiteboard extends JFrame {
 		leftPanel.add(saveBox);
 		leftPanel.add(serverBox);
 
+//		DataPanel dataPanel = new DataPanel();
+//		controlPanel.add(dataPanel);
+		
 		controlPanel.add(leftPanel, BorderLayout.WEST);
-
 		frame.add(controlPanel, BorderLayout.WEST);
 		frame.add(canvas, BorderLayout.CENTER);
 		frame.pack();
 		frame.setVisible(true);
 	}
 
+	
+	
+	
+	
+	
+	
+//	
+//	
+//private class DataPanel extends JPanel{
+//		
+//        JTable table;
+//        DataModel dataModel;
+//        String[] names;
+//
+//        public DataPanel(){
+//            dataModel = new DataModel(this);
+//            this.setLayout(new BorderLayout());
+//            names = new String[]{"X", "Y", "Width", "Height"};
+//
+//            Integer[][] tableData = new Integer[4][4];
+//
+//            table = new JTable(dataModel.data, names);
+////            table.setModel(dataModel);
+//
+//            TableCellRenderer rendererFromHeader = table.getTableHeader().getDefaultRenderer();
+//            JLabel headerLabel = (JLabel) rendererFromHeader;
+//            headerLabel.setHorizontalAlignment(JLabel.CENTER);
+//            JScrollPane tableScroll = new JScrollPane(table);
+//            tableScroll.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
+//            this.add(tableScroll);
+//            this.setPreferredSize(new Dimension(400, 300));
+//            this.setMaximumSize(this.getPreferredSize());
+//        }
+//        
+//        
+//        
+//
+//    private class DataModel extends AbstractTableModel implements ModelListener{
+//        private Integer[][] data;
+//        DataPanel tablePanel;
+//        public DataModel(DataPanel tablePanel){
+//            this.tablePanel = tablePanel;
+//            data = new Integer[0][4];
+//        }
+//
+//        @Override
+//        public int getRowCount() {
+//            return canvas.shapesList.size();
+//        }
+//
+//        @Override
+//        public Object getValueAt(int rowIndex, int columnIndex) {
+//
+//                DShape temp = canvas.shapesList.get(canvas.shapesList.size() - rowIndex - 1);
+//                
+//                DShapeModel model;
+//				if (temp instanceof DRect) {
+//					model = ((DRect) temp).model;
+//				} else if (temp instanceof DOval) {
+//					model = ((DOval) temp).model;
+//				} else if (temp instanceof DText) {
+//					model = ((DText) temp).model;
+//				} else if (temp instanceof DLine) {
+//					model = ((DLine) temp).model;
+//				}
+//				else{
+//					model = null;
+//				}
+//        		
+//                if (columnIndex == 0) {
+//                    return model.getX();
+//                } else if (columnIndex == 1) {
+//                    return model.getY();
+//                } else if (columnIndex == 2) {
+//                    return model.getWidth();
+//                } else {
+//                    return model.getHeight();
+//                }
+//
+//        }
+//
+//		@Override
+//		public int getColumnCount() {
+//			// TODO Auto-generated method stub
+//			return 4;
+//		}
+//
+//        public void fillTable(){
+//            data = new Integer[getRowCount()][4];
+//            for(int i = 0; i < getRowCount(); i++){
+//                for(int j = 0; j < 4; j++) {
+//                    data[i][j] = (int)getValueAt(i, j);
+//                }
+//            }
+//        }
+//
+//        public void removed(){
+//            fillTable();
+//            fireTableDataChanged();
+//        }
+//
+//        public void added(){
+//            fillTable();
+//            fireTableDataChanged();
+//        }
+//
+//        @Override
+//        public void modelChanged(DShapeModel model) {
+////            int index = 0;
+////            for(DShape shape: canvas.shapesList){
+////                if(shape.model.equals(model)){
+////                    index = canvas.shapesList.indexOf(shape);
+////                }
+////            }
+////            fireTableRowsUpdated(index, index);
+//
+//        }
+//    }
+//}
 }

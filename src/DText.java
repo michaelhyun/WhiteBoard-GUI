@@ -4,6 +4,8 @@ import java.awt.FontMetrics;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Point;
+import java.awt.Rectangle;
+import java.awt.Shape;
 import java.awt.geom.Rectangle2D;
 import java.util.ArrayList;
 
@@ -18,7 +20,7 @@ public class DText extends DShape implements ModelListener {
 	public boolean contains(Point point) {
 		int x = point.x;
 		int y = point.y;
-
+		
 		if (model.getX() <= x && x <= (model.getX() + model.getWidth())) {
 			if (model.getY() <= y && y <= (model.getY() + model.getHeight())) {
 				return true;
@@ -27,27 +29,45 @@ public class DText extends DShape implements ModelListener {
 		return false;
 	}
 
+	private Font computeFont(){
+        double size = 1.0;
+        double previous = 1;
+        Font theFont = new Font(model.getFontName(), Font.PLAIN, (int)size);
+        FontMetrics fontMetrics = new FontMetrics(theFont) {
+        };
+        while(fontMetrics.getHeight() < this.model.getHeight()){
+            previous = size;
+            size = (size*1.10) + 1;
+            theFont = new Font(this.model.getFontName(), Font.PLAIN, (int)size);
+            fontMetrics = new FontMetrics(theFont) {
+                @Override
+                public int getHeight() {
+                    return super.getHeight();
+                }
+            };
+        }
+        return new Font(model.getFontName(), Font.PLAIN, (int)previous);
+    }
+	
 	@Override
 	public void draw(Graphics g) {
 		// TODO Auto-generated method stub
+		Font f = computeFont();
+		 FontMetrics metrics = new FontMetrics(f) {
+	            @Override
+	            public int getDescent() {
+	                return super.getDescent();
+	            }
 
-		Font f = new Font(model.getFontName(), model.getFontStyle(), model.getFontSize());
-		g.setFont(f);
-
-		FontMetrics metrics = g.getFontMetrics(f);
-		int x = model.getX();
-		int y = metrics.getHeight() + model.getY();
-
-		// this is a bad solution, but I need to modify the model based on the
-		// graphics context
-		model.setWidth(metrics.stringWidth(model.getText()));
-		model.setHeight(metrics.getHeight());
-		// end bad code ^
+	        };
+	        
+	    Rectangle rect = new Rectangle(model.getX(), model.getY(), model.getWidth(), model.getHeight()); 
+	    Shape clip = g.getClip();
+	    g.setClip(rect.getBounds());
 		g.setColor(model.getColor());
-
-		// draw the string
-		g.drawString(model.getText(), x, y);
-
+        g.setFont(f);
+		g.drawString(model.getText(), model.getX(), model.getY() + metrics.getAscent() + metrics.getDescent());
+	    g.setClip(clip);
 	}
 
 	@Override
