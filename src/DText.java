@@ -68,6 +68,7 @@ public class DText extends DShape implements ModelListener {
         g.setFont(f);
 		g.drawString(model.getText(), model.getX(), model.getY() + metrics.getAscent() + metrics.getDescent());
 	    g.setClip(clip);
+
 	}
 
 	@Override
