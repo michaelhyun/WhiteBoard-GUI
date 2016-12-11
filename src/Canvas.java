@@ -310,9 +310,7 @@ public class Canvas extends JPanel {
 		}
 		whiteboard.dataPanel.dataModel.updateTable();
 
-		for (DShape shape : shapesList) {
-			shape.draw(this.getGraphics());
-		}
+		repaint();
 	}
 
 	public void colorUpdated(final Color c) {
