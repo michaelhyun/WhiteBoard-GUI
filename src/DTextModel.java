@@ -1,4 +1,6 @@
 
+import java.awt.Font;
+
 import org.w3c.dom.Element;
 
 public class DTextModel extends DShapeModel {
@@ -10,6 +12,7 @@ public class DTextModel extends DShapeModel {
 	public String getText() {
 		return text;
 	}
+	
 
 	public void setText(String text) {
 		this.text = text;

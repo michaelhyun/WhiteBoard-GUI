@@ -6,12 +6,19 @@ import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.GraphicsEnvironment;
+import java.awt.Point;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.image.BufferedImage;
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.net.ServerSocket;
+import java.net.Socket;
+import java.io.DataOutputStream;
 
 import javax.imageio.ImageIO;
 import javax.swing.Box;
@@ -22,11 +29,16 @@ import javax.swing.JComboBox;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+
 import javax.swing.JList;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+
 import javax.swing.JScrollPane;
+import javax.swing.JTable;
 import javax.swing.JTextArea;
+import javax.swing.table.AbstractTableModel;
+import javax.swing.table.TableCellRenderer;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
@@ -44,9 +56,14 @@ public class Whiteboard extends JFrame {
 	private static final long serialVersionUID = 1L;
 	private final String PROJECT_FRAME_NAME = "Whiteboard";
 	WhiteBoardController controller;
+	JTextArea textArea;
+	JComboBox<String> fontBox;
+	Canvas canvas;
+	DataPanel dataPanel;
 
 	public Whiteboard(WhiteBoardController controller) {
-		// TODO Auto-generated constructor stub
+		dataPanel = new DataPanel();
+		canvas = new Canvas(this);
 		this.controller = controller;
 		controller.attachView(this);
 		showGUI();
@@ -56,18 +73,14 @@ public class Whiteboard extends JFrame {
 		JFrame frame = new JFrame(PROJECT_FRAME_NAME);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.setLayout(new BorderLayout());
-		frame.setPreferredSize(new Dimension(700, 700));
-
-		// create canvas
-		Canvas canvas = new Canvas();
-		canvas.setPreferredSize(new Dimension(400, 400));
+		frame.setMinimumSize(new Dimension(1000, 800));
 
 		// create control panel for buttons
 		JPanel controlPanel = new JPanel();
-		controlPanel.setLayout(new FlowLayout());
-        
+		controlPanel.setLayout(new BorderLayout());
+		controlPanel.setPreferredSize(new Dimension(500, 700));
 
-
+		// Top Bar
 		Box top = Box.createHorizontalBox();
 		top.setAlignmentX(Box.LEFT_ALIGNMENT);
 		JLabel addLabel = new JLabel("Add");
@@ -110,11 +123,11 @@ public class Whiteboard extends JFrame {
 		// action listeners for adding Line
 		lineButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent evt) {
-				DShapeModel model = new DLineModel();
-				model.setX(10);
-				model.setY(10);
-				model.setWidth(20);
-				model.setHeight(20);
+				DLineModel model = new DLineModel();
+				model.setP1(new Point(10, 10));
+				model.setP2(new Point(40, 40));
+				model.setHeight(30);
+				model.setWidth(30);
 				model.setColor(Color.GRAY);
 				canvas.addShape(model);
 			}
@@ -124,7 +137,6 @@ public class Whiteboard extends JFrame {
 		textButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent evt) {
 				DTextModel model = new DTextModel();
-
 				// font must be set in this order
 				model.setColor(Color.GRAY);
 				model.setText("Hello");
@@ -133,13 +145,14 @@ public class Whiteboard extends JFrame {
 				model.setFontSize(30);
 				model.setX(10);
 				model.setY(10);
-				model.setWidth(20);
+				model.setWidth(50);
 				model.setHeight(20);
 				canvas.addShape(model);
 			}
 
 		});
 
+		// Middle Bar
 		Box middle = Box.createHorizontalBox();
 		middle.setAlignmentX(Box.LEFT_ALIGNMENT);
 		JButton setColorButton = new JButton("Set Color");
@@ -154,66 +167,59 @@ public class Whiteboard extends JFrame {
 
 		});
 
-		Box middleBot = Box.createHorizontalBox();
-		middleBot.setAlignmentX(Box.LEFT_ALIGNMENT);
-		JTextArea textArea = new JTextArea();
-		textArea.setPreferredSize(new Dimension(300,50));
-		GraphicsEnvironment graphEnviron = 
-			       GraphicsEnvironment.getLocalGraphicsEnvironment();
-			Font[] allFonts = graphEnviron.getAllFonts();
+		// Middle Bottom Bar
+		Box middleBox = Box.createHorizontalBox();
+		middleBox.setAlignmentX(Box.LEFT_ALIGNMENT);
+		textArea = new JTextArea();
+		textArea.setPreferredSize(new Dimension(300, 50));
+		GraphicsEnvironment graphEnviron = GraphicsEnvironment.getLocalGraphicsEnvironment();
+		String[] fonts = graphEnviron.getAvailableFontFamilyNames();
 
-		JComboBox<Font> fontBox = new JComboBox<>(allFonts);
+		fontBox = new JComboBox<String>(fonts);
 		fontBox.setSelectedIndex(0);
-		fontBox.setPreferredSize(new Dimension(150, 50));
-        fontBox.setMaximumSize(new Dimension(70, 50));
+		fontBox.setMaximumSize(new Dimension(70, 50));
 		fontBox.setRenderer(new DefaultListCellRenderer() {
-		   @Override
-		   public Component getListCellRendererComponent(JList<?> list,
-		         Object value, int index, boolean isSelected, boolean cellHasFocus) {
-		      if (value != null) {
-		         Font font = (Font) value;
-		         value = font.getName();
-		      }
-		      return super.getListCellRendererComponent(list, value, index,
-		            isSelected, cellHasFocus);
-		   }
+			public Component getListCellRendererComponent(JList<?> list, Object value, int index) {
+				return getListCellRendererComponent(list, value, index);
+			}
 		});
-		middleBot.add(textArea);
-		middleBot.add(fontBox);
 
 		// action listeners for adding Text
 		fontBox.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent evt) {
-				Font font = (Font) fontBox.getSelectedItem();
-				String fontName = font.getFontName();
+				String fontName = (String) fontBox.getSelectedItem();
 				canvas.changeFont(fontName);
-				
 			}
 
 		});
-		
+
 		textArea.addKeyListener(new KeyAdapter() {
-		      /**
-		       * When you type the character "a" into the text field you will see
-		       * an information dialog box
-		       */
-		      public void keyReleased(KeyEvent ke) {
+
+			public void keyReleased(KeyEvent ke) {
 				String text = textArea.getText();
 				canvas.changeText(text);
 
-		      }
+			}
 		});
-		      
-		      
+		middleBox.add(textArea);
+		middleBox.add(fontBox);
+
+		// Bottom Bar
 		Box bottom = Box.createHorizontalBox();
 		bottom.setAlignmentX(Box.LEFT_ALIGNMENT);
 		JButton frontButton = new JButton("Move to Front");
 		JButton backButton = new JButton("Move to Back");
-		JButton removeButton = new JButton("Remove Shape");
-		bottom.add(frontButton);
-		bottom.add(backButton);
-		bottom.add(removeButton);
+		JButton removeButton = new JButton("Delete Shape");
+		JButton removeAllButton = new JButton("Reset");
 
+		// removeAll
+		removeAllButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent evt) {
+				canvas.removeAll();
+
+			}
+
+		});
 		// action listeners for moving to front
 		frontButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent evt) {
@@ -239,7 +245,12 @@ public class Whiteboard extends JFrame {
 			}
 
 		});
+		bottom.add(frontButton);
+		bottom.add(backButton);
+		bottom.add(removeButton);
+		bottom.add(removeAllButton);
 
+		// Bottom Bar
 		Box saveBox = Box.createHorizontalBox();
 		saveBox.setAlignmentX(LEFT_ALIGNMENT);
 		JButton saveButton = new JButton("Save");
@@ -273,15 +284,14 @@ public class Whiteboard extends JFrame {
 					StreamResult result = new StreamResult(fileChooser.getSelectedFile());
 
 					transformer.transform(source, result);
-
 				} catch (Exception e) {
-					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
 
 			}
 
 		});
+
 		// action listeners for opening file
 		openButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent evt) {
@@ -319,15 +329,13 @@ public class Whiteboard extends JFrame {
 						Element eElement = (Element) nNode;
 						String shapeType = eElement.getElementsByTagName("type").item(0).getTextContent();
 
-						if (!shapeType.equals("text")) {
+						if (!shapeType.equals("text") && !shapeType.equals("line")) {
 							DShapeModel shapeModel = null; // applies for Rect,
-															// Oval, Line
+															// line
 							if (shapeType.equals("rect")) {
 								shapeModel = new DRectModel();
 							} else if (shapeType.equals("oval")) {
 								shapeModel = new DOvalModel();
-							} else if (shapeType.equals("line")) {
-								shapeModel = new DLineModel();
 							}
 							shapeModel.setX(
 									Integer.parseInt(eElement.getElementsByTagName("x").item(0).getTextContent()));
@@ -340,7 +348,7 @@ public class Whiteboard extends JFrame {
 							shapeModel.setColor(new Color(
 									Integer.parseInt(eElement.getElementsByTagName("color").item(0).getTextContent())));
 							canvas.addShape(shapeModel);
-						} else {
+						} else if (shapeType.equals("text")) {
 							DTextModel textModel = new DTextModel();
 							textModel.setX(
 									Integer.parseInt(eElement.getElementsByTagName("x").item(0).getTextContent()));
@@ -359,6 +367,26 @@ public class Whiteboard extends JFrame {
 							textModel.setFontSize(Integer
 									.parseInt(eElement.getElementsByTagName("fontSize").item(0).getTextContent()));
 							canvas.addShape(textModel);
+						} else if (shapeType.equals("line")) {
+							DLineModel lineModel = new DLineModel();
+							lineModel.setX(
+									Integer.parseInt(eElement.getElementsByTagName("x").item(0).getTextContent()));
+							lineModel.setY(
+									Integer.parseInt(eElement.getElementsByTagName("y").item(0).getTextContent()));
+							lineModel.setWidth(
+									Integer.parseInt(eElement.getElementsByTagName("width").item(0).getTextContent()));
+							lineModel.setHeight(
+									Integer.parseInt(eElement.getElementsByTagName("height").item(0).getTextContent()));
+							lineModel.setColor(new Color(
+									Integer.parseInt(eElement.getElementsByTagName("color").item(0).getTextContent())));
+
+							lineModel.setP1(new Point(
+									Integer.parseInt(eElement.getElementsByTagName("p1x").item(0).getTextContent()),
+									Integer.parseInt(eElement.getElementsByTagName("p1y").item(0).getTextContent())));
+							lineModel.setP2(new Point(
+									Integer.parseInt(eElement.getElementsByTagName("p2x").item(0).getTextContent()),
+									Integer.parseInt(eElement.getElementsByTagName("p2y").item(0).getTextContent())));
+							canvas.addShape(lineModel);
 						}
 
 					}
@@ -387,19 +415,196 @@ public class Whiteboard extends JFrame {
 
 		});
 
+		// Bottom Bar
+		Box serverBox = Box.createHorizontalBox();
+		serverBox.setAlignmentX(LEFT_ALIGNMENT);
+		JButton serverStartButton = new JButton("Server Start");
+		JButton clientStartButton = new JButton("Client Start");
+		JLabel statusLabel = new JLabel("Status: ");
+		serverBox.add(serverStartButton);
+		serverBox.add(clientStartButton);
+		serverBox.add(statusLabel);
+
+		serverStartButton.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				int portNumber;
+				String portNumString = (String) JOptionPane.showInputDialog(null, "Enter port number for server",
+						"Enter port number for server. Hit enter for default.", JOptionPane.QUESTION_MESSAGE, null,
+						null, Globals.DEFAULT_PORT_NUMBER);
+				if (portNumString.trim().equals("")) {
+					portNumber = Globals.DEFAULT_PORT_NUMBER;
+				} else {
+					portNumber = Integer.parseInt(portNumString);
+				}
+				statusLabel.setText("Status: Server mode");
+				new Thread() {
+					@Override
+					public void run() {
+						ServerSocket serverSocket = null;
+						Socket socket = null;
+
+						try {
+							serverSocket = new ServerSocket(portNumber);
+							System.out.println("Server started on port: " + portNumber);
+						} catch (IOException e2) {
+							e2.printStackTrace();
+						}
+
+						for (;;) {
+							try {
+								socket = serverSocket.accept();
+							} catch (IOException e2) {
+								e2.printStackTrace();
+							}
+							new ClientThread(socket, canvas).start();
+						}
+					}
+				}.start();
+
+			}
+
+		});
+
+		clientStartButton.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				// TODO Auto-generated method stub
+				String serverInfo = (String) JOptionPane.showInputDialog(null,
+						"Enter the ip address/port number of the server you would like to connect to",
+						"Enter the ip address/port number of the server you would like to connect to. Hit enter for default.",
+						JOptionPane.QUESTION_MESSAGE, null, null,
+						Globals.DEFAULT_IP_ADDRESS + ":" + Globals.DEFAULT_PORT_NUMBER);
+				statusLabel.setText("Status: Client mode");
+				String serverInfoArr[] = serverInfo.split(":");
+				new Client(canvas, serverInfoArr[0], Integer.parseInt(serverInfoArr[1])).start();
+			}
+		});
+
+		// put all boxes together
 		Box leftPanel = Box.createVerticalBox();
 		leftPanel.add(top);
 		leftPanel.add(middle);
-		leftPanel.add(middleBot);
+		leftPanel.add(middleBox);
 		leftPanel.add(bottom);
 		leftPanel.add(saveBox);
+		leftPanel.add(serverBox);
 
-		controlPanel.add(leftPanel, BorderLayout.WEST);
+		// Add controls and Table on left
+		controlPanel.add(leftPanel, BorderLayout.NORTH);
+		controlPanel.add(dataPanel, BorderLayout.SOUTH);
 
+		// Add Controls on left and Canvas on the right
 		frame.add(controlPanel, BorderLayout.WEST);
 		frame.add(canvas, BorderLayout.CENTER);
 		frame.pack();
 		frame.setVisible(true);
 	}
 
+	class DataPanel extends JPanel {
+		JTable table;
+		DataModel dataModel;
+		String[] columnNames;
+
+		public DataPanel() {
+			dataModel = new DataModel();
+			this.setLayout(new BorderLayout());
+			columnNames = new String[5];
+			columnNames[0] = "X";
+			columnNames[1] = "Y";
+			columnNames[2] = "Width";
+			columnNames[3] = "Height";
+			columnNames[4] = "Name";
+			table = new JTable(dataModel.data, columnNames);
+			table.setModel(dataModel);
+			JScrollPane tableScroll = new JScrollPane(table);
+			tableScroll.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
+			this.add(tableScroll);
+			table.getTableHeader().setLayout(new BorderLayout());
+			table.getTableHeader().setEnabled(false);
+			this.setPreferredSize(new Dimension(500, 500));
+
+		}
+
+		public class DataModel extends AbstractTableModel implements ModelListener {
+			private String[][] data;
+
+			public DataModel() {
+				data = new String[0][5];
+
+			}
+
+			@Override
+			public int getRowCount() {
+				return canvas.shapesList.size();
+			}
+
+			@Override
+			public String getColumnName(int index) {
+				return columnNames[index];
+			}
+
+			@Override
+			public int getColumnCount() {
+				return 5;
+			}
+
+			@Override
+			public Object getValueAt(int row, int column) {
+
+				DShape temp = canvas.shapesList.get(canvas.shapesList.size() - row - 1);
+				DShapeModel model;
+				String name = "";
+				if (temp instanceof DRect) {
+					model = ((DRect) temp).model;
+					name = "Rectangle";
+				} else if (temp instanceof DOval) {
+					model = ((DOval) temp).model;
+					name = "Oval";
+				} else if (temp instanceof DText) {
+					model = ((DText) temp).model;
+					name = "Text";
+				} else if (temp instanceof DLine) {
+					model = ((DLine) temp).model;
+					name = "Line";
+				} else {
+					model = null;
+				}
+
+				if (column == 0) {
+					return "" + model.getX();
+				} else if (column == 1) {
+					return "" + model.getY();
+				} else if (column == 2) {
+					return "" + model.getWidth();
+				} else if (column == 3) {
+					return "" + model.getHeight();
+				} else {
+					return name;
+				}
+
+			}
+
+			public void updateTable() {
+				data = new String[getRowCount()][5];
+				for (int i = 0; i < getRowCount(); i++) {
+					for (int j = 0; j < 5; j++) {
+						data[i][j] = (String) getValueAt(i, j);
+					}
+				}
+				fireTableDataChanged();
+			}
+
+			@Override
+			public void modelChanged(DShapeModel model) {
+				int index = 0;
+				for (DShape shape : canvas.shapesList) {
+					index = canvas.shapesList.indexOf(shape);
+				}
+				fireTableRowsUpdated(index, index);
+
+			}
+		}
+	}
 }

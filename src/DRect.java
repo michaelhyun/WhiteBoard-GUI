@@ -42,7 +42,6 @@ public class DRect extends DShape implements ModelListener {
 
 	@Override
 	public void modelChanged(DShapeModel model) {
-		// TODO Auto-generated method stub
 		this.model = (DRectModel) model;
 	}
 
