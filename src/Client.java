@@ -21,10 +21,12 @@ public class Client extends Thread {
 
 	private Canvas canvas;
 	private int portNumber;
+	private String ipAddress;
 
-	public Client(Canvas canvas, int portNumber) {
+	public Client(Canvas canvas, String ipAddress, int portNumber) {
 		this.canvas = canvas;
 		this.portNumber = portNumber;
+		this.ipAddress = ipAddress;
 	}
 
 	@Override
