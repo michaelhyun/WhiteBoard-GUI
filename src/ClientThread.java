@@ -2,7 +2,20 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
+import java.io.StringWriter;
 import java.net.Socket;
+
+import javax.swing.JFileChooser;
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.transform.OutputKeys;
+import javax.xml.transform.Transformer;
+import javax.xml.transform.TransformerFactory;
+import javax.xml.transform.dom.DOMSource;
+import javax.xml.transform.stream.StreamResult;
+
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
 
 public class ClientThread extends Thread implements Observer {
 	protected Socket socket;
@@ -44,8 +57,29 @@ public class ClientThread extends Thread implements Observer {
 	public void update() {
 		// TODO Auto-generated method stub
 		if (out != null) {
-			out.println("selected shape index: " + canvas.getSelectedShapeIndex());
-			//send xml
+			DocumentBuilderFactory docFactory = DocumentBuilderFactory.newInstance();
+			DocumentBuilder docBuilder;
+			Document doc = null;
+			String xmlModel = "";
+			try {
+				docBuilder = docFactory.newDocumentBuilder();
+				// root elements
+				doc = docBuilder.newDocument();
+				Element rootElement = doc.createElement("shapes");
+				doc.appendChild(rootElement);
+				rootElement = canvas.getRootElementForXML(rootElement);
+				TransformerFactory tf = TransformerFactory.newInstance();
+				Transformer transformer = tf.newTransformer();
+				transformer.setOutputProperty(OutputKeys.OMIT_XML_DECLARATION, "yes");
+				StringWriter writer = new StringWriter();
+				transformer.transform(new DOMSource(doc), new StreamResult(writer));
+				xmlModel = writer.getBuffer().toString().replaceAll("\n|\r", "");
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			//send xml representation of canvas
+			out.println(xmlModel);
 		}
 	}
 }
