@@ -76,6 +76,24 @@ public class DLineModel extends DShapeModel {
 		Element colorElement = rootElement.getOwnerDocument().createElement("color");
 		colorElement.appendChild(rootElement.getOwnerDocument().createTextNode(getColor().getRGB() + ""));
 		shape.appendChild(colorElement);
+		
+		Element p1x = rootElement.getOwnerDocument().createElement("p1x");
+		p1x.appendChild(rootElement.getOwnerDocument().createTextNode(getP1X()+""));
+		shape.appendChild(p1x);
+		
+		Element p1y = rootElement.getOwnerDocument().createElement("p1y");
+		p1y.appendChild(rootElement.getOwnerDocument().createTextNode(getP1Y()+""));
+		shape.appendChild(p1y);
+		
+		
+		Element p2x = rootElement.getOwnerDocument().createElement("p2x");
+		p2x.appendChild(rootElement.getOwnerDocument().createTextNode(getP2X()+""));
+		shape.appendChild(p2x);
+		
+		Element p2y = rootElement.getOwnerDocument().createElement("p2y");
+		p2y.appendChild(rootElement.getOwnerDocument().createTextNode(getP2Y()+""));
+		shape.appendChild(p2y);
+		
 
 		rootElement.appendChild(shape);
 

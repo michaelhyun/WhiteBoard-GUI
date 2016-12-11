@@ -69,3 +69,7 @@ local.properties
  
 # PDT-specific
 .buildpath
+
+#UML plugin
+*.ucls
+*.png

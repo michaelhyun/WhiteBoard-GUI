@@ -310,9 +310,7 @@ public class Canvas extends JPanel {
 		}
 		whiteboard.dataPanel.dataModel.updateTable();
 
-		for (DShape shape : shapesList) {
-			shape.draw(this.getGraphics());
-		}
+		repaint();
 	}
 
 	public void colorUpdated(final Color c) {
@@ -458,12 +456,6 @@ public class Canvas extends JPanel {
 				repaint();
 			}
 		}
-	}
-
-	public void clearCanvas() {
-		shapesList.clear();
-		selectedShape = null;
-		repaint();
 	}
 
 	public void attach(Observer observer) {
