@@ -365,6 +365,7 @@ public class Canvas extends JPanel {
 	
 	public void removeAll(){
 		shapesList.clear();
+		selectedShape = null;
 		repaint();
 	}
 
