@@ -15,7 +15,7 @@ import org.w3c.dom.Element;
 public class Canvas extends JPanel {
 	private static final long serialVersionUID = 1L;
 	private final int HEIGHT = 400, WIDTH = 400;
-	private ArrayList<DShape> shapesList;
+	ArrayList<DShape> shapesList;
 	private DShape selectedShape;
 	private int selectedShapeIndex;
 	private int xBeforeDrag = 0;
@@ -95,8 +95,6 @@ public class Canvas extends JPanel {
 								System.out.println("MovingKnob selected");
 							}
 						}
-						xBeforeDrag = e.getX();
-						yBeforeDrag = e.getY();
 					}
 					else{ //moving DLine
 						for (Point point : knobPoints) {
@@ -113,9 +111,10 @@ public class Canvas extends JPanel {
 								anchorKnob = knobPoints.get(0);
 							}
 						}
-						xBeforeDrag = e.getX();
-						yBeforeDrag = e.getY();
+
 					}
+					xBeforeDrag = e.getX();
+					yBeforeDrag = e.getY();
 				}
 			}
 
@@ -189,7 +188,22 @@ public class Canvas extends JPanel {
 					        
 					        
 						} else if (selectedShape instanceof DText) {
-							// resize
+							DShapeModel model;
+							model = ((DText) selectedShape).model;
+							int dx = (int) (point.x - anchorKnob.getX());
+							int dy = (int) (point.y - anchorKnob.getY());
+							int currentX = (int) model.getX();
+							int currentY = (int) model.getY();
+
+							if (anchorKnob.equals(knobPoints.get(0))) {
+								resize(point, model, currentX, currentY, dx, dy);
+							} else if (anchorKnob.equals(knobPoints.get(1))) {
+								resize(point, model, point.x, currentY, -dx, dy);
+							} else if (anchorKnob.equals(knobPoints.get(2))) {
+								resize(point, model, currentX, point.y, dx, -dy);
+							} else if (anchorKnob.equals(knobPoints.get(3))) {
+								resize(point, model, point.x, point.y, -dx, -dy);
+							}
 						}
 						
 						
@@ -202,7 +216,6 @@ public class Canvas extends JPanel {
 						if (selectedShape instanceof DRect) {
 							model = ((DRect) selectedShape).model;
 							moveShape(model, point);
-
 						} else if (selectedShape instanceof DOval) {
 							model = ((DOval) selectedShape).model;
 							moveShape(model, point);
@@ -272,6 +285,8 @@ public class Canvas extends JPanel {
 			DShape text = new DText((DTextModel) model);
 			shapesList.add(text);
 		}
+		
+        
 		for (DShape shape : shapesList) {
 			shape.draw(this.getGraphics());
 		}
