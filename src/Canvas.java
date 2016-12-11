@@ -243,11 +243,7 @@ public class Canvas extends JPanel {
 	}
 
 	public void resize(Point point, DShapeModel model, int x, int y, int width, int height) {
-<<<<<<< HEAD
-		
-=======
 
->>>>>>> 2c7d906f3c47504dcb714c66a3ad35517cea36b4
 		if (width < 0) {
 			model.setX(x - Math.abs(width));
 			model.setWidth(Math.abs((int) (anchorKnob.getX() - point.x)));

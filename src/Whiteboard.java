@@ -81,13 +81,9 @@ public class Whiteboard extends JFrame {
 
 		// create control panel for buttons
 		JPanel controlPanel = new JPanel();
-<<<<<<< HEAD
 		controlPanel.setLayout(new BorderLayout());
 		controlPanel.setPreferredSize(new Dimension(400,700));
-        
-=======
-		controlPanel.setLayout(new FlowLayout());
->>>>>>> 2c7d906f3c47504dcb714c66a3ad35517cea36b4
+
 
 		Box top = Box.createHorizontalBox();
 		top.setAlignmentX(Box.LEFT_ALIGNMENT);
