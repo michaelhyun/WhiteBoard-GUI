@@ -33,6 +33,7 @@ public class ClientThread extends Thread implements Observer {
 		System.out.println("Client on thread:" + Thread.currentThread().getId() + " connected");
 		try {
 			out = new PrintWriter(socket.getOutputStream(), true);
+			sendMessageToClient();
 			BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
 
 			String inputLine;
@@ -56,6 +57,10 @@ public class ClientThread extends Thread implements Observer {
 	@Override
 	public void update() {
 		// TODO Auto-generated method stub
+		sendMessageToClient();
+	}
+	
+	private void sendMessageToClient(){
 		if (out != null) {
 			DocumentBuilderFactory docFactory = DocumentBuilderFactory.newInstance();
 			DocumentBuilder docBuilder;
