@@ -27,7 +27,10 @@ import javax.swing.JList;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
+import javax.swing.JTable;
 import javax.swing.JTextArea;
+import javax.swing.table.AbstractTableModel;
+import javax.swing.table.TableCellRenderer;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
@@ -41,16 +44,19 @@ import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
+
 public class Whiteboard extends JFrame {
 	private static final long serialVersionUID = 1L;
 	private final String PROJECT_FRAME_NAME = "Whiteboard";
 	WhiteBoardController controller;
 	JTextArea textArea;
 	JComboBox<String> fontBox;
+	Canvas canvas;
 	
 
 	public Whiteboard(WhiteBoardController controller) {
 		// TODO Auto-generated constructor stub
+		canvas = new Canvas(this);
 		this.controller = controller;
 		controller.attachView(this);
 		showGUI();
@@ -63,13 +69,14 @@ public class Whiteboard extends JFrame {
 		frame.setPreferredSize(new Dimension(700, 700));
 
 		// create canvas
-		Canvas canvas = new Canvas(this);
+		
 		canvas.setPreferredSize(new Dimension(400, 400));
 
 		// create control panel for buttons
 		JPanel controlPanel = new JPanel();
 		controlPanel.setLayout(new FlowLayout());
         
+		
 
 
 		Box top = Box.createHorizontalBox();
@@ -135,7 +142,7 @@ public class Whiteboard extends JFrame {
 				model.setFontSize(30);
 				model.setX(10);
 				model.setY(10);
-				model.setWidth(20);
+				model.setWidth(50);
 				model.setHeight(20);
 				canvas.addShape(model);
 			}
@@ -387,12 +394,133 @@ public class Whiteboard extends JFrame {
 		leftPanel.add(bottom);
 		leftPanel.add(saveBox);
 
+//		DataPanel dataPanel = new DataPanel();
+//		controlPanel.add(dataPanel);
+		
 		controlPanel.add(leftPanel, BorderLayout.WEST);
-
 		frame.add(controlPanel, BorderLayout.WEST);
 		frame.add(canvas, BorderLayout.CENTER);
 		frame.pack();
 		frame.setVisible(true);
 	}
 
+	
+	
+	
+	
+	
+	
+//	
+//	
+//private class DataPanel extends JPanel{
+//		
+//        JTable table;
+//        DataModel dataModel;
+//        String[] names;
+//
+//        public DataPanel(){
+//            dataModel = new DataModel(this);
+//            this.setLayout(new BorderLayout());
+//            names = new String[]{"X", "Y", "Width", "Height"};
+//
+//            Integer[][] tableData = new Integer[4][4];
+//
+//            table = new JTable(dataModel.data, names);
+////            table.setModel(dataModel);
+//
+//            TableCellRenderer rendererFromHeader = table.getTableHeader().getDefaultRenderer();
+//            JLabel headerLabel = (JLabel) rendererFromHeader;
+//            headerLabel.setHorizontalAlignment(JLabel.CENTER);
+//            JScrollPane tableScroll = new JScrollPane(table);
+//            tableScroll.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
+//            this.add(tableScroll);
+//            this.setPreferredSize(new Dimension(400, 300));
+//            this.setMaximumSize(this.getPreferredSize());
+//        }
+//        
+//        
+//        
+//
+//    private class DataModel extends AbstractTableModel implements ModelListener{
+//        private Integer[][] data;
+//        DataPanel tablePanel;
+//        public DataModel(DataPanel tablePanel){
+//            this.tablePanel = tablePanel;
+//            data = new Integer[0][4];
+//        }
+//
+//        @Override
+//        public int getRowCount() {
+//            return canvas.shapesList.size();
+//        }
+//
+//        @Override
+//        public Object getValueAt(int rowIndex, int columnIndex) {
+//
+//                DShape temp = canvas.shapesList.get(canvas.shapesList.size() - rowIndex - 1);
+//                
+//                DShapeModel model;
+//				if (temp instanceof DRect) {
+//					model = ((DRect) temp).model;
+//				} else if (temp instanceof DOval) {
+//					model = ((DOval) temp).model;
+//				} else if (temp instanceof DText) {
+//					model = ((DText) temp).model;
+//				} else if (temp instanceof DLine) {
+//					model = ((DLine) temp).model;
+//				}
+//				else{
+//					model = null;
+//				}
+//        		
+//                if (columnIndex == 0) {
+//                    return model.getX();
+//                } else if (columnIndex == 1) {
+//                    return model.getY();
+//                } else if (columnIndex == 2) {
+//                    return model.getWidth();
+//                } else {
+//                    return model.getHeight();
+//                }
+//
+//        }
+//
+//		@Override
+//		public int getColumnCount() {
+//			// TODO Auto-generated method stub
+//			return 4;
+//		}
+//
+//        public void fillTable(){
+//            data = new Integer[getRowCount()][4];
+//            for(int i = 0; i < getRowCount(); i++){
+//                for(int j = 0; j < 4; j++) {
+//                    data[i][j] = (int)getValueAt(i, j);
+//                }
+//            }
+//        }
+//
+//        public void removed(){
+//            fillTable();
+//            fireTableDataChanged();
+//        }
+//
+//        public void added(){
+//            fillTable();
+//            fireTableDataChanged();
+//        }
+//
+//        @Override
+//        public void modelChanged(DShapeModel model) {
+////            int index = 0;
+////            for(DShape shape: canvas.shapesList){
+////                if(shape.model.equals(model)){
+////                    index = canvas.shapesList.indexOf(shape);
+////                }
+////            }
+////            fireTableRowsUpdated(index, index);
+//
+//        }
+//    }
+//}
 }
