@@ -44,6 +44,7 @@ public class DText extends DShape implements ModelListener {
         return new Font(model.getFontName(), Font.PLAIN, (int)previous);
     }
 	
+	@SuppressWarnings("unused")
 	@Override
 	public void draw(Graphics g) {
 		Font f = computeFont(g);

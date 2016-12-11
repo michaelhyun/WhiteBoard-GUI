@@ -2,7 +2,6 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
-import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.GraphicsEnvironment;
@@ -12,13 +11,10 @@ import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.image.BufferedImage;
-import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
-import java.io.InputStreamReader;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.io.DataOutputStream;
 
 import javax.imageio.ImageIO;
 import javax.swing.Box;
@@ -38,7 +34,6 @@ import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.JTextArea;
 import javax.swing.table.AbstractTableModel;
-import javax.swing.table.TableCellRenderer;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
@@ -69,6 +64,7 @@ public class Whiteboard extends JFrame {
 		showGUI();
 	}
 
+	@SuppressWarnings({ "serial" })
 	private void showGUI() {
 		JFrame frame = new JFrame(PROJECT_FRAME_NAME);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -179,6 +175,7 @@ public class Whiteboard extends JFrame {
 		fontBox.setSelectedIndex(0);
 		fontBox.setMaximumSize(new Dimension(70, 50));
 		fontBox.setRenderer(new DefaultListCellRenderer() {
+			@SuppressWarnings("unused")
 			public Component getListCellRendererComponent(JList<?> list, Object value, int index) {
 				return getListCellRendererComponent(list, value, index);
 			}
@@ -440,6 +437,7 @@ public class Whiteboard extends JFrame {
 				}
 				statusLabel.setText("Status: Server mode");
 				new Thread() {
+					@SuppressWarnings("resource")
 					@Override
 					public void run() {
 						ServerSocket serverSocket = null;
@@ -502,6 +500,7 @@ public class Whiteboard extends JFrame {
 		frame.setVisible(true);
 	}
 
+	@SuppressWarnings("serial")
 	class DataPanel extends JPanel {
 		JTable table;
 		DataModel dataModel;

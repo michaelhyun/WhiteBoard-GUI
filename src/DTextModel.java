@@ -1,6 +1,4 @@
 
-import java.awt.Font;
-
 import org.w3c.dom.Element;
 
 public class DTextModel extends DShapeModel {

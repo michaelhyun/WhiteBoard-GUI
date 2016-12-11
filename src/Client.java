@@ -31,7 +31,7 @@ public class Client extends Thread {
 
 	@Override
 	public void run() {
-		String serverHostname = new String("192.168.1.129");
+		String serverHostname = new String(ipAddress);
 
 		System.out.println("Attemping to connect to host " + serverHostname + " on port " + portNumber);
 
